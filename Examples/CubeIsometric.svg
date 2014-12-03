@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="595.28px" height="841.89px" viewBox="0 0 595.28 841.89" enable-background="new 0 0 595.28 841.89" xml:space="preserve">
+<g id="CubeBlue">
+	<polygon fill="#B3D676" stroke="#000000" stroke-miterlimit="10" points="44.56,50.419 3.062,26.461 44.646,2.714 86.143,26.673 	
+		"/>
+	<polygon fill="#54B948" stroke="#000000" stroke-miterlimit="10" points="86.142,82.002 44.646,105.96 44.646,50.631 
+		86.143,26.673 	"/>
+	<polygon fill="#E5EEBC" stroke="#000000" stroke-miterlimit="10" points="3.147,81.502 44.643,105.46 44.643,50.131 3.146,26.173 	
+		"/>
+</g>
+<g id="CubeGreen">
+	<polygon fill="#9677B5" stroke="#000000" stroke-miterlimit="10" points="44.56,50.419 3.062,26.461 44.646,2.714 86.144,26.673 	
+		"/>
+	<polygon fill="#6F50A1" stroke="#000000" stroke-miterlimit="10" points="86.142,82.002 44.646,105.96 44.646,50.631 
+		86.144,26.673 	"/>
+	<polygon fill="#D4BBDA" stroke="#000000" stroke-miterlimit="10" points="3.147,81.502 44.643,105.46 44.643,50.131 3.146,26.173 	
+		"/>
+</g>
+<g id="Ground_2_">
+	<polygon id="Ground_3_" fill="none" stroke="#000000" stroke-miterlimit="10" points="44.56,105.96 3.062,82.002 44.646,58.255 
+		86.144,82.214 	"/>
+</g>
+<g id="GroundCross">
+	<polygon id="Ground" fill="none" stroke="#000000" stroke-miterlimit="10" points="44.56,105.96 3.062,82.002 44.646,58.255 
+		86.144,82.214 	"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="44.646" y1="58.255" x2="44.646" y2="105.19"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="3.062" y1="82.002" x2="85.228" y2="82.002"/>
+</g>
+</svg>
