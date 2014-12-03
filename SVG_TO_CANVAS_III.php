@@ -74,6 +74,8 @@
 //		golf_example 
 //		Smarter ID printing depending on kind of element.... i.e. line etc but different behavior on group/text etc
 //		Supporting of use statement for instancing like in golf_field example
+//		Bug: Black things are handled as transparent i.e. no color given.
+//		Bug: hyphens "-" in identifiers for gradients etc breaks code in some cases the id "3456-123" is interpreted as a number by javascript
 
 $elementcounter=0;
 $graphnodes=array();
