@@ -3,6 +3,8 @@
 //    Bug: Some times context instead of c
 //		Bug: Invisible Lines
 //		Fix: c instead of canvas and (linex1,liney1) to (linex2,liney2 instead of linex1,liney1)
+//    Bug: Texts with even very simple tspans fail.
+//		Fix: Simple tspan workaround.
 //--------------------------------------------------------------------------
 // Version 3.6 
 //		Transparency fix for ellipse/circle
@@ -57,8 +59,8 @@
 // 		Supports the new user interface
 //		Works even without filename or with errors in file name 
 //		Fixed strokes so that strokes are above fills in all cases
-//-------------------------------------------------------------------------- Next Version Blueprint
-// Version 3.7
+//-------------------------------------------------------------------------- Future Version Blueprint
+// 
 //    Curve Closing (html5)
 //		Support for transformed gradients (??Is this in current version??)
 // 		Real Arc Drawing using Complex Math from values, draw arc using math in formula
@@ -67,6 +69,11 @@
 //		Better Support for printing ID-s
 //		Drawing support
 //		Click-map drawing support
+//		Font/styling support
+//		Tspan support
+//		golf_example 
+//		Smarter ID printing depending on kind of element.... i.e. line etc but different behavior on group/text etc
+//		Supporting of use statement for instancing like in golf_field example
 
 $elementcounter=0;
 $graphnodes=array();
@@ -104,12 +111,12 @@ function recurseelement($element){
 						}
 						recurseelement($child);
 
-				}else if($child->getName()=="use"||$child->getName()=="ellipse"||$child->getName()=="circle"||$child->getName()=="stop"||$child->getName()=="polygon"||$child->getName()=="line"||$child->getName()=="polyline"||$child->getName()=="path"||$child->getName()=="rect"||$child->getName()=="text"){
+				}else if($child->getName()=="use"||$child->getName()=="ellipse"||$child->getName()=="circle"||$child->getName()=="stop"||$child->getName()=="polygon"||$child->getName()=="line"||$child->getName()=="polyline"||$child->getName()=="path"||$child->getName()=="rect"||$child->getName()=="text"||$child->getName()=="tspan"){
 						// Add element to queue
 						$graphnodes[$elementcounter]=$child;
 						$elementcounter++;
 				}else{
-						echo "//Unknown element: ".$child->getName()."<br>";
+						echo "//Unknown inner element: ".$child->getName()."\n";
 				}
 		}		
 
@@ -138,18 +145,18 @@ if(isset($_POST['svgname'])){
 			// Recurse into elements and add to element stack
 			// its important that we only process hierarchies of g elements and layers
 			foreach ($svg as $element) {
-					if($element->getName()=="clipPath"||$element->getName()=="defs"||$element->getName()=="g"||$element->getName()=="linearGradient"||$element->getName()=="defs"||$element->getName()=="radialGradient"){
-							if($element->getName()=="clipPath"||$element->getName()=="defs"||$element->getName()=="g"||$element->getName()=="linearGradient"||$element->getName()=="radialGradient"){
+					if($element->getName()=="clipPath"||$element->getName()=="defs"||$element->getName()=="g"||$element->getName()=="linearGradient"||$element->getName()=="defs"||$element->getName()=="radialGradient"||$element->getName()=="text"){
+							if($element->getName()=="clipPath"||$element->getName()=="defs"||$element->getName()=="g"||$element->getName()=="linearGradient"||$element->getName()=="radialGradient"||$element->getName()=="text"){
 									$graphnodes[$elementcounter]=$element;
 									$elementcounter++;
 							}
 							recurseelement($element);
-					}else if($element->getName()=="use"||$element->getName()=="radialGradient"||$element->getName()=="linearGradient"||$element->getName()=="polygon"||$element->getName()=="line"||$element->getName()=="polyline"||$element->getName()=="path"||$element->getName()=="rect"||$element->getName()=="ellipse"||$element->getName()=="circle"||$element->getName()=="text"){
+					}else if($element->getName()=="use"||$element->getName()=="radialGradient"||$element->getName()=="linearGradient"||$element->getName()=="polygon"||$element->getName()=="line"||$element->getName()=="polyline"||$element->getName()=="path"||$element->getName()=="rect"||$element->getName()=="ellipse"||$element->getName()=="circle"||$element->getName()=="tspan"){
 							// Add element to queue
 							$graphnodes[$elementcounter]=$element;
 							$elementcounter++;
 					}else{
-							echo "//Unknown element: ".$element->getName()."\n";
+							echo "//Unknown outer element: ".$element->getName()."\n";
 					}
 			}
 
@@ -157,7 +164,7 @@ if(isset($_POST['svgname'])){
 			$defsstring="";
 			$defsid="";
 			$clipid="";
-			
+						
 			// Process elements
 			foreach ($graphnodes as $graphelement) {
 
@@ -165,18 +172,35 @@ if(isset($_POST['svgname'])){
 				$fillstyle="none";
 				$linestyle="none";	
 				$opacity="1.0";
-							
-				// For text element get 
-				if($graphelement->getName()=="text"){
+
+				// For tspan element get text content...
+				// This currently clashes with the text element.
+				if($graphelement->getName()=="tspan"){
+						echo "// tspan ";
 						if(isset($graphelement[0])){
 								$textline=$graphelement[0];
 						}
+						echo  "\n";
+				}
+							
+				// For text element get (simple tspan fix... now supports simple tspans)
+				if($graphelement->getName()=="text"){
+						echo "// text";
+						if(isset($graphelement[0])){
+								// There is a tspan (only a tspan?)
+								if(property_exists ( $graphelement[0] ,"tspan" )){
+										$textline=($graphelement[0]->tspan);																
+								}else{
+										$textline=$graphelement[0];								
+								}
+						}
+						echo  "\n";
 				}
 
+				// ID printing disabled for clarity?
 				if(isset($attrs['id'])){
-				
+//						echo "// ID: ".$attrs['id']."\n";
 				}
-
 
 				// To get ID comment/code
 				$attrs=$graphelement->attributes();
