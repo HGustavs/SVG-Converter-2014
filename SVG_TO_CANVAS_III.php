@@ -5,6 +5,8 @@
 //		Fix: c instead of canvas and (linex1,liney1) to (linex2,liney2 instead of linex1,liney1)
 //    Bug: Texts with even very simple tspans fail.
 //		Fix: Simple tspan workaround.
+//		Bug: Switch and foreignObject elements are not supported
+//		Fix: Recurse into but ignore Switch and ignore foreignObject completely
 //--------------------------------------------------------------------------
 // Version 3.6 
 //		Transparency fix for ellipse/circle
@@ -117,6 +119,8 @@ function recurseelement($element){
 						// Add element to queue
 						$graphnodes[$elementcounter]=$child;
 						$elementcounter++;
+				}else if($child->getName()=="foreignObject"){
+						// Ignore this element
 				}else{
 						echo "//Unknown inner element: ".$child->getName()."\n";
 				}
@@ -147,7 +151,7 @@ if(isset($_POST['svgname'])){
 			// Recurse into elements and add to element stack
 			// its important that we only process hierarchies of g elements and layers
 			foreach ($svg as $element) {
-					if($element->getName()=="clipPath"||$element->getName()=="defs"||$element->getName()=="g"||$element->getName()=="linearGradient"||$element->getName()=="defs"||$element->getName()=="radialGradient"||$element->getName()=="text"){
+					if($element->getName()=="clipPath"||$element->getName()=="defs"||$element->getName()=="g"||$element->getName()=="linearGradient"||$element->getName()=="defs"||$element->getName()=="radialGradient"||$element->getName()=="text"||$element->getName()=="switch"){
 							if($element->getName()=="clipPath"||$element->getName()=="defs"||$element->getName()=="g"||$element->getName()=="linearGradient"||$element->getName()=="radialGradient"||$element->getName()=="text"){
 									$graphnodes[$elementcounter]=$element;
 									$elementcounter++;
