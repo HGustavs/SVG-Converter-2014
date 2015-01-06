@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="595.28px" height="425.2px" viewBox="0 0 595.28 425.2" enable-background="new 0 0 595.28 425.2" xml:space="preserve">
+<path fill="none" stroke="#BE1E2D" stroke-width="16" stroke-miterlimit="10" d="M88.519,143.284
+	c19.126-13.115,215.846-122.95,196.721,38.251"/>
+<path fill="none" stroke="#BE1E2D" stroke-width="16" stroke-linecap="round" stroke-miterlimit="10" d="M67.168,177.536
+	c19.126-13.115,215.846-122.95,196.721,38.251"/>
+<path fill="none" stroke="#BE1E2D" stroke-width="16" stroke-linecap="square" stroke-miterlimit="10" d="M47.015,212.287
+	c19.126-13.115,215.846-122.95,196.721,38.25"/>
+<text transform="matrix(1 0 0 1 300.54 181.5356)" font-family="'MyriadPro-Regular'" font-size="12">Butt</text>
+<text transform="matrix(1 0 0 1 276.3433 221.5469)" font-family="'MyriadPro-Regular'" font-size="12">Round</text>
+<text transform="matrix(1 0 0 1 258.4644 255.3057)" font-family="'MyriadPro-Regular'" font-size="12">Square</text>
+<polyline fill="none" stroke="#BE1E2D" stroke-width="16" stroke-miterlimit="10" points="333.067,172.315 407.384,64.49 
+	467.493,165.757 "/>
+<polyline fill="none" stroke="#BE1E2D" stroke-width="16" stroke-linejoin="round" stroke-miterlimit="10" points="333.066,212.6 
+	407.384,104.775 467.493,206.042 "/>
+<polyline fill="none" stroke="#BE1E2D" stroke-width="16" stroke-linejoin="bevel" stroke-miterlimit="10" points="333.066,255.306 
+	407.384,147.48 467.493,248.749 "/>
+<g>
+	<g>
+		<path fill="none" stroke="#00A651" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M128.41,287
+			c0.315-0.102,0.633-0.202,0.953-0.301"/>
+		
+			<path fill="none" stroke="#00A651" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" stroke-dasharray="2.0261,6.0782" d="
+			M135.241,285.162c41.023-9.078,116.24,5.202,118.305,25.335c2.083,20.301,52.259,43.576,65.045,21.179"/>
+		<path fill="none" stroke="#00A651" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M319.88,328.927
+			c0.117-0.308,0.228-0.622,0.333-0.943"/>
+	</g>
+</g>
+<text transform="matrix(1 0 0 1 113.6553 302.3008)" font-family="'MyriadPro-Regular'" font-size="12">Illustrator Dashed Line</text>
+</svg>

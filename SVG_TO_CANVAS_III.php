@@ -1,4 +1,16 @@
 ﻿<?php
+// Version 3.8
+//		Bug: Dashed Lines do not work
+//--------------------------------------------------------------------------
+// Version 3.7
+//		Selective Rounding with parameter
+//    Bug: Sun example does not Work
+//		Fix: Remove rounding of color stops.
+//		Bug: Rounded caps for lines do not work.
+//		Fix: Rounded cap interpretation with styling
+//		Bug: Rounded joins for lines do not work.
+//		Fix: Rounded joins interpretation with styling
+//--------------------------------------------------------------------------
 // Version 3.7
 //    Bug: Some times context instead of c
 //		Bug: Invisible Lines
@@ -79,6 +91,9 @@
 //		Bug: Black things are handled as transparent i.e. no color given.
 //		Bug: hyphens "-" in identifiers for gradients etc breaks code in some cases the id "3456-123" is interpreted as a number by javascript
 
+$rndp;
+$rndp=0;
+
 $elementcounter=0;
 $graphnodes=array();
 $colorstops=array();
@@ -87,12 +102,20 @@ $clippaths=array();
 
 $fillstyle="none";
 $linestyle="none";
+$caps="none";
+$join="none";
 $opacity="1.0";
 $gradientname="foo";
 
 $isinkscape=false;
 
 $stopcounter=0;
+
+function numb($numb)
+{
+		global $rndp;
+		return  round($numb,$rndp);
+}
 
 function recurseelement($element){
 		global $elementcounter;
@@ -176,7 +199,9 @@ if(isset($_POST['svgname'])){
 
 				// Clear Line Style and Fill Styles
 				$fillstyle="none";
-				$linestyle="none";	
+				$linestyle="none";
+				$caps="none";
+					
 				$opacity="1.0";
 
 				// For tspan element get text content...
@@ -233,7 +258,7 @@ if(isset($_POST['svgname'])){
 								$isinkscape=true;
 						}else if(isset($xlinkattrs['href'])){
 
-								echo "var ".$gradientname."=c.createLinearGradient(".$attrs['x1'].",".$attrs['y1'].",".$attrs['x2'].",".$attrs['y2'].");\n";
+								echo "var ".$gradientname."=c.createLinearGradient(".numb($attrs['x1']).",".numb($attrs['y1']).",".numb($attrs['x2']).",".numb($attrs['y2']).");\n";
 
 								// Now we create a new gradient with the following properties
 								$gradientref=$xlinkattrs['href'];
@@ -246,7 +271,7 @@ if(isset($_POST['svgname'])){
 								}
 																
 						}else{
-								echo "var ".$gradientname."=c.createLinearGradient(".$attrs['x1'].",".$attrs['y1'].",".$attrs['x2'].",".$attrs['y2'].");\n";
+								echo "var ".$gradientname."=c.createLinearGradient(".numb($attrs['x1']).",".numb($attrs['y1']).",".numb($attrs['x2']).",".numb($attrs['y2']).");\n";
 						}
 				}else if($graphelement->getName()=="radialGradient"){
 						if(isset($attrs['id'])){
@@ -256,7 +281,7 @@ if(isset($_POST['svgname'])){
 								// Radial Gradient is not complete, this means that it is an inkscape element!
 								$isinkscape=true;
 						}else if(isset($xlinkattrs['href'])){
-								echo "var ".$gradientname."=c.createRadialGradient(".$attrs['cx'].",".$attrs['cy'].",0,".$attrs['cx'].",".$attrs['cy'].",".$attrs['r'].");\n";
+								echo "var ".$gradientname."=c.createRadialGradient(".numb($attrs['cx']).",".numb($attrs['cy']).",0,".numb($attrs['cx']).",".numb($attrs['cy']).",".numb($attrs['r']).");\n";
 
 								// Now we create a new gradient with the following properties
 								$gradientref=$xlinkattrs['href'];
@@ -269,7 +294,7 @@ if(isset($_POST['svgname'])){
 								}
 																
 						}else{
-								echo "var ".$gradientname."=c.createRadialGradient(".$attrs['cx'].",".$attrs['cy'].",0,".$attrs['cx'].",".$attrs['cy'].",".$attrs['r'].");\n";
+								echo "var ".$gradientname."=c.createRadialGradient(".numb($attrs['cx']).",".numb($attrs['cy']).",0,".numb($attrs['cx']).",".numb($attrs['cy']).",".numb($attrs['r']).");\n";
 						}
 				}else if($graphelement->getName()=="stop"){
 						$stopcolor=$attrs['style'];
@@ -398,15 +423,19 @@ if(isset($_POST['svgname'])){
 									$params[$noparams++]=$dostr;
 							}
 							 				
-							$translate="c.translate(".$params[4].",".$params[5].");\n";
-							$rotate="c.rotate(".$params[1].",".$params[2].");\n";
-							$scale="c.scale(".$params[0].",".$params[3].");\n";
+							$translate="c.translate(".numb($params[4]).",".numb($params[5]).");\n";
+							$rotate="c.rotate(".numb($params[1]).",".numb($params[2]).");\n";
+							$scale="c.scale(".numb($params[0]).",".numb($params[3]).");\n";
 															
 			    }elseif ($key == "stroke"){
 							echo "" .'c.strokeStyle = "' . $val . '";' . "\n";
 							$linestyle=$val;
 			    }elseif ($key == "opacity"){
 			    		$opacity=$val;
+			    }elseif ($key == "stroke-linecap"){
+							$caps=$val;
+			    }elseif ($key == "stroke-linejoin"){
+							$join=$val;
 			    }elseif ($key == "fill"){
 				      if($val!="none"){
 									if(strpos($val,"url(")===false){
@@ -447,7 +476,7 @@ if(isset($_POST['svgname'])){
 			    		  		if($strokeposend===false) $strokeposend=strlen($val);
 							  		$strokewidth=substr($val,$strokepos+13,$strokeposend-$strokepos-13);
 										$strokewidth=str_replace("px","",$strokewidth);
-										echo "\n" . 'c.lineWidth = "' . $strokewidth . '";' . "\n";
+										echo "\n" . 'c.lineWidth = "' . numb($strokewidth) . '";' . "\n";
 			    		}	
 
 			    		$fontsizepos=strpos($val,"font-size:");
@@ -473,7 +502,7 @@ if(isset($_POST['svgname'])){
 			    		}	
 			    					    				    		
 			    }elseif ($key == "stroke-width"){
-							echo "\n" . 'c.lineWidth = "' . $val . '";' . "\n";
+							echo "\n" . 'c.lineWidth = "' . numb($val) . '";' . "\n";
 			    }elseif ($key == "points"&&($graphelement->getName()=="polygon"||$graphelement->getName()=="polyline"||$graphelement->getName()=="line")) {
 			      	if($defsmode){
 			      			$defsstring.="c.beginPath();\n";			      				      				      	
@@ -513,15 +542,15 @@ if(isset($_POST['svgname'])){
 							for($j=0;$j<$noparams;$j+=2){
 										if($j==0){
 							      	if($defsmode){
-													$defsstring.="c.moveTo(".$params[$j].",".$params[$j+1].");\n";							
+													$defsstring.="c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";							
 							      	}else{
-													echo "c.moveTo(".$params[$j].",".$params[$j+1].");\n";							
+													echo "c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";							
 							      	}
 										}else{
 							      	if($defsmode){
-													$defsstring.="c.lineTo(".$params[$j].",".$params[$j+1].");\n";														
+													$defsstring.="c.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
 							      	}else{
-													echo "c.lineTo(".$params[$j].",".$params[$j+1].");\n";														
+													echo "c.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
 							      	}
 										}
 							}
@@ -529,15 +558,26 @@ if(isset($_POST['svgname'])){
 							// If a polygon close path if not i.e. polyline keep it open
 							if($noparams>=2&&$graphelement->getName()=="polygon"){
 					      	if($defsmode){
-											$defsstring.="c.lineTo(".$params[0].",".$params[1].");\n";														
+											$defsstring.="c.lineTo(".numb($params[0]).",".numb($params[1]).");\n";														
 					      	}else{
-											echo "c.lineTo(".$params[0].",".$params[1].");\n";														
+											echo "c.lineTo(".numb($params[0]).",".numb($params[1]).");\n";														
 					      	}
 							}
 						
 			      	if(!$defsmode){
 									echo "c.globalAlpha = $opacity;\n";
 			      	}
+
+							if($caps!="none"){
+					      	if(!$defsmode){
+											echo "c.lineCap = '".$caps."';\n";
+					      	}
+					    }
+							if($join!="none"){
+					      	if(!$defsmode){
+											echo "c.lineJoin = '".$join."';\n";
+					      	}
+					    }
 
 							if($fillstyle=="none"&&$linestyle=="none"){
 					      	if(!$defsmode){
@@ -546,6 +586,7 @@ if(isset($_POST['svgname'])){
 						      		echo "c.fill();\n\n";
 					      	}
 							}
+												    
 							if($fillstyle!="none"){
 					      	if(!$defsmode){
 						      		echo "c.fill();\n";
@@ -629,7 +670,7 @@ if(isset($_POST['svgname'])){
 																if($command=="M"){
 																				$cx=$params[$j];
 																				$cy=$params[$j+1];
-																				echo "c.moveTo(".$cx.",".$cy.");\n";
+																				echo "c.moveTo(".numb($cx).",".numb($cy).");\n";
 																				$firstpoint=1;
 																	      $firstpointx=$cx;
 			      														$firstpointy=$cy;
@@ -637,14 +678,14 @@ if(isset($_POST['svgname'])){
 																		if(!$firstpoint){
 																				$cx=$params[$j];
 																				$cy=$params[$j+1];
-																				echo "c.moveTo(".$cx.",".$cy.");\n";
+																				echo "c.moveTo(".numb($cx).",".numb($cy).");\n";
 																				$firstpoint=1;
 																	      $firstpointx=$cx;
 			      														$firstpointy=$cy;
 																		}else{
 																				$cx+=$params[$j];
 																				$cy+=$params[$j+1];															
-																				echo "c.moveTo(".$cx.",".$cy.");\n";
+																				echo "c.moveTo(".numb($cx).",".numb($cy).");\n";
 																		}													
 																}
 													}else{
@@ -652,11 +693,11 @@ if(isset($_POST['svgname'])){
 																if($command=="M"){
 																		$cx=$params[$j];
 																		$cy=$params[$j+1];
-																		echo "c.lineTo(".$cx.",".$cy.");\n";
+																		echo "c.lineTo(".numb($cx).",".numb($cy).");\n";
 																}else if($command=="m"){
 																		$cx+=$params[$j];
 																		$cy+=$params[$j+1];															
-																		echo "c.lineTo(".$cx.",".$cy.");\n";
+																		echo "c.lineTo(".numb($cx).",".numb($cy).");\n";
 																}
 													}
 											}
@@ -672,7 +713,7 @@ if(isset($_POST['svgname'])){
 															$cy=$params[$j+5];
 															$lastpointx=$p2x;
 															$lastpointy=$p2y;
-															echo "c.bezierCurveTo(".$p1x.",".$p1y.",".$p2x.",".$p2y.",".$cx.",".$cy.");\n";
+															echo "c.bezierCurveTo(".numb($p1x).",".numb($p1y).",".numb($p2x).",".numb($p2y).",".numb($cx).",".numb($cy).");\n";
 															// Curveto absolute set cx to final point, other coordinates are control points
 													}else if($command=="c"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
@@ -684,7 +725,7 @@ if(isset($_POST['svgname'])){
 															$lastpointy=$p2y;
 															$cx+=$params[$j+4];
 															$cy+=$params[$j+5];
-															echo "c.bezierCurveTo(".$p1x.",".$p1y.",".$p2x.",".$p2y.",".$cx.",".$cy.");\n";
+															echo "c.bezierCurveTo(".numb($p1x).",".numb($p1y).",".numb($p2x).",".numb($p2y).",".numb($cx).",".numb($cy).");\n";
 													}
 											}
 			     				}else if ($command=="S"||$command=="s"){
@@ -698,7 +739,7 @@ if(isset($_POST['svgname'])){
 															$cy=$params[$j+3];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-														  echo "c.bezierCurveTo(".$lastpointx.",".$lastpointy.",".$p1x.",".$p1y.",".$cx.",".$cy.");\n";
+														  echo "c.bezierCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($p1x).",".numb($p1y).",".numb($cx).",".numb($cy).");\n";
 														  // Curveto absolute set cx to final point, other coordinates are control points
 													}else if($command=="s"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
@@ -708,7 +749,7 @@ if(isset($_POST['svgname'])){
 															$cy+=$params[$j+3];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-															echo "c.bezierCurveTo(".$lastpointx.",".$lastpointy.",".$p1x.",".$p1y.",".$cx.",".$cy.");\n";
+															echo "c.bezierCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($p1x).",".numb($p1y).",".numb($cx).",".numb($cy).");\n";
 													}
 											}
 			     				}else if ($command=="V"||$command=="v"){
@@ -716,11 +757,11 @@ if(isset($_POST['svgname'])){
 											for($j=0;$j<$noparams;$j++){
 													if($command=="V"){
 															$cy=$params[$j];
-															echo "c.lineTo(".$cx.",".$cy.");\n";   				
+															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}else if($command=="v"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cy+=$params[$j];
-														echo "c.lineTo(".$cx.",".$cy.");\n";   				
+														echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}
 											}
 			     				}else if ($command=="H"||$command=="h"){
@@ -728,11 +769,11 @@ if(isset($_POST['svgname'])){
 											for($j=0;$j<$noparams;$j++){
 													if($command=="H"){
 															$cx=$params[$j];
-															echo "c.lineTo(".$cx.",".$cy.");\n";   				
+															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}else if($command=="h"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cx+=$params[$j];
-															echo "c.lineTo(".$cx.",".$cy.");\n";   				
+															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}
 											}
 			     				}else if ($command=="L"||$command=="l"){
@@ -741,16 +782,16 @@ if(isset($_POST['svgname'])){
 													if($command=="L"){
 															$cx=$params[$j];
 															$cy=$params[$j+1];
-															echo "c.lineTo(".$cx.",".$cy.");\n";   				
+															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}else if($command=="l"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cx+=$params[$j];
 															$cy+=$params[$j+1];
-															echo "c.lineTo(".$cx.",".$cy.");\n";   				
+															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}
 											}
 			     				}else if ($command=="Z"||$command=="z"){
-											echo "c.lineTo(".$firstpointx.",".$firstpointy.");\n";   				
+											echo "c.lineTo(".numb($firstpointx).",".numb($firstpointy).");\n";   				
 									}else if ($command=="A"||$command=="a"){
 											// To avoid hard math - draw arc as a line
 											for($j=0;$j<$noparams;$j+=7){
@@ -761,7 +802,7 @@ if(isset($_POST['svgname'])){
 													$sweepflag=$params[4];
 													$cx=$params[$j];
 													$cy=$params[$j+1];
-													echo "c.lineTo(".$cx.",".$cy.");\n";   				
+													echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 			     						}
 			     				}
 			     				
@@ -775,6 +816,13 @@ if(isset($_POST['svgname'])){
 			      }while($i<=strlen($str));
 						
 						echo "c.globalAlpha = $opacity;\n";
+
+						if($caps!="none"){
+								echo "c.lineCap = '".$caps."';\n";
+						}
+						if($join!="none"){
+								echo "c.lineJoin = '".$join."';\n";
+						}
 
 						if($fillstyle=="none"&&$linestyle=="none"){
 								echo 'c.fillStyle = "#000";';
@@ -844,11 +892,11 @@ if(isset($_POST['svgname'])){
 						echo "c.globalAlpha = $opacity;\n";
 
 						echo "c.beginPath();\n";
-						echo "c.moveTo(".$linex1.",".$liney1.");\n";
-						echo "c.lineTo(".($linex1+$linex2).",".($liney1).");\n";
-						echo "c.lineTo(".($linex1+$linex2).",".($liney1+$liney2).");\n";
-						echo "c.lineTo(".($linex1).",".($liney1+$liney2).");\n";			
-						echo "c.lineTo(".($linex1).",".($liney1).");\n";			
+						echo "c.moveTo(".numb($linex1).",".numb($liney1).");\n";
+						echo "c.lineTo(".numb($linex1+$linex2).",".numb($liney1).");\n";
+						echo "c.lineTo(".numb($linex1+$linex2).",".numb($liney1+$liney2).");\n";
+						echo "c.lineTo(".numb($linex1).",".numb($liney1+$liney2).");\n";			
+						echo "c.lineTo(".numb($linex1).",".numb($liney1).");\n";			
 				    if($fillstyle!="none"){
 //								echo "c.save();\n\n";
 //								echo "c.scale(1,1);\n";								
@@ -882,11 +930,11 @@ if(isset($_POST['svgname'])){
 						$ysp=$cy-($ry*0.552);
 						$yep=$cy+($ry*0.552);
 						
-						echo "c.moveTo(".$cx.",".$ys.");\n";						
-  					echo "c.bezierCurveTo(".$xsp.",".$ys.",".$xs.",".$ysp.",".$xs.",".$cy.");\n";
-  					echo "c.bezierCurveTo(".$xs.",".$yep.",".$xsp.",".$ye.",".$cx.",".$ye.");\n";
-  					echo "c.bezierCurveTo(".$xep.",".$ye.",".$xe.",".$yep.",".$xe.",".$cy.");\n";
-  					echo "c.bezierCurveTo(".$xe.",".$ysp.",".$xep.",".$ys.",".$cx.",".$ys.");\n";
+						echo "c.moveTo(".numb($cx).",".numb($ys).");\n";						
+  					echo "c.bezierCurveTo(".numb($xsp).",".numb($ys).",".numb($xs).",".numb($ysp).",".numb($xs).",".numb($cy).");\n";
+  					echo "c.bezierCurveTo(".numb($xs).",".numb($yep).",".numb($xsp).",".numb($ye).",".numb($cx).",".numb($ye).");\n";
+  					echo "c.bezierCurveTo(".numb($xep).",".numb($ye).",".numb($xe).",".numb($yep).",".numb($xe).",".numb($cy).");\n";
+  					echo "c.bezierCurveTo(".numb($xe).",".numb($ysp).",".numb($xep).",".numb($ys).",".numb($cx).",".numb($ys).");\n";
 
 				    if($fillstyle!="none"){
 			      		echo "c.fill();\n";
@@ -898,8 +946,8 @@ if(isset($_POST['svgname'])){
 			     }
 				}elseif($graphelement->getName()=="line"){
 						echo "c.beginPath();\n";
-						echo "c.moveTo(".$linex1.",".$liney1.");\n";
-						echo "c.lineTo(".$linex2.",".$liney2.");\n";
+						echo "c.moveTo(".numb($linex1).",".numb($liney1).");\n";
+						echo "c.lineTo(".numb($linex2).",".numb($liney2).");\n";
 						echo "c.stroke();\n";
 
 				}elseif($graphelement->getName()=="g"){
