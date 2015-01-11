@@ -1,6 +1,11 @@
 ﻿<?php
 // Version 3.8
 //		Bug: Dashed Lines do not work
+//		Bug: ID-s of elements can be printed as comments (to simplify reading of code) 
+//		Bug: Line Width as string ctx.lineWidth="10"; rather than ctx.lineWidth=10;
+//    Bug: No enter after c.stroke(); but enter after c.strokestyle. This makes it appear like strokestyle is in previous group -- Enter after stroke if there is no fill, never enter after strokestyle
+//		Bug: Too many Opacity and Linewidth. Only add linewidth/Opacity if it changes
+//		Bug: End Caps do not work for bricks example
 //--------------------------------------------------------------------------
 // Version 3.7
 //		Selective Rounding with parameter
@@ -92,7 +97,7 @@
 //		Bug: hyphens "-" in identifiers for gradients etc breaks code in some cases the id "3456-123" is interpreted as a number by javascript
 
 $rndp;
-$rndp=0;
+$rndp=1;
 
 $elementcounter=0;
 $graphnodes=array();
@@ -168,6 +173,9 @@ function recurseelement($element){
 }
 
 if(isset($_POST['svgname'])){
+
+//		x2 scale for debug purposes
+//			echo "c.scale(2.0,2.0);\n";
 
 			$svg = simplexml_load_file("Examples/".$_POST['svgname']);
 			
@@ -428,7 +436,7 @@ if(isset($_POST['svgname'])){
 							$scale="c.scale(".numb($params[0]).",".numb($params[3]).");\n";
 															
 			    }elseif ($key == "stroke"){
-							echo "" .'c.strokeStyle = "' . $val . '";' . "\n";
+							echo "" .'c.strokeStyle = "' . $val . '";';
 							$linestyle=$val;
 			    }elseif ($key == "opacity"){
 			    		$opacity=$val;
@@ -476,7 +484,7 @@ if(isset($_POST['svgname'])){
 			    		  		if($strokeposend===false) $strokeposend=strlen($val);
 							  		$strokewidth=substr($val,$strokepos+13,$strokeposend-$strokepos-13);
 										$strokewidth=str_replace("px","",$strokewidth);
-										echo "\n" . 'c.lineWidth = "' . numb($strokewidth) . '";' . "\n";
+										echo "\n" . 'c.lineWidth = ' . numb(floatval($strokewidth)) . ';' . "\n";
 			    		}	
 
 			    		$fontsizepos=strpos($val,"font-size:");
@@ -502,7 +510,7 @@ if(isset($_POST['svgname'])){
 			    		}	
 			    					    				    		
 			    }elseif ($key == "stroke-width"){
-							echo "\n" . 'c.lineWidth = "' . numb($val) . '";' . "\n";
+							echo "\n" . 'c.lineWidth = "' . numb(floatval($val)) . '";' . "\n";
 			    }elseif ($key == "points"&&($graphelement->getName()=="polygon"||$graphelement->getName()=="polyline"||$graphelement->getName()=="line")) {
 			      	if($defsmode){
 			      			$defsstring.="c.beginPath();\n";			      				      				      	
@@ -837,8 +845,7 @@ if(isset($_POST['svgname'])){
 				    		if($linestyle=="none") echo "\n";
 			    	}
 			    	if($linestyle!="none"){
-			      		echo "c.stroke();\n";
-			      		echo "\n";
+			      		echo "c.stroke();\n\n";
 			      }
 			      
 			      unset($dval);
@@ -941,14 +948,13 @@ if(isset($_POST['svgname'])){
 				    		if($linestyle=="none") echo "\n";
 			    	}
 				    if($linestyle!="none"){
-			     		echo "c.stroke();\n";
-			     		echo "\n";
+			     		echo "c.stroke();\n\n";
 			     }
 				}elseif($graphelement->getName()=="line"){
 						echo "c.beginPath();\n";
 						echo "c.moveTo(".numb($linex1).",".numb($liney1).");\n";
 						echo "c.lineTo(".numb($linex2).",".numb($liney2).");\n";
-						echo "c.stroke();\n";
+						echo "c.stroke();\n\n";
 
 				}elseif($graphelement->getName()=="g"){
 							// We only print groups that have an ID
