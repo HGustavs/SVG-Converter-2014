@@ -1,4 +1,25 @@
 ﻿<?php
+//--------------------------------------------------------------------------
+// Version 3.9
+//    Bug: Duplicate closing commands. A good idea to check for previous closings before adding more identical ones
+//    Bug: Undefined variable fontstyle (bool2)
+//    Bug: Json Groups not output completely correctly - commas , are missing
+//		Bug: Fixed bug with ellipse command
+//    Feature: Settings pane for decimals and json. (2015-08-26)
+//		Feature: JSON Export
+//								MoveTo 			(Done) 0
+//								LineTo      (Done) 1
+//                Quadratic   (Done) 4
+//								Text
+//								Group       (Done) [ and ]
+//								Opacity			(Done) 100
+//								Fillstyle   (Done) 101
+//								beginPath		(Done) [				
+//                Linestyle
+//								Fill							 500
+//								Stroke						 501
+//		JSON String
+//--------------------------------------------------------------------------
 // Version 3.8
 //		Bug: Dashed Lines do not work
 //		Bug: ID-s of elements can be printed as comments (to simplify reading of code) 
@@ -6,6 +27,8 @@
 //    Bug: No enter after c.stroke(); but enter after c.strokestyle. This makes it appear like strokestyle is in previous group -- Enter after stroke if there is no fill, never enter after strokestyle
 //		Bug: Too many Opacity and Linewidth. Only add linewidth/Opacity if it changes
 //		Bug: End Caps do not work for bricks example
+//		Fix: Added better comment printing using single line comment
+//		Added a basic polygon export functionality wich exports polyline coordinates as arrays.
 //--------------------------------------------------------------------------
 // Version 3.7
 //		Selective Rounding with parameter
@@ -96,8 +119,24 @@
 //		Bug: Black things are handled as transparent i.e. no color given.
 //		Bug: hyphens "-" in identifiers for gradients etc breaks code in some cases the id "3456-123" is interpreted as a number by javascript
 
-$rndp;
-$rndp=1;
+if(isset($_POST['decimals'])){
+		$rndp=($_POST['decimals']);
+}else{
+		$rndp=0;
+}
+
+if(isset($_POST['kind'])){
+		if($_POST['kind']==1){
+				$coordsmode=1;			// Output coordinates as list instead of moveto lineto				
+		}else{
+				$coordsmode=0;			// Output coordinates as moveto lineto
+		}
+}else{
+		$coordsmode=0;			// Output coordinates as moveto lineto
+}
+
+// Rounding Decimal Count i.e. 1 is n.n 2 is n.nn
+$coordsscale=1.0;	// Rescale output coordinates e.g. if we want sizes to be normalized
 
 $elementcounter=0;
 $graphnodes=array();
@@ -107,6 +146,10 @@ $clippaths=array();
 
 $fillstyle="none";
 $linestyle="none";
+$fontstyle="none";
+$fontfamily="Arial";
+$fontline="24px";
+
 $caps="none";
 $join="none";
 $opacity="1.0";
@@ -115,6 +158,8 @@ $gradientname="foo";
 $isinkscape=false;
 
 $stopcounter=0;
+
+$jsonstr="var plaflaster=";
 
 function numb($numb)
 {
@@ -174,9 +219,6 @@ function recurseelement($element){
 
 if(isset($_POST['svgname'])){
 
-//		x2 scale for debug purposes
-//			echo "c.scale(2.0,2.0);\n";
-
 			$svg = simplexml_load_file("Examples/".$_POST['svgname']);
 			
 			// Recurse into elements and add to element stack
@@ -206,8 +248,10 @@ if(isset($_POST['svgname'])){
 			foreach ($graphnodes as $graphelement) {
 
 				// Clear Line Style and Fill Styles
+				$fontstyle="none";
 				$fillstyle="none";
 				$linestyle="none";
+				$fontfamily="Arial";
 				$caps="none";
 					
 				$opacity="1.0";
@@ -334,6 +378,21 @@ if(isset($_POST['svgname'])){
 
 				// We process attributes after gradients but before the drawing elements.
 
+				if(isset($attrs['id'])){
+						if($coordsmode==2){
+								// If in polygons mode do nothing
+						}else if($coordsmode==1){
+								$jsonstr.=',{"kind":1000,"label":'.$attrs['id'].',"name:"'.$graphelement->getName().'}';	
+						}else{
+								echo "//---------===### ";
+								echo $graphelement->getName().": ".$attrs['id'];									
+								echo " ###===---------\n";
+						}
+					
+					
+				}							
+
+			  
 			  foreach ($graphelement->attributes() as $key => $val) {
 
 					// Get font parameters!
@@ -436,8 +495,10 @@ if(isset($_POST['svgname'])){
 							$scale="c.scale(".numb($params[0]).",".numb($params[3]).");\n";
 															
 			    }elseif ($key == "stroke"){
-							echo "" .'c.strokeStyle = "' . $val . '";';
-							$linestyle=$val;
+			    		if(!$coordsmode){
+									echo "" .'c.strokeStyle = "' . $val . '";';
+									$linestyle=$val;			    			
+			    		}
 			    }elseif ($key == "opacity"){
 			    		$opacity=$val;
 			    }elseif ($key == "stroke-linecap"){
@@ -447,9 +508,21 @@ if(isset($_POST['svgname'])){
 			    }elseif ($key == "fill"){
 				      if($val!="none"){
 									if(strpos($val,"url(")===false){
-											echo "" .'c.fillStyle = "' . $val. '";' . "\n";
+											if($coordsmode==2){
+													// Fillstyle not applicable for coordinate export
+											}else if($coordsmode==1){
+													$jsonstr.= ',{"kind":101,"style":"'.$val.'"}';	
+											}else{
+													echo 'c.fillStyle = "' . $val. '";' . "\n";
+											}
 									}else{
-											echo "c.fillStyle=".substr($val,5,strlen($val)-6).";\n";
+											if($coordsmode==2){
+													// Fillstyle not applicable for coordinate export
+											}else if($coordsmode==1){
+													$jsonstr.= ',{"kind":101,"style":"'.substr($val,5,strlen($val)-6).'"}';	
+											}else{
+													echo "c.fillStyle=".substr($val,5,strlen($val)-6).";\n";
+											}
 									}
 							}
 							$fillstyle=$val;
@@ -461,9 +534,21 @@ if(isset($_POST['svgname'])){
 			    				$fillstyle=substr($val,$fillpos+5,$fillposend-$fillpos-5);
 							    if($fillstyle!="none"){
 											if(strpos($fillstyle,"url(")===false){
-													echo "c.fillStyle = '".$fillstyle ."';\n";
+													if($coordsmode==2){
+															// Fillstyle not applicable for coordinate export
+													}else if($coordsmode==1){
+															$jsonstr.= ',{"kind":101,"style":"'.$fillstyle.'"}';	
+													}else{
+															echo "c.fillStyle = '".$fillstyle ."';\n";
+													}
 											}else{
-													echo "c.fillStyle=".substr($fillstyle,5,strlen($fillstyle)-6).";\n";
+													if($coordsmode==2){
+															// Fillstyle not applicable for coordinate export
+													}else if($coordsmode==1){
+															$jsonstr.= ',{"kind":101,"style":"'.substr($fillstyle,5,strlen($fillstyle)-6).'"}';	
+													}else{
+															echo "c.fillStyle=".substr($fillstyle,5,strlen($fillstyle)-6).";\n";
+													}
 											}
 									}	
 			    		}
@@ -510,13 +595,20 @@ if(isset($_POST['svgname'])){
 			    		}	
 			    					    				    		
 			    }elseif ($key == "stroke-width"){
-							echo "\n" . 'c.lineWidth = "' . numb(floatval($val)) . '";' . "\n";
+			    		if(!$coordsmode){
+			    			echo "\n" . 'c.lineWidth = "' . numb(floatval($val)) . '";' . "\n";
+			    		}
 			    }elseif ($key == "points"&&($graphelement->getName()=="polygon"||$graphelement->getName()=="polyline"||$graphelement->getName()=="line")) {
-			      	if($defsmode){
-			      			$defsstring.="c.beginPath();\n";			      				      				      	
-			      	}else{
-			      			echo "c.beginPath();\n";			      	
-			      	}
+			      	
+							if($coordsmode){
+									echo "[";
+							}else{
+					      	if($defsmode){
+					      			$defsstring.="c.beginPath();\n";			      				      				      	
+					      	}else{
+					      			echo "c.beginPath();\n";			      	
+					      	}
+							}
 
 							// dostr loop for polygons. Bugfix: if old char is e, then we do not break string at -							
 							$j=0;
@@ -552,64 +644,98 @@ if(isset($_POST['svgname'])){
 							      	if($defsmode){
 													$defsstring.="c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";							
 							      	}else{
-													echo "c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";							
+													if($coordsmode==2){
+															echo numb($params[$j]/$coordsscale).", ".numb($params[$j+1]/$coordsscale);
+													}else if($coordsmode==1){
+															$jsonstr.= ',{"kind":0,"x1":'.numb($params[$j]/$coordsscale).',"y1":'.numb($params[$j+1]/$coordsscale).'}';	
+													}else{
+															echo "c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";
+													}
 							      	}
 										}else{
-							      	if($defsmode){
-													$defsstring.="c.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
-							      	}else{
-													echo "c.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
-							      	}
+											if($coordsmode==2){
+													echo numb($params[$j]/$coordsscale).", ".numb($params[$j+1]/$coordsscale);
+											}else if($coordsmode==1){
+													$jsonstr.=',{"kind":1,"x1":'.numb($params[$j]/$coordsscale).',"y1":'.numb($params[$j+1]/$coordsscale).'}';	
+											}else{
+									      	if($defsmode){
+															$defsstring.="c.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
+									      	}else{
+															echo "c.lineTo(".numb($params[$j]).", ".numb($params[$j+1]).");\n";														
+									      	}
+											}
 										}
 							}
 			
-							// If a polygon close path if not i.e. polyline keep it open
+							// If a polygon closes path if not i.e. polyline keep it open
 							if($noparams>=2&&$graphelement->getName()=="polygon"){
-					      	if($defsmode){
-											$defsstring.="c.lineTo(".numb($params[0]).",".numb($params[1]).");\n";														
-					      	}else{
-											echo "c.lineTo(".numb($params[0]).",".numb($params[1]).");\n";														
-					      	}
+									if($coordsmode){
+											echo ", ".numb($params[0]/$coordsscale).",".numb($params[1]/$coordsscale);
+									}else{
+							      	if($defsmode){
+													$defsstring.="c.lineTo(".numb($params[0]).", ".numb($params[1]).");\n";														
+							      	}else{
+													if($coordsmode==2){
+															echo numb($params[0]/$coordsscale).", ".numb($params[1]/$coordsscale);														
+													}else if($coordsmode==1){
+															$jsonstr.=',{"kind":1,"x1":'.numb($params[0]/$coordsscale).',"y1":'.numb($params[1]/$coordsscale).'}';	
+													}else{
+															echo "c.lineTo(".numb($params[0]).",".numb($params[1]).");\n";														
+													}											
+							      	}
+									}
 							}
 						
-			      	if(!$defsmode){
-									echo "c.globalAlpha = $opacity;\n";
-			      	}
-
-							if($caps!="none"){
+							if($coordsmode){
+									echo "],\n";
+							}else{
+		
 					      	if(!$defsmode){
-											echo "c.lineCap = '".$caps."';\n";
+											echo "c.globalAlpha = $opacity;\n";
 					      	}
-					    }
-							if($join!="none"){
-					      	if(!$defsmode){
-											echo "c.lineJoin = '".$join."';\n";
-					      	}
-					    }
-
-							if($fillstyle=="none"&&$linestyle=="none"){
-					      	if(!$defsmode){
-											echo 'c.fillStyle = "#000";';
-											echo "\n";
-						      		echo "c.fill();\n\n";
-					      	}
+		
+									if($caps!="none"){
+							      	if(!$defsmode){
+													echo "c.lineCap = '".$caps."';\n";
+							      	}
+							    }
+									if($join!="none"){
+							      	if(!$defsmode){
+													echo "c.lineJoin = '".$join."';\n";
+							      	}
+							    }
+		
+									if($fillstyle=="none"&&$linestyle=="none"){
+							      	if(!$defsmode){
+													if($coordsmode==2){
+															// Fillstyle not applicable for coordinate export
+													}else if($coordsmode==1){
+															$jsonstr.= ',{"kind":101,"style":"#000"}';	
+													}else{
+															echo 'c.fillStyle = "#000";';
+															echo "\n";
+										      		echo "c.fill();\n\n";
+													}
+							      	}
+									}
+														    
+									if($fillstyle!="none"){
+							      	if(!$defsmode){
+								      		echo "c.fill();\n";
+								    			if($linestyle=="none") echo "\n";
+							      	}
+							    }
+							    if($linestyle!="none"){
+							      	if(!$defsmode){
+								      		echo "c.stroke();\n\n";
+							      	}
+							    }
+		
+							    if($defsmode){
+							    		$defsstring.="c.clip();\n\n";		
+							    }
+							
 							}
-												    
-							if($fillstyle!="none"){
-					      	if(!$defsmode){
-						      		echo "c.fill();\n";
-						    			if($linestyle=="none") echo "\n";
-					      	}
-					    }
-					    if($linestyle!="none"){
-					      	if(!$defsmode){
-						      		echo "c.stroke();\n\n";
-					      	}
-					    }
-					    
-					    if($defsmode){
-					    		$defsstring.="c.clip();\n\n";		
-					    }
 				    								
 			    }elseif ($key == "d") {
 			    	
@@ -618,11 +744,18 @@ if(isset($_POST['svgname'])){
 			    }
 			  }
 
-				// Draw d line commands. This is a fix for the bug that requires the line settings to be assigned before the line commands
+				// Draw d line commands. This is a fix for the svg data that requires that the line settings have to be assigned before the line commands
 				
 				if(isset($dval)){
 				
-			      echo "c.beginPath();\n";
+						if($coordsmode==2){
+								// Fillstyle not applicable for coordinate export
+						}else if($coordsmode==1){
+								$jsonstr.=',[';	
+						}else{
+					      echo "c.beginPath();\n";
+						}
+
 			      
 			      $i=0;
 			      $str=$dval;
@@ -647,7 +780,7 @@ if(isset($_POST['svgname'])){
 					  					$params=array();
 					  					$noparams=0;
 					  					
-					  					// dochr loop for other drawing commands. Bug fix: If we encounter - and before it is an e we do nothing, otherwise proceed as normal
+					  					// do chr loop for other drawing commands. Bug fix: If we encounter - and before it is an e we do nothing, otherwise proceed as normal
 					  					
 					  					do{
 					 								$oldchr=$dochr;
@@ -678,7 +811,11 @@ if(isset($_POST['svgname'])){
 																if($command=="M"){
 																				$cx=$params[$j];
 																				$cy=$params[$j+1];
-																				echo "c.moveTo(".numb($cx).",".numb($cy).");\n";
+																				if($coordsmode==1){
+																						$jsonstr.= ',{"kind":0,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cx/$coordsscale).'}';	
+																				}else{
+																						echo "c.moveTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+																				}
 																				$firstpoint=1;
 																	      $firstpointx=$cx;
 			      														$firstpointy=$cy;
@@ -686,26 +823,48 @@ if(isset($_POST['svgname'])){
 																		if(!$firstpoint){
 																				$cx=$params[$j];
 																				$cy=$params[$j+1];
-																				echo "c.moveTo(".numb($cx).",".numb($cy).");\n";
+																				if($coordsmode==1){
+																						$jsonstr.=',{"kind":0,"x1":'.numb($params[$j]/$coordsscale).',"y1":'.numb($params[$j+1]/$coordsscale).'}';	
+																				}else{
+																						echo "c.moveTo(".numb($params[$j]/$coordsscale).",".numb($params[$j+1]/$coordsscale).");\n";
+																				}
 																				$firstpoint=1;
 																	      $firstpointx=$cx;
 			      														$firstpointy=$cy;
 																		}else{
 																				$cx+=$params[$j];
 																				$cy+=$params[$j+1];															
-																				echo "c.moveTo(".numb($cx).",".numb($cy).");\n";
+																				if($coordsmode==1){
+																						$jsonstr.=',{"kind":0,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
+																				}else{
+																						echo "c.moveTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+																				}
 																		}													
 																}
 													}else{
-																// Implicit lineto
+																// Implicit lineto (m is relative)
 																if($command=="M"){
 																		$cx=$params[$j];
 																		$cy=$params[$j+1];
-																		echo "c.lineTo(".numb($cx).",".numb($cy).");\n";
+
+																		if($coordsmode==2){
+																				echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
+																		}else if($coordsmode==1){
+																				$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
+																		}else{
+																				echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+																		}
 																}else if($command=="m"){
 																		$cx+=$params[$j];
 																		$cy+=$params[$j+1];															
-																		echo "c.lineTo(".numb($cx).",".numb($cy).");\n";
+
+																		if($coordsmode==2){
+																				echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
+																		}else if($coordsmode==1){
+																				$jsonstr.=',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
+																		}else{
+																				echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+																		}
 																}
 													}
 											}
@@ -721,8 +880,14 @@ if(isset($_POST['svgname'])){
 															$cy=$params[$j+5];
 															$lastpointx=$p2x;
 															$lastpointy=$p2y;
-															echo "c.bezierCurveTo(".numb($p1x).",".numb($p1y).",".numb($p2x).",".numb($p2y).",".numb($cx).",".numb($cy).");\n";
-															// Curveto absolute set cx to final point, other coordinates are control points
+
+															if($coordsmode==2){
+															}else if($coordsmode==1){
+																	$jsonstr.=',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($p2x/$coordsscale).',"y2":'.numb($p2y/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
+															}else{
+																	// Curveto absolute set cx to final point, other coordinates are control points
+																	echo "c.bezierCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($p2x/$coordsscale).",".numb($p2y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+															}
 													}else if($command=="c"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$p1x=$cx+$params[$j];
@@ -733,11 +898,17 @@ if(isset($_POST['svgname'])){
 															$lastpointy=$p2y;
 															$cx+=$params[$j+4];
 															$cy+=$params[$j+5];
-															echo "c.bezierCurveTo(".numb($p1x).",".numb($p1y).",".numb($p2x).",".numb($p2y).",".numb($cx).",".numb($cy).");\n";
+
+															if($coordsmode==2){
+															}else if($coordsmode==1){
+																	$jsonstr.= ',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($p2x/$coordsscale).',"y2":'.numb($p2y/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
+															}else{
+																	// Curveto absolute set cx to final point, other coordinates are control points
+																	echo "c.bezierCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($p2x/$coordsscale).",".numb($p2y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+															}
 													}
 											}
 			     				}else if ($command=="S"||$command=="s"){
-															//context . quadraticCurveTo(cpx, cpy, x, y)
 			     						// Quadratic Curveto
 											for($j=0;$j<$noparams;$j+=4){
 													if($command=="S"){
@@ -747,7 +918,15 @@ if(isset($_POST['svgname'])){
 															$cy=$params[$j+3];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-														  echo "c.bezierCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($p1x).",".numb($p1y).",".numb($cx).",".numb($cy).");\n";
+
+															if($coordsmode==2){
+															}else if($coordsmode==1){
+																	$jsonstr.= ',{"kind":4,"x1":'.numb($lastpointx/$coordsscale).',"y1":'.numb($lastpointy/$coordsscale).',"x2":'.numb($p1x/$coordsscale).',"y2":'.numb($p1y/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
+															}else{
+																	// Curveto absolute set cx to final point, other coordinates are control points
+																  echo "c.bezierCurveTo(".numb($lastpointx/$coordsscale).",".numb($lastpointy/$coordsscale).",".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+															}
+
 														  // Curveto absolute set cx to final point, other coordinates are control points
 													}else if($command=="s"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
@@ -765,11 +944,16 @@ if(isset($_POST['svgname'])){
 											for($j=0;$j<$noparams;$j++){
 													if($command=="V"){
 															$cy=$params[$j];
-															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}else if($command=="v"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cy+=$params[$j];
-														echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
+													}
+													if($coordsmode==2){
+															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
+													}else if($coordsmode==1){
+															$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
+													}else{
+															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
 													}
 											}
 			     				}else if ($command=="H"||$command=="h"){
@@ -777,11 +961,16 @@ if(isset($_POST['svgname'])){
 											for($j=0;$j<$noparams;$j++){
 													if($command=="H"){
 															$cx=$params[$j];
-															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}else if($command=="h"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cx+=$params[$j];
-															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
+													}
+													if($coordsmode==2){
+															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
+													}else if($coordsmode==1){
+															$jsonstr.=',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
+													}else{
+															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
 													}
 											}
 			     				}else if ($command=="L"||$command=="l"){
@@ -790,16 +979,27 @@ if(isset($_POST['svgname'])){
 													if($command=="L"){
 															$cx=$params[$j];
 															$cy=$params[$j+1];
-															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
 													}else if($command=="l"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cx+=$params[$j];
 															$cy+=$params[$j+1];
-															echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
+													}
+													if($coordsmode==2){
+															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
+													}else if($coordsmode==1){
+															$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
+													}else{
+															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
 													}
 											}
 			     				}else if ($command=="Z"||$command=="z"){
-											echo "c.lineTo(".numb($firstpointx).",".numb($firstpointy).");\n";   				
+											if($coordsmode==2){
+													echo numb($firstpointx/$coordsscale).", ".numb($firstpointy/$coordsscale);
+											}else if($coordsmode==1){
+													$jsonstr.= ',{"kind":1,"x1":'.numb($firstpointx/$coordsscale).',"y1":'.numb($firstpointy/$coordsscale).'}';	
+											}else{
+													echo "c.lineTo(".numb($firstpointx/$coordsscale).",".numb($firstpointy/$coordsscale).");\n";
+											}
 									}else if ($command=="A"||$command=="a"){
 											// To avoid hard math - draw arc as a line
 											for($j=0;$j<$noparams;$j+=7){
@@ -810,7 +1010,14 @@ if(isset($_POST['svgname'])){
 													$sweepflag=$params[4];
 													$cx=$params[$j];
 													$cy=$params[$j+1];
-													echo "c.lineTo(".numb($cx).",".numb($cy).");\n";   				
+
+													if($coordsmode==2){
+															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
+													}else if($coordsmode==1){
+															$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
+													}else{
+															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+													}
 			     						}
 			     				}
 			     				
@@ -823,7 +1030,13 @@ if(isset($_POST['svgname'])){
 			      		$i++;
 			      }while($i<=strlen($str));
 						
-						echo "c.globalAlpha = $opacity;\n";
+						if($coordsmode==2){
+								// Opacity not needed in polygon mode.
+						}else if($coordsmode==1){
+								$jsonstr.=',{"kind":100,"opacity":'.$opacity.'}';	
+						}else{
+								echo "c.globalAlpha = $opacity;\n";
+						}
 
 						if($caps!="none"){
 								echo "c.lineCap = '".$caps."';\n";
@@ -832,21 +1045,40 @@ if(isset($_POST['svgname'])){
 								echo "c.lineJoin = '".$join."';\n";
 						}
 
+						// Fill Path Command - We must 
 						if($fillstyle=="none"&&$linestyle=="none"){
-								echo 'c.fillStyle = "#000";';
-			      		echo "\n";
-			      		echo "c.fill();\n\n";
+								if($coordsmode==2){
+											// Not applicable in that mode
+								}else if($coordsmode==1){
+										// Issue fill command and close path array
+										$jsonstr.= ',{"kind":101,"x1":"#000"}';
+										$jsonstr.= ']';	
+								}else{
+										echo 'c.fillStyle = "#000";';
+					      		echo "\n";
+					      		echo "c.fill();\n\n";
+								}
 						}
-						if($fillstyle!="none"){
-//								echo "c.save();\n\n";
-//								echo "c.scale(2.5,2.5);\n";								
-			      		echo "c.fill();\n";
-//								echo "c.restore();\n\n";
-				    		if($linestyle=="none") echo "\n";
-			    	}
-			    	if($linestyle!="none"){
-			      		echo "c.stroke();\n\n";
-			      }
+
+						if($coordsmode==1){
+								// 
+								if($fillstyle!="none"){
+										$jsonstr.= ',{"kind":500}';
+					    	}
+					    	if($linestyle!="none"){
+										$jsonstr.= ',{"kind":501}';
+					      }
+
+						}else{
+								// Path fill or path line
+								if($fillstyle!="none"){
+					      		echo "c.fill();\n";
+						    		if($linestyle=="none") echo "\n";
+					    	}
+					    	if($linestyle!="none"){
+					      		echo "c.stroke();\n\n";
+					      }
+						}
 			      
 			      unset($dval);
 				
@@ -896,20 +1128,25 @@ if(isset($_POST['svgname'])){
 									echo $clipdefs[strval($clipid)];
 						}
 						
-						echo "c.globalAlpha = $opacity;\n";
+						if($coordsmode==1){
+								$jsonstr.= ',{"kind":0,"x1":'.numb($linex1/$coordsscale).',"y1":'.numb($liney1/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":1,"x1":'.numb(($linex1+$linex2)/$coordsscale).',"y1":'.numb($liney1/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":1,"x1":'.numb(($linex1+$linex2)/$coordsscale).',"y1":'.numb(($liney1+$liney2)/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":1,"x1":'.numb($linex1/$coordsscale).',"y1":'.numb(($liney1+$liney2)/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":1,"x1":'.numb($linex1/$coordsscale).',"y1":'.numb($liney1/$coordsscale).'}';	
 
-						echo "c.beginPath();\n";
-						echo "c.moveTo(".numb($linex1).",".numb($liney1).");\n";
-						echo "c.lineTo(".numb($linex1+$linex2).",".numb($liney1).");\n";
-						echo "c.lineTo(".numb($linex1+$linex2).",".numb($liney1+$liney2).");\n";
-						echo "c.lineTo(".numb($linex1).",".numb($liney1+$liney2).");\n";			
-						echo "c.lineTo(".numb($linex1).",".numb($liney1).");\n";			
+						}else{
+								echo "c.globalAlpha = $opacity;\n";
+								echo "c.beginPath();\n";
+								echo "c.moveTo(".numb($linex1).",".numb($liney1).");\n";
+								echo "c.lineTo(".numb($linex1+$linex2).",".numb($liney1).");\n";
+								echo "c.lineTo(".numb($linex1+$linex2).",".numb($liney1+$liney2).");\n";
+								echo "c.lineTo(".numb($linex1).",".numb($liney1+$liney2).");\n";			
+								echo "c.lineTo(".numb($linex1).",".numb($liney1).");\n";			
+						}
+
 				    if($fillstyle!="none"){
-//								echo "c.save();\n\n";
-//								echo "c.scale(1,1);\n";								
 			      		echo "c.fill();\n";
-//								echo "c.restore();\n\n";
-
 				    		if($linestyle=="none") echo "\n";
 			    	}
 				    if($linestyle!="none"){
@@ -919,14 +1156,10 @@ if(isset($_POST['svgname'])){
 						if(isset($attrs['clip-path'])){
 									echo "c.restore();\n";
 						}
-						
 						echo "\n";
 
 			  }elseif($graphelement->getName()=="circle"||$graphelement->getName()=="ellipse"){
-						echo "c.globalAlpha = $opacity;\n";			  	
-			  	
-						echo "c.beginPath();\n";
-						
+
 						$xs=$cx-$rx;
 						$xe=$cx+$rx;
 						$ys=$cy-$ry;
@@ -936,41 +1169,70 @@ if(isset($_POST['svgname'])){
 						$xep=$cx+($rx*0.552);
 						$ysp=$cy-($ry*0.552);
 						$yep=$cy+($ry*0.552);
-						
-						echo "c.moveTo(".numb($cx).",".numb($ys).");\n";						
-  					echo "c.bezierCurveTo(".numb($xsp).",".numb($ys).",".numb($xs).",".numb($ysp).",".numb($xs).",".numb($cy).");\n";
-  					echo "c.bezierCurveTo(".numb($xs).",".numb($yep).",".numb($xsp).",".numb($ye).",".numb($cx).",".numb($ye).");\n";
-  					echo "c.bezierCurveTo(".numb($xep).",".numb($ye).",".numb($xe).",".numb($yep).",".numb($xe).",".numb($cy).");\n";
-  					echo "c.bezierCurveTo(".numb($xe).",".numb($ysp).",".numb($xep).",".numb($ys).",".numb($cx).",".numb($ys).");\n";
+												
+						if($coordsmode==1){
+								$jsonstr.= ',[';
 
-				    if($fillstyle!="none"){
-			      		echo "c.fill();\n";
-				    		if($linestyle=="none") echo "\n";
-			    	}
-				    if($linestyle!="none"){
-			     		echo "c.stroke();\n\n";
-			     }
+								$jsonstr.= '{"kind":0,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';
+								$jsonstr.= ',{"kind":4,"x1":'.numb($xsp/$coordsscale).',"y1":'.numb($ys/$coordsscale).',"x2":'.numb($xs/$coordsscale).',"y2":'.numb($ysp/$coordsscale).',"x3":'.numb($xs/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":4,"x1":'.numb($xs/$coordsscale).',"y1":'.numb($yep/$coordsscale).',"x2":'.numb($xsp/$coordsscale).',"y2":'.numb($ye/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($ye/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":4,"x1":'.numb($xep/$coordsscale).',"y1":'.numb($ye/$coordsscale).',"x2":'.numb($xe/$coordsscale).',"y2":'.numb($yep/$coordsscale).',"x3":'.numb($xe/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":4,"x1":'.numb($xe/$coordsscale).',"y1":'.numb($ysp/$coordsscale).',"x2":'.numb($xep/$coordsscale).',"y2":'.numb($ys/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($ys/$coordsscale).'}';	
+
+								$jsonstr.= ']';
+						}else{
+								echo "c.globalAlpha = $opacity;\n";			  	
+								echo "c.beginPath();\n";
+								echo "c.moveTo(".numb($cx/$coordsscale).",".numb($ys/$coordsscale).");\n";
+		  					echo "c.bezierCurveTo(".numb($xsp/$coordsscale).",".numb($ys/$coordsscale).",".numb($xs/$coordsscale).",".numb($ysp/$coordsscale).",".numb($xs/$coordsscale).",".numb($cy/$coordsscale).");\n";
+		  					echo "c.bezierCurveTo(".numb($xs/$coordsscale).",".numb($yep/$coordsscale).",".numb($xsp/$coordsscale).",".numb($ye/$coordsscale).",".numb($cx/$coordsscale).",".numb($ye/$coordsscale).");\n";
+		  					echo "c.bezierCurveTo(".numb($xep/$coordsscale).",".numb($ye/$coordsscale).",".numb($xe/$coordsscale).",".numb($yep/$coordsscale).",".numb($xe/$coordsscale).",".numb($cy/$coordsscale).");\n";
+		  					echo "c.bezierCurveTo(".numb($xe/$coordsscale).",".numb($ysp/$coordsscale).",".numb($xep/$coordsscale).",".numb($ys/$coordsscale).",".numb($cx/$coordsscale).",".numb($ys/$coordsscale).");\n";
+
+						    if($fillstyle!="none"){
+					      		echo "c.fill();\n";
+						    		if($linestyle=="none") echo "\n";
+					    	}
+						    if($linestyle!="none"){
+					     		echo "c.stroke();\n\n";
+					  		}
+						}
+
 				}elseif($graphelement->getName()=="line"){
-						echo "c.beginPath();\n";
-						echo "c.moveTo(".numb($linex1).",".numb($liney1).");\n";
-						echo "c.lineTo(".numb($linex2).",".numb($liney2).");\n";
-						echo "c.stroke();\n\n";
-
+						if($coordsmode==1){
+								$jsonstr.= ',{"kind":0,"x1":'.numb($linex1/$coordsscale).',"y1":'.numb($liney1/$coordsscale).'}';	
+								$jsonstr.= ',{"kind":1,"x1":'.numb($linex2/$coordsscale).',"y1":'.numb($liney2/$coordsscale).'}';	
+						}else{
+								echo "c.beginPath();\n";
+								echo "c.moveTo(".numb($linex1/$coordsscale).",".numb($liney1/$coordsscale).");\n";
+								echo "c.lineTo(".numb($linex2/$coordsscale).",".numb($liney2/$coordsscale).");\n";
+								echo "c.stroke();\n\n";
+						}
 				}elseif($graphelement->getName()=="g"){
 							// We only print groups that have an ID
-//							if(isset($attrs['id'])){
-									echo "//-------------------------------\n";
-									echo "// Group: ".$attrs['id']."\n";
-									echo "//-------------------------------\n";
-//							}							
+							if($coordsmode==0){
+									if(isset($attrs['id'])){
+											echo "//-------------------------------\n";
+											echo "// Group: ".$attrs['id']."\n";
+											echo "//-------------------------------\n";
+									}							
+							}else{
+									// if it is a group in non-coordinate mode we output a json array construct
+									$jsonstr.= ",[";									
+							}
 				}elseif($graphelement->getName()=="eg"){
 							// We only print groups that have an ID
-							if(isset($attrs['id'])){
-									echo "//-------------------------------\n";
-									echo "// GroupEnd: ".$attrs['id']."\n";
-									echo "//-------------------------------\n";
-									echo "\n\n\n";
-							}							
+							if($coordsmode==0){
+									if(isset($attrs['id'])){
+											echo "//-------------------------------\n";
+											echo "// GroupEnd: ".$attrs['id']."\n";
+											echo "//-------------------------------\n";
+											echo "\n\n\n";
+									}							
+							}else{
+									// if it is a group in non-coordinate mode we output a json array construct
+									$jsonstr.= "]";									
+							}
 				}elseif($graphelement->getName()=="defs"){
 									$defsmode=1;
 									$defsstring="";
@@ -984,5 +1246,8 @@ if(isset($_POST['svgname'])){
 		}
 }
 
+if($coordsmode==1){
+		echo $jsonstr;
+}
 
 ?>

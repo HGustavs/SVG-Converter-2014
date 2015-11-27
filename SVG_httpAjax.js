@@ -9,8 +9,10 @@
 
 		var httpAjax = false;
 
-		function getSVG(fileName){
+		function getSVG(fileName,decimals,kind){
 				paramstr="svgname="+escape(fileName);
+				paramstr+="&decimals="+escape(decimals)
+				paramstr+="&kind="+escape(kind)
 				AjaxService("SVG_TO_CANVAS_III.php",paramstr,"returnedSVG");
 		}
 				
