@@ -12,7 +12,8 @@
 
 						// We only execute if the mode is set to canvas. JSON mode is executed in a separate manner
 						if(kind==0){
-								str='var acanvas=document.getElementById("previewCanvas");acanvas.width=700;var c=acanvas.getContext("2d");'+htmltext;
+								str='var acanvas=document.getElementById("previewCanvas");acanvas.width=700;var c=acanvas.getContext("2d");c.translate(200,200);c.save();'+htmltext+"c.restore();c.strokeStyle='#464';c.beginPath();c.moveTo(-20,-20);c.lineTo(20,20);c.moveTo(20,-20);c.lineTo(-20,20);c.stroke();";
+								console.log(str);
 								eval(str);						
 						}else{
 								// If it is a json object do nothing for now!
