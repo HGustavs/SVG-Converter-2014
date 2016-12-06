@@ -770,9 +770,9 @@ if(isset($_POST['svgname'])){
 			      $lastpointy=0;
 			      do{
 			     			$chr=substr($str,$i,1);
-			     			if($chr=="H"||$chr=="h"||$chr=="V"||$chr=="v"||$chr=="M"||$chr=="m"||$chr=="C"||$chr=="c"||$chr=="L"||$chr=="A"||$chr=="a"||$chr=="l"||$chr=="z"||$chr=="Z"||$chr=="s"||$chr=="S"||$i==strlen($str)){
+			     			if($chr=="H"||$chr=="h"||$chr=="V"||$chr=="v"||$chr=="M"||$chr=="m"||$chr=="C"||$chr=="c"||$chr=="L"||$chr=="A"||$chr=="a"||$chr=="l"||$chr=="z"||$chr=="Z"||$chr=="q"||$chr=="Q"||$chr=="s"||$chr=="S"||$i==strlen($str)){
 									// Process Parameters for any parameter command
-									if($command=="M"||$command=="m"||$command=="c"||$command=="C"||$command=="v"||$command=="V"||$command=="h"||$command=="H"||$command=="s"||$command=="S"||$command=="l"||$command=="L"||$command=="a"||$command=="A"){
+									if($command=="M"||$command=="m"||$command=="c"||$command=="C"||$command=="v"||$command=="V"||$command=="h"||$command=="H"||$command=="s"||$command=="S"||$command=="l"||$command=="L"||$command=="a"||$command=="A"||$command=="q"||$command=="Q"){
 					    				$j=0;
 					  					$dostr="";
 											$dochr="";
@@ -795,6 +795,11 @@ if(isset($_POST['svgname'])){
 					 												$dostr="";
 					 										}
 					 								}else{
+			 												// We found second decimal point i.e. 1.4.6 is not a number but 1.4 followed by .6
+					 										if($dochr==="." && strpos($dostr, ".")!==false){
+						     									$params[$noparams++]=$dostr;
+					 												$dostr="";
+					 										}
 					 										$dostr.=$dochr;
 					 								}
 					 								$j++;
@@ -803,6 +808,44 @@ if(isset($_POST['svgname'])){
 													$params[$noparams++]=$dostr;
 											}
 									}
+
+			     				if($command=="Q" || $command=="q"){
+			     						// Bezier Curveto
+											for($j=0;$j<$noparams;$j+=4){
+													if($command=="C"){
+															$p1x=$params[$j];
+															$p1y=$params[$j+1];
+															$cx=$params[$j+2];
+															$cy=$params[$j+3];
+															$lastpointx=$cx;
+															$lastpointy=$cy;
+
+															if($coordsmode==2){
+															}else if($coordsmode==1){
+																	$jsonstr.=',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($cx/$coordsscale).',"y2":'.numb($cy/$coordsscale).'}';	
+															}else{
+																	// Curveto absolute set cx to final point, other coordinates are control points
+																	echo "c.quadraticCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+															}
+													}else if($command=="c"){
+															// Curveto relative set cx to final point, other coordinates are relative control points
+															$p1x=$cx+$params[$j];
+															$p1y=$cy+$params[$j+1];
+															$lastpointx=$p2x;
+															$lastpointy=$p2y;
+															$cx+=$params[$j+2];
+															$cy+=$params[$j+3];
+
+															if($coordsmode==2){
+															}else if($coordsmode==1){
+																	$jsonstr.= ',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($cx/$coordsscale).',"y2":'.numb($cy/$coordsscale).'}';	
+															}else{
+																	// Curveto absolute set cx to final point, other coordinates are control points
+																	echo "c.bezierCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
+															}
+													}
+											}
+			     				}
 			
 			     				if($command=="M" || $command=="m"){
 											for($j=0;$j<$noparams;$j+=2){
