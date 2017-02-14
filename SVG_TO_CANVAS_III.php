@@ -350,13 +350,22 @@ if(isset($_POST['svgname'])){
 						}
 				}else if($graphelement->getName()=="stop"){
 						$stopcolor=$attrs['style'];
-						if(strpos($stopcolor,";",11)!==false){
-								$stopcolorend=strpos($stopcolor,";",11);
+
+						if(strpos($stopcolor,"opacity")>0){
+								$stopR=hexdec(substr($stopcolor,12,2));
+								$stopG=hexdec(substr($stopcolor,14,2));
+								$stopB=hexdec(substr($stopcolor,16,2));
+								$stopA=substr($stopcolor,strrpos($stopcolor,":")+1);
+								$stopcolor="RGBA(".$stopR.",".$stopG.",".$stopB.",".$stopA.")";
 						}else{
-								$stopcolorend=strlen($stopcolor);
+								if(strpos($stopcolor,";",11)!==false){
+										$stopcolorend=strpos($stopcolor,";",11);
+								}else{
+										$stopcolorend=strlen($stopcolor);
+								}
+								$stopcolor=substr($stopcolor,11,$stopcolorend-11);
 						}
-						$stopcolor=substr($stopcolor,11,$stopcolorend-11);
-						
+												
 						if($isinkscape){
 									if(isset($colorstops["$gradientname"])){
 											array_push($colorstops["$gradientname"],$attrs['offset'].",'".$stopcolor."'");

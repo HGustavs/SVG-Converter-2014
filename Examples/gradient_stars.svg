@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="430px"
+	 height="400px" viewBox="0 0 430 400" enable-background="new 0 0 430 400" xml:space="preserve">
+<g id="Spaceship">
+	<polygon id="BaseStar" display="none" fill="#848484" points="0,-144.715 27.69,-66.85 102.329,-102.329 66.85,-27.69 144.715,0 
+		66.85,27.69 102.329,102.329 27.69,66.85 0,144.715 -27.69,66.85 -102.329,102.329 -66.85,27.69 -144.715,0 -66.85,-27.69 
+		-102.329,-102.329 -27.69,-66.85 	"/>
+	<g id="GradientStar">
+		<g>
+			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-65.0151" y1="-36.5146" x2="-52.0151" y2="-50.2646">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_1_)" points="0,0 -102.329,-102.329 -66.896,-27.789 			"/>
+			<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="-14.5039" y1="-23.3711" x2="-83.768" y2="-107.3277">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_2_)" points="-102.329,-102.329 0,0 -27.69,-66.85 			"/>
+		</g>
+		<g>
+			
+				<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="-105.9492" y1="-9.3901" x2="-92.9492" y2="-23.1401" gradientTransform="matrix(0.7071 -0.7071 0.7071 0.7071 9.7646 -48.0878)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_3_)" points="0,0.037 -144.715,0.037 -66.953,27.69 			"/>
+			
+				<linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="-55.4385" y1="3.7544" x2="-124.7031" y2="-80.2027" gradientTransform="matrix(0.7071 -0.7071 0.7071 0.7071 9.7646 -48.0878)">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_4_)" points="-144.715,0.037 0,0.037 -66.849,-27.653 			"/>
+		</g>
+		<g>
+			
+				<linearGradient id="SVGID_5_" gradientUnits="userSpaceOnUse" x1="-39.3633" y1="-4.5156" x2="-26.3637" y2="-18.2652" gradientTransform="matrix(1.192488e-08 -1 1 1.192488e-08 -32 25.6709)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_5_)" points="0,0.019 -102.329,102.348 -27.789,66.915 			"/>
+			
+				<linearGradient id="SVGID_6_" gradientUnits="userSpaceOnUse" x1="11.1479" y1="8.6304" x2="-58.1166" y2="-75.3268" gradientTransform="matrix(1.192488e-08 -1 1 1.192488e-08 -32 25.6709)">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_6_)" points="-102.329,102.348 0,0.019 -66.85,27.708 			"/>
+		</g>
+		<g>
+			
+				<linearGradient id="SVGID_7_" gradientUnits="userSpaceOnUse" x1="-45.9375" y1="-1.1108" x2="-32.9377" y2="-14.8606" gradientTransform="matrix(-0.7071 -0.7071 0.7071 -0.7071 -11.3603 38.5244)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_7_)" points="0.185,0 0.185,144.715 27.838,66.953 			"/>
+			
+				<linearGradient id="SVGID_8_" gradientUnits="userSpaceOnUse" x1="4.5732" y1="12.0342" x2="-64.6909" y2="-71.9224" gradientTransform="matrix(-0.7071 -0.7071 0.7071 -0.7071 -11.3603 38.5244)">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_8_)" points="0.185,144.715 0.185,0 -27.505,66.85 			"/>
+		</g>
+		<g>
+			
+				<linearGradient id="SVGID_9_" gradientUnits="userSpaceOnUse" x1="-61.2769" y1="109.4858" x2="-48.2773" y2="95.7363" gradientTransform="matrix(-1 0 0 -1 3.3232 146.0186)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_9_)" points="-0.414,0.019 101.915,102.348 66.482,27.808 			"/>
+			
+				<linearGradient id="SVGID_10_" gradientUnits="userSpaceOnUse" x1="-10.7666" y1="122.6304" x2="-80.0312" y2="38.6732" gradientTransform="matrix(-1 0 0 -1 3.3232 146.0186)">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_10_)" points="101.915,102.348 -0.414,0.019 27.276,66.868 			"/>
+		</g>
+		<g>
+			
+				<linearGradient id="SVGID_11_" gradientUnits="userSpaceOnUse" x1="35.4424" y1="124.2544" x2="48.442" y2="110.5048" gradientTransform="matrix(-0.7071 0.7071 -0.7071 -0.7071 184.7158 42.4619)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_11_)" points="0,-0.186 144.715,-0.186 66.953,-27.838 			"/>
+			
+				<linearGradient id="SVGID_12_" gradientUnits="userSpaceOnUse" x1="85.9531" y1="137.3994" x2="16.6885" y2="53.4423" gradientTransform="matrix(-0.7071 0.7071 -0.7071 -0.7071 184.7158 42.4619)">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_12_)" points="144.715,-0.186 0,-0.186 66.85,27.505 			"/>
+		</g>
+		<g>
+			
+				<linearGradient id="SVGID_13_" gradientUnits="userSpaceOnUse" x1="48.9561" y1="84.4897" x2="61.9561" y2="70.7397" gradientTransform="matrix(-1.192488e-08 1 -1 -1.192488e-08 121.0049 -113.9707)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_13_)" points="0,0 102.329,-102.329 27.789,-66.896 			"/>
+			
+				<linearGradient id="SVGID_14_" gradientUnits="userSpaceOnUse" x1="99.4663" y1="97.6333" x2="30.2017" y2="13.6762" gradientTransform="matrix(-1.192488e-08 1 -1 -1.192488e-08 121.0049 -113.9707)">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_14_)" points="102.329,-102.329 0,0 66.85,-27.69 			"/>
+		</g>
+		<g>
+			
+				<linearGradient id="SVGID_15_" gradientUnits="userSpaceOnUse" x1="-3.4219" y1="81.8696" x2="9.5781" y2="68.1196" gradientTransform="matrix(0.7071 0.7071 -0.7071 0.7071 40.3232 -127.2637)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="0.088" style="stop-color:#070707"/>
+				<stop  offset="0.2164" style="stop-color:#1B1B1B"/>
+				<stop  offset="0.3697" style="stop-color:#3B3B3B"/>
+				<stop  offset="0.5421" style="stop-color:#676767"/>
+				<stop  offset="0.7304" style="stop-color:#A0A0A0"/>
+				<stop  offset="0.9291" style="stop-color:#E5E5E5"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_15_)" points="0.166,0 0.166,-144.715 -27.487,-66.953 			"/>
+			
+				<linearGradient id="SVGID_16_" gradientUnits="userSpaceOnUse" x1="47.0884" y1="95.0132" x2="-22.1762" y2="11.0561" gradientTransform="matrix(0.7071 0.7071 -0.7071 0.7071 40.3232 -127.2637)">
+				<stop  offset="0.2212" style="stop-color:#FFFFFF"/>
+				<stop  offset="0.9684" style="stop-color:#322E2F"/>
+			</linearGradient>
+			<polygon fill="url(#SVGID_16_)" points="0.166,-144.715 0.166,0 27.856,-66.85 			"/>
+		</g>
+	</g>
+	<g id="TwoColorStar" display="none">
+		<polygon display="inline" fill="#FF8383" points="0,0 0,144.715 27.69,66.85 		"/>
+		<polygon display="inline" fill="#FF8383" points="0,0 102.329,102.329 66.85,27.69 		"/>
+		<polygon display="inline" fill="#FF8383" points="0,0 144.634,-0.029 66.85,-27.69 		"/>
+		<polygon display="inline" fill="#FF8383" points="0,0 102.329,-102.329 27.69,-66.85 		"/>
+		<polygon display="inline" fill="#FF8383" points="0,0 0,-144.715 -27.69,-66.85 		"/>
+		<polygon display="inline" fill="#FF8383" points="0,0 -144.562,0 -66.85,27.69 		"/>
+		<polygon display="inline" fill="#FF8383" points="0.167,-0.167 -102.329,102.329 -27.69,66.85 		"/>
+		<polygon display="inline" fill="#E8FF85" points="0,-144.715 0,0 27.69,-66.85 		"/>
+		<polygon display="inline" fill="#E8FF85" points="-66.896,-27.789 -144.715,0 0,0 		"/>
+		<polygon display="inline" fill="#E8FF85" points="-66.85,27.69 -102.329,102.329 0,0 		"/>
+		<polygon display="inline" fill="#E8FF85" points="0,0 -27.69,66.85 0,145.75 		"/>
+		<polygon display="inline" fill="#E8FF85" points="0,0 27.69,66.85 101.5,101.5 		"/>
+		<polygon display="inline" fill="#E8FF85" points="66.924,27.664 144.715,0 0,0 		"/>
+		<polygon display="inline" fill="#E8FF85" points="102.329,-102.329 0,0 66.85,-27.69 		"/>
+		<polygon display="inline" fill="#FF8383" points="0,0 -102.329,-102.329 -66.85,-27.69 		"/>
+		<polygon display="inline" fill="#E8FF85" points="-102.329,-102.329 0,0 -27.69,-66.85 		"/>
+	</g>
+	<linearGradient id="SVGID_17_" gradientUnits="userSpaceOnUse" x1="-65.4292" y1="-36.4775" x2="-52.4294" y2="-50.2273">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_17_)" points="-0.414,0.037 -102.743,-102.292 -67.311,-27.752 	"/>
+	<linearGradient id="SVGID_18_" gradientUnits="userSpaceOnUse" x1="-14.9185" y1="-23.333" x2="-84.183" y2="-107.2901">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_18_)" points="-102.743,-102.292 -0.414,0.037 -28.104,-66.812 	"/>
+	
+		<linearGradient id="SVGID_19_" gradientUnits="userSpaceOnUse" x1="-106.2676" y1="-9.6567" x2="-93.2676" y2="-23.4067" gradientTransform="matrix(0.7071 -0.7071 0.7071 0.7071 9.7646 -48.0878)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_19_)" points="-0.414,0.074 -145.129,0.074 -67.367,27.728 	"/>
+	
+		<linearGradient id="SVGID_20_" gradientUnits="userSpaceOnUse" x1="-55.7578" y1="3.4873" x2="-125.0215" y2="-80.4687" gradientTransform="matrix(0.7071 -0.7071 0.7071 0.7071 9.7646 -48.0878)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_20_)" points="-145.129,0.074 -0.414,0.074 -67.263,-27.616 	"/>
+	
+		<linearGradient id="SVGID_21_" gradientUnits="userSpaceOnUse" x1="-39.3999" y1="-4.9297" x2="-26.3999" y2="-18.6797" gradientTransform="matrix(1.192488e-08 -1 1 1.192488e-08 -32 25.6709)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_21_)" points="-0.414,0.056 -102.743,102.385 -28.203,66.952 	"/>
+	
+		<linearGradient id="SVGID_22_" gradientUnits="userSpaceOnUse" x1="11.1113" y1="8.2163" x2="-58.1528" y2="-75.7403" gradientTransform="matrix(1.192488e-08 -1 1 1.192488e-08 -32 25.6709)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_22_)" points="-102.743,102.385 -0.414,0.056 -67.264,27.746 	"/>
+	
+		<linearGradient id="SVGID_23_" gradientUnits="userSpaceOnUse" x1="-45.6709" y1="-1.4292" x2="-32.6713" y2="-15.1787" gradientTransform="matrix(-0.7071 -0.7071 0.7071 -0.7071 -11.3603 38.5244)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_23_)" points="-0.229,0.038 -0.229,144.752 27.424,66.99 	"/>
+	
+		<linearGradient id="SVGID_24_" gradientUnits="userSpaceOnUse" x1="4.8403" y1="11.7144" x2="-64.4238" y2="-72.2422" gradientTransform="matrix(-0.7071 -0.7071 0.7071 -0.7071 -11.3603 38.5244)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_24_)" points="-0.229,144.752 -0.229,0.038 -27.919,66.887 	"/>
+	
+		<linearGradient id="SVGID_25_" gradientUnits="userSpaceOnUse" x1="-60.8628" y1="109.4487" x2="-47.8628" y2="95.6987" gradientTransform="matrix(-1 0 0 -1 3.3232 146.0186)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_25_)" points="-0.828,0.056 101.501,102.385 66.068,27.845 	"/>
+	
+		<linearGradient id="SVGID_26_" gradientUnits="userSpaceOnUse" x1="-10.3525" y1="122.5928" x2="-79.6171" y2="38.6356" gradientTransform="matrix(-1 0 0 -1 3.3232 146.0186)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_26_)" points="101.501,102.385 -0.828,0.056 26.862,66.905 	"/>
+	
+		<linearGradient id="SVGID_27_" gradientUnits="userSpaceOnUse" x1="35.7607" y1="124.5215" x2="48.7603" y2="110.7719" gradientTransform="matrix(-0.7071 0.7071 -0.7071 -0.7071 184.7158 42.4619)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_27_)" points="-0.414,-0.148 144.301,-0.148 66.539,-27.801 	"/>
+	
+		<linearGradient id="SVGID_28_" gradientUnits="userSpaceOnUse" x1="86.2725" y1="137.6665" x2="17.0079" y2="53.7094" gradientTransform="matrix(-0.7071 0.7071 -0.7071 -0.7071 184.7158 42.4619)">
+		<stop  offset="0" style="stop-color:#FFFFFF"/>
+		<stop  offset="1" style="stop-color:#322E2F;stop-opacity:0"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_28_)" points="144.301,-0.148 -0.414,-0.148 66.436,27.542 	"/>
+	
+		<linearGradient id="SVGID_29_" gradientUnits="userSpaceOnUse" x1="48.9937" y1="84.9038" x2="61.9932" y2="71.1543" gradientTransform="matrix(-1.192488e-08 1 -1 -1.192488e-08 121.0049 -113.9707)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_29_)" points="-0.414,0.037 101.915,-102.292 27.375,-66.859 	"/>
+	
+		<linearGradient id="SVGID_30_" gradientUnits="userSpaceOnUse" x1="99.5039" y1="98.0483" x2="30.2393" y2="14.0912" gradientTransform="matrix(-1.192488e-08 1 -1 -1.192488e-08 121.0049 -113.9707)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_30_)" points="101.915,-102.292 -0.414,0.037 66.436,-27.653 	"/>
+	
+		<linearGradient id="SVGID_31_" gradientUnits="userSpaceOnUse" x1="-3.6885" y1="82.1885" x2="9.3115" y2="68.4385" gradientTransform="matrix(0.7071 0.7071 -0.7071 0.7071 40.3232 -127.2637)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_31_)" points="-0.248,0.037 -0.248,-144.678 -27.901,-66.916 	"/>
+	
+		<linearGradient id="SVGID_32_" gradientUnits="userSpaceOnUse" x1="46.8223" y1="95.3315" x2="-22.4419" y2="11.375" gradientTransform="matrix(0.7071 0.7071 -0.7071 0.7071 40.3232 -127.2637)">
+		<stop  offset="0" style="stop-color:#322E2F;stop-opacity:0"/>
+		<stop  offset="0.099" style="stop-color:#3A3637;stop-opacity:0.099"/>
+		<stop  offset="0.2502" style="stop-color:#4E4B4C;stop-opacity:0.2502"/>
+		<stop  offset="0.4348" style="stop-color:#706E6E;stop-opacity:0.4348"/>
+		<stop  offset="0.6458" style="stop-color:#A09E9E;stop-opacity:0.6458"/>
+		<stop  offset="0.8759" style="stop-color:#DCDBDB;stop-opacity:0.8759"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_32_)" points="-0.248,-144.678 -0.248,0.037 27.442,-66.813 	"/>
+</g>
+<g id="Layer_2">
+</g>
+</svg>
