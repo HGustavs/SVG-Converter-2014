@@ -560,23 +560,27 @@ if(isset($_POST['svgname'])){
 			    }elseif ($key == "fill"){
 				      if($val!="none"){
 									if(strpos($val,"url(")===false){
-											if($coordsmode==2){
+/*
+										if($coordsmode==2){
 													// Fillstyle not applicable for coordinate export
 											}else if($coordsmode==1){
 													$jsonstr.= ',{"kind":101,"style":"'.$val.'"}';	
 											}else{
 													echo 'c.fillStyle = "' . $val. '";' . "\n";
 											}
+*/
 											$graphobj['fillstyle']=$val;
 									}else{
-											if($coordsmode==2){
+/*
+										if($coordsmode==2){
 													// Fillstyle not applicable for coordinate export
 											}else if($coordsmode==1){
 													$jsonstr.= ',{"kind":101,"style":"'.substr($val,5,strlen($val)-6).'"}';	
 											}else{
 													echo "c.fillStyle=".substr($val,5,strlen($val)-6).";\n";
+*/
 													$graphobj['fillstyle']=substr($val,5,strlen($val)-6);												
-											}
+//											}
 									}
 							}
 							$fillstyle=$val;
@@ -588,22 +592,26 @@ if(isset($_POST['svgname'])){
 			    				$fillstyle=substr($val,$fillpos+5,$fillposend-$fillpos-5);
 							    if($fillstyle!="none"){
 											if(strpos($fillstyle,"url(")===false){
-													if($coordsmode==2){
+/*
+												if($coordsmode==2){
 															// Fillstyle not applicable for coordinate export
 													}else if($coordsmode==1){
 															$jsonstr.= ',{"kind":101,"style":"'.$fillstyle.'"}';	
 													}else{
 															echo "c.fillStyle = '".$fillstyle ."';\n";
 													}
+*/
 													$graphobj['fillstyle']=$fillstyle;				
 											}else{
-													if($coordsmode==2){
+/*
+												if($coordsmode==2){
 															// Fillstyle not applicable for coordinate export
 													}else if($coordsmode==1){
 															$jsonstr.= ',{"kind":101,"style":"'.substr($fillstyle,5,strlen($fillstyle)-6).'"}';	
 													}else{
 															echo "c.fillStyle=".substr($fillstyle,5,strlen($fillstyle)-6).";\n";
 													}
+*/
 													$graphobj['fillstyle']=substr($fillstyle,5,strlen($fillstyle)-6);																	
 											}
 									}	
@@ -615,7 +623,7 @@ if(isset($_POST['svgname'])){
 			    		  		if($strokeposend===false) $strokeposend=strlen($val);
 							  		$linestyle=substr($val,$strokepos+7,$strokeposend-$strokepos-7);
 							      if($linestyle!="none"){
-												echo "" .'c.strokeStyle = "' . $linestyle . '";' . "\n";
+//												echo "" .'c.strokeStyle = "' . $linestyle . '";' . "\n";
 												$graphobj['strokestyle']=$linestyle;
 										}
 			    		}
@@ -626,7 +634,7 @@ if(isset($_POST['svgname'])){
 			    		  		if($strokeposend===false) $strokeposend=strlen($val);
 							  		$strokewidth=substr($val,$strokepos+13,$strokeposend-$strokepos-13);
 										$strokewidth=str_replace("px","",$strokewidth);
-										echo "\n" . 'c.lineWidth = ' . numb(floatval($strokewidth)) . ';' . "\n";
+										// echo "\n" . 'c.lineWidth = ' . numb(floatval($strokewidth)) . ';' . "\n";
 										$graphobj['strokewidth']=numb(floatval($strokewidth));
 							}	
 
@@ -653,21 +661,25 @@ if(isset($_POST['svgname'])){
 			    		}	
 			    					    				    		
 			    }elseif ($key == "stroke-width"){
-			    		if(!$coordsmode){
+/*
+						if(!$coordsmode){
 			    			echo "\n" . 'c.lineWidth = "' . numb(floatval($val)) . '";' . "\n";
 			    		}
+*/
 							$graphobj['strokestyle']=$linestyle;
 			    }elseif ($key == "points"&&($graphelement->getName()=="polygon"||$graphelement->getName()=="polyline"||$graphelement->getName()=="line")) {
 			      	
-
 							if($coordsmode){
-									echo "[";
+//									echo "[";
 							}else{
 					      	if($defsmode){
 					      			$defsstring.="c.beginPath();\n";			      				      				      	
-					      	}else{
+					      	}
+/*
+									else{
 					      			echo "c.beginPath();\n";			      	
 					      	}
+*/
 							}
 
 							$graphobj['kind']=$graphelement->getName();
@@ -709,51 +721,60 @@ if(isset($_POST['svgname'])){
 							      	if($defsmode){
 													$defsstring.="c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";							
 							      	}else{
+		/*											
 													if($coordsmode==2){
 															echo numb($params[$j]/$coordsscale).", ".numb($params[$j+1]/$coordsscale);
 													}else if($coordsmode==1){
 															$jsonstr.= ',{"kind":0,"x1":'.numb($params[$j]/$coordsscale).',"y1":'.numb($params[$j+1]/$coordsscale).'}';	
 													}else{
 															echo "c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";
-															array_push($graphobj['pntarr'],makePnt2("M",numb($params[$j]),numb($params[$j+1])));
-													}
+*/
+													array_push($graphobj['pntarr'],makePnt2("M",numb($params[$j]),numb($params[$j+1])));
+//													}
 							      	}
 										}else{
+/*											
 											if($coordsmode==2){
 													echo numb($params[$j]/$coordsscale).", ".numb($params[$j+1]/$coordsscale);
 											}else if($coordsmode==1){
 													$jsonstr.=',{"kind":1,"x1":'.numb($params[$j]/$coordsscale).',"y1":'.numb($params[$j+1]/$coordsscale).'}';	
 											}else{
-									      	if($defsmode){
+*/									      	
+													if($defsmode){
 															$defsstring.="c.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
 									      	}else{
-															echo "c.lineTo(".numb($params[$j]).", ".numb($params[$j+1]).");\n";														
+//															echo "c.lineTo(".numb($params[$j]).", ".numb($params[$j+1]).");\n";														
 															array_push($graphobj['pntarr'],makePnt2("L", numb($params[$j]),numb($params[$j+1])));
 													}
 											}
-										}
+//										}
 							}
 			
 							// If a polygon closes path if not i.e. polyline keep it open
 							if($noparams>=2&&$graphelement->getName()=="polygon"){
-									if($coordsmode){
+/*
+								if($coordsmode){
 											echo ", ".numb($params[0]/$coordsscale).",".numb($params[1]/$coordsscale);
 									}else{
-							      	if($defsmode){
+*/
+											if($defsmode){
 													$defsstring.="c.lineTo(".numb($params[0]).", ".numb($params[1]).");\n";														
 							      	}else{
+/*												
 													if($coordsmode==2){
 															echo numb($params[0]/$coordsscale).", ".numb($params[1]/$coordsscale);														
 													}else if($coordsmode==1){
 															$jsonstr.=',{"kind":1,"x1":'.numb($params[0]/$coordsscale).',"y1":'.numb($params[1]/$coordsscale).'}';	
 													}else{
 															echo "c.lineTo(".numb($params[0]).",".numb($params[1]).");\n";
+*/															
 															array_push($graphobj['pntarr'],makePnt2("L",numb($params[0]),numb($params[1])));
-													}											
-							      	}
+//													}											
+//							      	}
 									}
 							}
-						
+	
+/*					
 							if($coordsmode){
 									echo "],\n";
 							}else{
@@ -798,13 +819,13 @@ if(isset($_POST['svgname'])){
 								      		echo "c.stroke();\n\n";
 							      	}
 							    }
-		
+*/		
 							    if($defsmode){
 							    		$defsstring.="c.clip();\n\n";		
 							    }
-							
+/*							
 							}
-				    								
+*/				    								
 			    }elseif ($key == "d") {
 			    	
 			    	$dval=$val;
@@ -821,6 +842,7 @@ if(isset($_POST['svgname'])){
 
 						$graphobj['pntarr']=array();
 
+/*
 						if($coordsmode==2){
 								// Fillstyle not applicable for coordinate export
 						}else if($coordsmode==1){
@@ -828,7 +850,7 @@ if(isset($_POST['svgname'])){
 						}else{
 					      echo "c.beginPath();\n";
 						}
-
+*/
 			      
 			      $i=0;
 			      $str=$dval;
@@ -842,7 +864,7 @@ if(isset($_POST['svgname'])){
 			      $lastpointx=0;
 			      $lastpointy=0;
 					
-						// T command is incorrect - relative quadratic 
+						// T command is partially incorrect - relative quadratic 
 			      do{
 			     			$chr=substr($str,$i,1);
 			     			if($chr=="H"||$chr=="h"||$chr=="V"||$chr=="v"||$chr=="M"||$chr=="m"||$chr=="C"||$chr=="c"||$chr=="L"||$chr=="A"||$chr=="a"||$chr=="l"||$chr=="z"||$chr=="Z"||$chr=="q"||$chr=="Q"||$chr=="s"||$chr=="S"||$chr=="T"||$chr=="t"||$i==strlen($str)){
@@ -894,14 +916,17 @@ if(isset($_POST['svgname'])){
 															$lastpointx=$cx;
 															$lastpointy=$cy;
 
+														/*
 															if($coordsmode==2){
 															}else if($coordsmode==1){
 																	$jsonstr.=',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($cx/$coordsscale).',"y2":'.numb($cy/$coordsscale).'}';	
 															}else{
 																	// Curveto absolute set cx to final point, other coordinates are control points
 																	echo "c.quadraticCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																	array_push($graphobj['pntarr'],makePnt4("Q",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 															}
+														*/
+														array_push($graphobj['pntarr'],makePnt4("Q",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
+
 													}else if($command=="q"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$p1x=$cx+$params[$j];
@@ -910,15 +935,18 @@ if(isset($_POST['svgname'])){
 															$lastpointy=$p2y;
 															$cx+=$params[$j+2];
 															$cy+=$params[$j+3];
-
+														
+															/*
 															if($coordsmode==2){
 															}else if($coordsmode==1){
 																	$jsonstr.= ',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($cx/$coordsscale).',"y2":'.numb($cy/$coordsscale).'}';	
 															}else{
 																	// Curveto absolute set cx to final point, other coordinates are control points
 																	echo "c.bezierCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																	array_push($graphobj['pntarr'],makePnt4("Q",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 															}
+															*/
+															array_push($graphobj['pntarr'],makePnt4("Q",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
+														
 													}
 											}
 			     				}
@@ -930,12 +958,15 @@ if(isset($_POST['svgname'])){
 																if($command=="M"){
 																				$cx=$params[$j];
 																				$cy=$params[$j+1];
+																				/*
 																				if($coordsmode==1){
 																						$jsonstr.= ',{"kind":0,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cx/$coordsscale).'}';	
 																				}else{
 																						echo "c.moveTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																						array_push($graphobj['pntarr'],makePnt2("M",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 																				}
+																				*/
+																				array_push($graphobj['pntarr'],makePnt2("M",numb($cx/$coordsscale),numb($cy/$coordsscale)));
+
 																				$firstpoint=1;
 																	      $firstpointx=$cx;
 			      														$firstpointy=$cy;
@@ -943,24 +974,30 @@ if(isset($_POST['svgname'])){
 																		if(!$firstpoint){
 																				$cx=$params[$j];
 																				$cy=$params[$j+1];
+																				/*
 																				if($coordsmode==1){
 																						$jsonstr.=',{"kind":0,"x1":'.numb($params[$j]/$coordsscale).',"y1":'.numb($params[$j+1]/$coordsscale).'}';	
 																				}else{
 																						echo "c.moveTo(".numb($params[$j]/$coordsscale).",".numb($params[$j+1]/$coordsscale).");\n";
-																						array_push($graphobj['pntarr'],makePnt2("M",numb($params[$j]/$coordsscale),numb($params[$j+1]/$coordsscale)));
 																				}
+																				*/
+																				
+																				array_push($graphobj['pntarr'],makePnt2("M",numb($params[$j]/$coordsscale),numb($params[$j+1]/$coordsscale)));
+
 																				$firstpoint=1;
 																	      $firstpointx=$cx;
 			      														$firstpointy=$cy;
 																		}else{
 																				$cx+=$params[$j];
 																				$cy+=$params[$j+1];															
+																				/*
 																				if($coordsmode==1){
 																						$jsonstr.=',{"kind":0,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
 																				}else{
 																						echo "c.moveTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																						array_push($graphobj['pntarr'],makePnt2("M",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 																				}
+																				*/
+																				array_push($graphobj['pntarr'],makePnt2("M",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 																		}													
 																}
 													}else{
@@ -968,27 +1005,33 @@ if(isset($_POST['svgname'])){
 																if($command=="M"){
 																		$cx=$params[$j];
 																		$cy=$params[$j+1];
-
+																		
+																		/*
 																		if($coordsmode==2){
 																				echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
 																		}else if($coordsmode==1){
 																				$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
 																		}else{
 																				echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																				array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 																		}
+																		*/
+																		array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
+
 																}else if($command=="m"){
 																		$cx+=$params[$j];
-																		$cy+=$params[$j+1];															
-
+																		$cy+=$params[$j+1];		
+																	
+																		/*
 																		if($coordsmode==2){
 																				echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
 																		}else if($coordsmode==1){
 																				$jsonstr.=',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
 																		}else{
 																				echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																				array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale).",".numb($cy/$coordsscale)));
 																		}
+																		*/
+																		array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale).",".numb($cy/$coordsscale)));
+
 																}
 													}
 											}
@@ -1004,15 +1047,16 @@ if(isset($_POST['svgname'])){
 															$cy=$params[$j+5];
 															$lastpointx=$p2x;
 															$lastpointy=$p2y;
-
+															/*
 															if($coordsmode==2){
 															}else if($coordsmode==1){
 																	$jsonstr.=',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($p2x/$coordsscale).',"y2":'.numb($p2y/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
 															}else{
 																	// Curveto absolute set cx to final point, other coordinates are control points
 																	echo "c.bezierCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($p2x/$coordsscale).",".numb($p2y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																	array_push($graphobj['pntarr'],makePnt6("B",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($p2x/$coordsscale),numb($p2y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 															}
+															*/
+															array_push($graphobj['pntarr'],makePnt6("B",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($p2x/$coordsscale),numb($p2y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 													}else if($command=="c"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$p1x=$cx+$params[$j];
@@ -1023,15 +1067,16 @@ if(isset($_POST['svgname'])){
 															$lastpointy=$p2y;
 															$cx+=$params[$j+4];
 															$cy+=$params[$j+5];
-
+/*
 															if($coordsmode==2){
 															}else if($coordsmode==1){
 																	$jsonstr.= ',{"kind":4,"x1":'.numb($p1x/$coordsscale).',"y1":'.numb($p1y/$coordsscale).',"x2":'.numb($p2x/$coordsscale).',"y2":'.numb($p2y/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
 															}else{
 																	// Curveto absolute set cx to final point, other coordinates are control points
 																	echo "c.bezierCurveTo(".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($p2x/$coordsscale).",".numb($p2y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																	array_push($graphobj['pntarr'],makePnt6("B",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($p2x/$coordsscale),numb($p2y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 															}
+*/
+															array_push($graphobj['pntarr'],makePnt6("B",numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($p2x/$coordsscale),numb($p2y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 													}
 											}
 			     				}else if ($command=="S"||$command=="s"){
@@ -1044,15 +1089,17 @@ if(isset($_POST['svgname'])){
 															$cy=$params[$j+3];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-
+															
+															/*
 															if($coordsmode==2){
 															}else if($coordsmode==1){
 																	$jsonstr.= ',{"kind":4,"x1":'.numb($lastpointx/$coordsscale).',"y1":'.numb($lastpointy/$coordsscale).',"x2":'.numb($p1x/$coordsscale).',"y2":'.numb($p1y/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
 															}else{
 																	// Curveto absolute set cx to final point, other coordinates are control points
 																  echo "c.bezierCurveTo(".numb($lastpointx/$coordsscale).",".numb($lastpointy/$coordsscale).",".numb($p1x/$coordsscale).",".numb($p1y/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																	array_push($graphobj['pntarr'],makePnt6("B",numb($lastpointx/$coordsscale),numb($lastpointy/$coordsscale),numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 															}
+															*/
+															array_push($graphobj['pntarr'],makePnt6("B",numb($lastpointx/$coordsscale),numb($lastpointy/$coordsscale),numb($p1x/$coordsscale),numb($p1y/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 
 														  // Curveto absolute set cx to final point, other coordinates are control points
 													}else if($command=="s"){
@@ -1063,7 +1110,7 @@ if(isset($_POST['svgname'])){
 															$cy+=$params[$j+3];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-															echo "c.bezierCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($p1x).",".numb($p1y).",".numb($cx).",".numb($cy).");\n";
+															// echo "c.bezierCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($p1x).",".numb($p1y).",".numb($cx).",".numb($cy).");\n";
 															array_push($graphobj['pntarr'],makePnt6("B",numb($lastpointx),numb($lastpointy),numb($p1x),numb($p1y),numb($cx),numb($cy)));
 													}
 											}
@@ -1075,24 +1122,25 @@ if(isset($_POST['svgname'])){
 															$cy=$params[$j+1];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-
+/*
 															if($coordsmode==2){
 															}else if($coordsmode==1){
 																	$jsonstr.= ',{"kind":4,"x1":'.numb($lastpointx/$coordsscale).',"y1":'.numb($lastpointy/$coordsscale).',"x2":'.numb($p1x/$coordsscale).',"y2":'.numb($p1y/$coordsscale).',"x3":'.numb($cx/$coordsscale).',"y3":'.numb($cy/$coordsscale).'}';	
 															}else{
 																	// Curveto absolute set cx to final point, other coordinates are control points
 																  echo "c.quadraticCurveTo(".numb($lastpointx/$coordsscale).",".numb($lastpointy/$coordsscale).",".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-																	array_push($graphobj['pntarr'],makePnt4("Q",numb($lastpointx/$coordsscale),numb($lastpointy/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
 															}
 
-														  // Curveto absolute set cx to final point, other coordinates are control points
+*/
+															array_push($graphobj['pntarr'],makePnt4("Q",numb($lastpointx/$coordsscale),numb($lastpointy/$coordsscale),numb($cx/$coordsscale),numb($cy/$coordsscale)));
+															// Curveto absolute set cx to final point, other coordinates are control points
 													}else if($command=="t"){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cx+=$params[$j];
 															$cy+=$params[$j+1];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-															echo "c.quadraticCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($cx).",".numb($cy).");\n";
+															// echo "c.quadraticCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($cx).",".numb($cy).");\n";
 															array_push($graphobj['pntarr'],makePnt4("Q",numb($lastpointx),numb($lastpointy),numb($cx),numb($cy)));
 													}
 											}
@@ -1105,14 +1153,17 @@ if(isset($_POST['svgname'])){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cy+=$params[$j];
 													}
+													/*
 													if($coordsmode==2){
 															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
 													}else if($coordsmode==1){
 															$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
 													}else{
 															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-															array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 													}
+													*/
+													array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
+
 											}
 			     				}else if ($command=="H"||$command=="h"){
 			     						// horizontal Lineto
@@ -1123,14 +1174,17 @@ if(isset($_POST['svgname'])){
 															// Curveto relative set cx to final point, other coordinates are relative control points
 															$cx+=$params[$j];
 													}
+												
+													array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
+													/*
 													if($coordsmode==2){
 															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
 													}else if($coordsmode==1){
 															$jsonstr.=',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
 													}else{
 															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-															array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 													}
+													*/
 											}
 			     				}else if ($command=="L"||$command=="l"){
 			     						// Lineto
@@ -1143,24 +1197,28 @@ if(isset($_POST['svgname'])){
 															$cx+=$params[$j];
 															$cy+=$params[$j+1];
 													}
+													array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
+												/*											
 													if($coordsmode==2){
 															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
 													}else if($coordsmode==1){
 															$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
 													}else{
 															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-															array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 													}
+	*/
 											}
 			     				}else if ($command=="Z"||$command=="z"){
+											/*
 											if($coordsmode==2){
 													echo numb($firstpointx/$coordsscale).", ".numb($firstpointy/$coordsscale);
 											}else if($coordsmode==1){
 													$jsonstr.= ',{"kind":1,"x1":'.numb($firstpointx/$coordsscale).',"y1":'.numb($firstpointy/$coordsscale).'}';	
 											}else{
 													echo "c.lineTo(".numb($firstpointx/$coordsscale).",".numb($firstpointy/$coordsscale).");\n";
-													array_push($graphobj['pntarr'],makePnt2("L",numb($firstpointx/$coordsscale),numb($firstpointy/$coordsscale)));
 											}
+											*/
+											array_push($graphobj['pntarr'],makePnt2("L",numb($firstpointx/$coordsscale),numb($firstpointy/$coordsscale)));
 									}else if ($command=="A"||$command=="a"){
 											// To avoid hard math - draw arc as a line
 											for($j=0;$j<$noparams;$j+=7){
@@ -1172,14 +1230,16 @@ if(isset($_POST['svgname'])){
 													$cx=$params[$j];
 													$cy=$params[$j+1];
 
+													array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
+												/*
 													if($coordsmode==2){
 															echo numb($cx/$coordsscale).", ".numb($cy/$coordsscale);
 													}else if($coordsmode==1){
 															$jsonstr.= ',{"kind":1,"x1":'.numb($cx/$coordsscale).',"y1":'.numb($cy/$coordsscale).'}';	
 													}else{
 															echo "c.lineTo(".numb($cx/$coordsscale).",".numb($cy/$coordsscale).");\n";
-															array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 													}
+												*/
 			     						}
 			     				}
 			     				
@@ -1191,7 +1251,7 @@ if(isset($_POST['svgname'])){
 			     			}
 			      		$i++;
 			      }while($i<=strlen($str));
-						
+/*
 						if($coordsmode==2){
 								// Opacity not needed in polygon mode.
 						}else if($coordsmode==1){
@@ -1241,7 +1301,7 @@ if(isset($_POST['svgname'])){
 					      		echo "c.stroke();\n\n";
 					      }
 						}
-			      
+*/			      
 			      unset($dval);
 				
 				}
@@ -1278,7 +1338,6 @@ if(isset($_POST['svgname'])){
 						echo "c.restore();\n\n";
 
 			  }elseif($graphelement->getName()=="rect"){
-										
 						// This rectangle must be clipped!
 						if(isset($attrs['clip-path'])){
 									$clipid=substr($attrs['clip-path'],5);
@@ -1289,7 +1348,8 @@ if(isset($_POST['svgname'])){
 									
 									echo $clipdefs[strval($clipid)];
 						}
-						
+
+/*					
 						if($coordsmode==1){
 								$jsonstr.= ',{"kind":0,"x1":'.numb($linex1/$coordsscale).',"y1":'.numb($liney1/$coordsscale).'}';	
 								$jsonstr.= ',{"kind":1,"x1":'.numb(($linex1+$linex2)/$coordsscale).',"y1":'.numb($liney1/$coordsscale).'}';	
@@ -1307,6 +1367,7 @@ if(isset($_POST['svgname'])){
 								echo "c.lineTo(".numb($linex1).",".numb($liney1+$liney2).");\n";			
 								echo "c.lineTo(".numb($linex1).",".numb($liney1).");\n";			
 						}
+*/
 					
 						$graphobj['kind']="Rect";
 						$graphobj['opacity']=$opacity;
@@ -1318,6 +1379,7 @@ if(isset($_POST['svgname'])){
 						array_push($graphobj['pntarr'],makePnt2("L",numb($linex1),numb($liney1+$liney2)));
 						array_push($graphobj['pntarr'],makePnt2("L",numb($linex1),numb($liney1)));
 
+	/*
 				    if($fillstyle!="none"){
 								$graphobj['fill']="true";
 								echo "c.fill();\n";
@@ -1331,12 +1393,12 @@ if(isset($_POST['svgname'])){
 			    	}else{
 								$graphobj['stroke']="false";
 						}
-					
+*/
 						// This rectangle must be clipped!
 						if(isset($attrs['clip-path'])){
 									echo "c.restore();\n";
 						}
-						echo "\n";
+//						echo "\n";
 
 			  }elseif($graphelement->getName()=="circle"||$graphelement->getName()=="ellipse"){
 
@@ -1349,7 +1411,8 @@ if(isset($_POST['svgname'])){
 						$xep=$cx+($rx*0.552);
 						$ysp=$cy-($ry*0.552);
 						$yep=$cy+($ry*0.552);
-												
+
+/*												
 						if($coordsmode==1){
 								$jsonstr.= ',[';
 
@@ -1368,7 +1431,7 @@ if(isset($_POST['svgname'])){
 		  					echo "c.bezierCurveTo(".numb($xs/$coordsscale).",".numb($yep/$coordsscale).",".numb($xsp/$coordsscale).",".numb($ye/$coordsscale).",".numb($cx/$coordsscale).",".numb($ye/$coordsscale).");\n";
 		  					echo "c.bezierCurveTo(".numb($xep/$coordsscale).",".numb($ye/$coordsscale).",".numb($xe/$coordsscale).",".numb($yep/$coordsscale).",".numb($xe/$coordsscale).",".numb($cy/$coordsscale).");\n";
 		  					echo "c.bezierCurveTo(".numb($xe/$coordsscale).",".numb($ysp/$coordsscale).",".numb($xep/$coordsscale).",".numb($ys/$coordsscale).",".numb($cx/$coordsscale).",".numb($ys/$coordsscale).");\n";
-
+*/
 								$graphobj['kind']="Circ";
 								$graphobj['opacity']=$opacity;
 
@@ -1377,23 +1440,21 @@ if(isset($_POST['svgname'])){
 								array_push($graphobj['pntarr'],makePnt6("B",numb($xs/$coordsscale),numb($yep/$coordsscale),numb($xsp/$coordsscale),numb($ye/$coordsscale),numb($cx/$coordsscale),numb($ye/$coordsscale)));
 								array_push($graphobj['pntarr'],makePnt6("B",numb($xep/$coordsscale),numb($ye/$coordsscale),numb($xe/$coordsscale),numb($yep/$coordsscale),numb($xe/$coordsscale),numb($cy/$coordsscale)));
 								array_push($graphobj['pntarr'],makePnt6("B",numb($xe/$coordsscale),numb($ysp/$coordsscale),numb($xep/$coordsscale),numb($ys/$coordsscale),numb($cx/$coordsscale),numb($ys/$coordsscale)));
-							
+
 								if($fillstyle!="none"){
 										$graphobj['fill']="true";
-										echo "c.fill();\n";
-										if($linestyle=="none") echo "\n";
 								}else{
-										$graphobj['fill']="false";
+										$graphobj['fill']="false";								
 								}
+
 								if($linestyle!="none"){
 									$graphobj['stroke']="true";
 									echo "c.stroke();\n";
 								}else{
 										$graphobj['stroke']="false";
 								}
-						}
-
 				}elseif($graphelement->getName()=="line"){
+/*
 						if($coordsmode==1){
 								$jsonstr.= ',{"kind":0,"x1":'.numb($linex1/$coordsscale).',"y1":'.numb($liney1/$coordsscale).'}';	
 								$jsonstr.= ',{"kind":1,"x1":'.numb($linex2/$coordsscale).',"y1":'.numb($liney2/$coordsscale).'}';	
@@ -1403,9 +1464,9 @@ if(isset($_POST['svgname'])){
 								echo "c.lineTo(".numb($linex2/$coordsscale).",".numb($liney2/$coordsscale).");\n";
 								echo "c.stroke();\n\n";
 						}
+*/
 						$graphobj['kind']="Line";
 						$graphobj['opacity']=$opacity;
-
 						$graphobj['pntarr']=array();
 						array_push($graphobj['pntarr'],makePnt2("M", numb($linex1/$coordsscale),numb($liney1/$coordsscale) ));
 						array_push($graphobj['pntarr'],makePnt2("L", numb($linex2/$coordsscale),numb($liney2/$coordsscale)));
