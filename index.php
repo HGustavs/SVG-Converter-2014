@@ -66,11 +66,17 @@
 					    return (strcasecmp(substr($haystack, strlen($haystack) - strlen($needle)),$needle)===0);
 					}
 					$dir = opendir('./Examples');
+					$filelist=array();
 			    while (($file = readdir($dir)) !== false) {
 			        if(endsWith($file,".svg")){
-			        		echo "<span onmouseover='this.style.backgroundColor=\"#000\";this.style.color=\"#fff\"' onmouseout='this.style.backgroundColor=\"#fff8f8\";this.style.color=\"#000\"' style='cursor:pointer;' onclick='getSVG(\"".$file."\",document.getElementById(\"decimals\").value,document.getElementById(\"kind\").value);'>".$file."</span><br>";
+									array_push($filelist,$file);
 			      	}
 			    }
+					sort($filelist);
+					foreach($filelist as $file){
+			    		echo "<span onmouseover='this.style.backgroundColor=\"#000\";this.style.color=\"#fff\"' onmouseout='this.style.backgroundColor=\"#fff8f8\";this.style.color=\"#000\"' style='cursor:pointer;' onclick='getSVG(\"".$file."\",document.getElementById(\"decimals\").value,document.getElementById(\"kind\").value);'>".$file."</span><br>";						
+					}
+					
 			?>
 		</td>
 		<td id='preview' class="svgview" valign="top">

@@ -151,8 +151,6 @@ $colorstops=array();
 $clipdefs=array();
 $clippaths=array();
 
-$fillstyle="none";
-$linestyle="none";
 $fontstyle="none";
 $fontfamily="Arial";
 $fontline="24px";
@@ -163,13 +161,20 @@ $opacity="1.0";
 $gradientname="foo";
 
 $isinkscape=false;
+$graphobjs=array();
 
 $stopcounter=0;
 
-$jsonstr="var plaflaster=";
+// Tabbed version of echo
+function tabbedecho($string,$notabs)
+{
+		for($i=0;$i<$notabs;$i++){
+				echo "   ";
+		}
+		echo $string;
+}
 
-// Make point object (associated array with draw commands as elements)
-
+// Make point object (associated array with draw commands as elements) 3 versions with different number of parameters
 function makePnt2($kind,$p1,$p2)
 {
 		$pp=array();
@@ -242,14 +247,19 @@ function recurseelement($element){
 									$sxe = new SimpleXMLElement("<defsend/>");
 									$graphnodes[$elementcounter]=$sxe;
 									$elementcounter++;
-						
 		}
 
 }
 
-if(isset($_POST['svgname'])){
+if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 
-			$svg = simplexml_load_file("Examples/".$_POST['svgname']);
+			if(isset($_POST['svgname'])){
+					$filename=$_POST['svgname'];
+			}else{
+					$filename=$_GET['svgname'];			
+			}
+	
+			$svg = simplexml_load_file("Examples/".$filename);
 			
 			// Recurse into elements and add to element stack
 			// its important that we only process hierarchies of g elements and layers
@@ -276,6 +286,8 @@ if(isset($_POST['svgname'])){
 	
 			$graphobjs=array();
 	
+			$lastgradient=null;
+	
 			// Process elements
 			foreach ($graphnodes as $graphelement) {
 				
@@ -283,13 +295,11 @@ if(isset($_POST['svgname'])){
 
 				// Clear Line Style and Fill Styles
 				$fontstyle="none";
-				$fillstyle="none";
-				$linestyle="none";
 				$fontfamily="Arial";
 				$caps="none";
 					
-				$opacity="1.0";
-				$graphobj['opacity']="1.0";
+				$graphobj['kind']=$graphelement->getName();
+				$graphobj['pntarr']=array();
 
 				// For tspan element get text content...
 				// This currently clashes with the text element.
@@ -311,14 +321,14 @@ if(isset($_POST['svgname'])){
 						}
 				}
 
+				// To get ID comment/code
+				$attrs=$graphelement->attributes();
+				$xlinkattrs=$graphelement->attributes('http://www.w3.org/1999/xlink');
+
 				// ID printing (disabled for clarity?)
 				if(isset($attrs['id'])){
 						$graphobj['id']=(string)$attrs['id'];
 				}
-
-				// To get ID comment/code
-				$attrs=$graphelement->attributes();
-				$xlinkattrs=$graphelement->attributes('http://www.w3.org/1999/xlink');
 
 				// For use element get 
 				if($graphelement->getName()=="use"){
@@ -332,56 +342,36 @@ if(isset($_POST['svgname'])){
 				}
 
 				if($graphelement->getName()=="linearGradient"){
-						
-						if(isset($attrs['id'])){
-								$gradientname=$attrs['id'];
-						}
-						if(!isset($attrs['x1'])){
-								// Linear Gradient is not complete, this means that it is an inkscape element!
-								$isinkscape=true;
-						}else if(isset($xlinkattrs['href'])){
-
-								echo "var ".$gradientname."=c.createLinearGradient(".numb($attrs['x1']).",".numb($attrs['y1']).",".numb($attrs['x2']).",".numb($attrs['y2']).");\n";
-
-								// Now we create a new gradient with the following properties
-								$gradientref=$xlinkattrs['href'];
-								$gradientref=substr($gradientref,1,strlen($gradientref)-1);
-								
-								if(isset($colorstops["$gradientref"])){
-										foreach($colorstops["$gradientref"] as $key => $value){
-												echo $gradientname.".addColorStop(".$value.");\n";
-										}
-								}
-																
-						}else{
-								echo "var ".$gradientname."=c.createLinearGradient(".numb($attrs['x1']).",".numb($attrs['y1']).",".numb($attrs['x2']).",".numb($attrs['y2']).");\n";
-						}
+						// Create array to store stops
+						$graphobj['stops']=array();
+					
+						$graphobj['gradientx1']=numb((string)$attrs['x1']);
+						$graphobj['gradienty1']=numb((string)$attrs['y1']);
+						$graphobj['gradientx2']=numb((string)$attrs['x2']);
+						$graphobj['gradienty2']=numb((string)$attrs['y2']);
+					
+						$graphobj['gradientid']=(string)$attrs['id'];
 				}else if($graphelement->getName()=="radialGradient"){
-						if(isset($attrs['id'])){
-								$gradientname=$attrs['id'];
-						}
-						if(!isset($attrs['cx'])){
-								// Radial Gradient is not complete, this means that it is an inkscape element!
-								$isinkscape=true;
-						}else if(isset($xlinkattrs['href'])){
-								echo "var ".$gradientname."=c.createRadialGradient(".numb($attrs['cx']).",".numb($attrs['cy']).",0,".numb($attrs['cx']).",".numb($attrs['cy']).",".numb($attrs['r']).");\n";
+						// Create array to store stops
+						$graphobj['stops']=array();
+					
+						$graphobj['gradientcx']=numb((string)$attrs['cx']);
+						$graphobj['gradientcy']=numb((string)$attrs['cy']);
+						$graphobj['gradientr']=numb((string)$attrs['r']);
 
-								// Now we create a new gradient with the following properties
-								$gradientref=$xlinkattrs['href'];
-								$gradientref=substr($gradientref,1,strlen($gradientref)-1);
-								
-								if(isset($colorstops["$gradientref"])){
-										foreach($colorstops["$gradientref"] as $key => $value){
-												echo $gradientname.".addColorStop(".$value.");\n";
-										}
-								}
-																
+						// Either set second center to same as first center or use second center
+						if(isset($attrs['fx'])){
+								$graphobj['gradientfx']=numb((string)$attrs['fx']);
+								$graphobj['gradientfy']=numb((string)$attrs['fy']);
 						}else{
-								echo "var ".$gradientname."=c.createRadialGradient(".numb($attrs['cx']).",".numb($attrs['cy']).",0,".numb($attrs['cx']).",".numb($attrs['cy']).",".numb($attrs['r']).");\n";
+								$graphobj['gradientfx']=numb((string)$attrs['cx']);
+								$graphobj['gradientfy']=numb((string)$attrs['cy']);						
 						}
+					
+						$graphobj['gradientid']=(string)$attrs['id'];
 				}else if($graphelement->getName()=="stop"){
 						$stopcolor=$attrs['style'];
-
+						
 						if(strpos($stopcolor,"opacity")>0){
 								$stopR=hexdec(substr($stopcolor,12,2));
 								$stopG=hexdec(substr($stopcolor,14,2));
@@ -396,19 +386,11 @@ if(isset($_POST['svgname'])){
 								}
 								$stopcolor=substr($stopcolor,11,$stopcolorend-11);
 						}
-												
-						if($isinkscape){
-									if(isset($colorstops["$gradientname"])){
-											array_push($colorstops["$gradientname"],$attrs['offset'].",'".$stopcolor."'");
-									}else{
-											$poo=array();
-											array_push($poo,$attrs['offset'].",'".$stopcolor."'");
-											$colorstops["$gradientname"]=$poo;
-									}
-						}else{
-									echo $gradientname.".addColorStop(".$attrs['offset'].",'".$stopcolor."');\n";
-						}
-						
+
+						$stop=array();
+						$stop[0]=(string)$attrs['offset'];
+						$stop[1]=$stopcolor;
+						array_push($graphobjs[$lastgradient]['stops'],$stop);
 				}else{
 								// We assume that defsid is the only use of ID
 								if(isset($attrs['id'])) $defsid=$attrs['id'];
@@ -426,41 +408,17 @@ if(isset($_POST['svgname'])){
 			  	
 					// Get font parameters!
 			    if ($key == "font-size"&&$graphelement->getName()=="text"){
-							$fontline=$val;
+							$graphobj['fontsize']=$val;
 			    }		
 			    	    
 			    if ($key == "font-family"&&$graphelement->getName()=="text"){
-							$fontfamily=$val;
-			    		$fontfamily=str_replace("'","",$fontfamily);
-			    		$fontstyle="";
-			    		if(!(strpos($fontfamily,"-Oblique")===FALSE)){
-			    				$fontfamily=str_replace("-Oblique","",$fontfamily);
-			    				$fontstyle="Bold";			    				
-			    		}
-			    		if(!(strpos($fontfamily,"-Bold")===FALSE)){
-			    				$fontfamily=str_replace("-Bold","",$fontfamily);
-			    				$fontstyle="Bold";			    				
-			    		}
-			    		if(!(strpos($fontfamily,"-Italic")===FALSE)){
-			    				$fontfamily=str_replace("-Italic","",$fontfamily);
-			    				$fontstyle="Italic";			    				
-			    		}			    		
-			    		if(!(strpos($fontfamily,"Bold")===FALSE)){
-			    				$fontfamily=str_replace("Bold","",$fontfamily);
-			    				$fontstyle=$fontstyle." Bold";			    				
-			    		}
-			    		if(!(strpos($fontfamily,"Italic")===FALSE)){
-			    				$fontfamily=str_replace("Italic","",$fontfamily);
-			    				$fontstyle=$fontstyle." Italic";			    				
-			    		}
-							
-							$graphobj['fontstyle']=$fontstyle;
-
+							$arr = explode("-", $val, 2);
+							$graphobj['fontstyle']=$arr[0];
 			    }
 
 			    if ($graphelement->getName()=="text"){
-							if($key=="x") $textx=$val;
-							if($key=="y") $texty=$val;
+							if($key=="x") $graphobj['textx']=$val;
+							if($key=="y") $graphobj['texty']=$val;
 			    }
 
 			    if ($graphelement->getName()=="rect"){
@@ -489,13 +447,11 @@ if(isset($_POST['svgname'])){
 							if($key=="y1") $liney1=$val;
 							if($key=="y2") $liney2=$val;
 			    }else if ($key == "transform"&&$graphelement->getName()=="text"){
-			    	
 			 				$j=0;
 							$dostr="";
 							$params=array();
 							$noparams=0;
 							$workstr=$val;
-			
 							do{
 									$dochr=substr($workstr,$j,1);
 									if($dochr==" "||$dochr=="("||$dochr==")"){
@@ -515,17 +471,11 @@ if(isset($_POST['svgname'])){
 			   			if(trim($dostr)!=""){
 									$params[$noparams++]=$dostr;
 							}
-						
 							$graphobj['translate']=numb($params[4]).",".numb($params[5]);
 							$graphobj['rotate']=numb($params[1]).",".numb($params[2]);
 							$graphobj['scale']=numb($params[0]).",".numb($params[3]);
-							 				
-							$translate="c.translate(".numb($params[4]).",".numb($params[5]).");\n";
-							$rotate="c.rotate(".numb($params[1]).",".numb($params[2]).");\n";
-							$scale="c.scale(".numb($params[0]).",".numb($params[3]).");\n";
-															
 			    }elseif ($key == "stroke"){
-							$graphobj['strokestyle']=$val;
+							$graphobj['strokestyle']=(string)$val;
 			    }elseif ($key == "opacity"){
 			    		$opacity=$val;
 							$graphobj['opacity']=$val;
@@ -535,15 +485,17 @@ if(isset($_POST['svgname'])){
 			    }elseif ($key == "stroke-linejoin"){
 							$join=$val;
 							$graphobj['linejoin']=$val;
+			    }elseif ($key == "stroke-dasharray"){
+							$dash=$val;
+							$graphobj['dasharr']=$dash;
 			    }elseif ($key == "fill"){
 				      if($val!="none"){
 									if(strpos($val,"url(")===false){
-											$graphobj['fillstyle']=$val;
+											$graphobj['fillstyle']=(string)$val;
 									}else{
-											$graphobj['fillstyle']=substr($val,5,strlen($val)-6);												
+											$graphobj['fillgradient']=substr($val,5,strlen($val)-6);												
 									}
 							}
-							$fillstyle=$val;
 			    }elseif ($key == "style"){
 			    		$fillpos=strpos($val,"fill:");
 			    		if($fillpos!==false){
@@ -601,16 +553,12 @@ if(isset($_POST['svgname'])){
 			    		}	
 			    					    				    		
 			    }elseif ($key == "stroke-width"){
-							$graphobj['strokestyle']=$linestyle;
+							$graphobj['strokewidth']=(string)$val;
 			    }elseif ($key == "points"&&($graphelement->getName()=="polygon"||$graphelement->getName()=="polyline"||$graphelement->getName()=="line")) {
 			      	
 							if($defsmode){
 									$defsstring.="c.beginPath();\n";			      				      				      	
 							}
-
-							$graphobj['kind']=$graphelement->getName();
-							$graphobj['opacity']=$opacity;
-							$graphobj['pntarr']=array();
 
 							// dostr loop for polygons. Bugfix: if old char is e, then we do not break string at -							
 							$j=0;
@@ -676,9 +624,6 @@ if(isset($_POST['svgname'])){
 				// Draw d path commands. This is a fix for the svg data that requires that the line settings have to be assigned before the line commands
 				if(isset($dval)){
 				
-						$graphobj['kind']="Path";
-						$graphobj['opacity']=$opacity;
-
 						$graphobj['pntarr']=array();
 			      
 			      $i=0;
@@ -791,7 +736,8 @@ if(isset($_POST['svgname'])){
 																}else if($command=="m"){
 																		$cx+=$params[$j];
 																		$cy+=$params[$j+1];		
-																		array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale).",".numb($cy/$coordsscale)));
+																		array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
+																		array_push($graphobj['pntarr'],makePnt2("L",numb($cx/$coordsscale),numb($cy/$coordsscale)));
 																}
 													}
 											}
@@ -841,7 +787,6 @@ if(isset($_POST['svgname'])){
 															$cy+=$params[$j+3];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-															// echo "c.bezierCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($p1x).",".numb($p1y).",".numb($cx).",".numb($cy).");\n";
 															array_push($graphobj['pntarr'],makePnt6("B",numb($lastpointx),numb($lastpointy),numb($p1x),numb($p1y),numb($cx),numb($cy)));
 													}
 											}
@@ -861,7 +806,6 @@ if(isset($_POST['svgname'])){
 															$cy+=$params[$j+1];
 															$lastpointx=$p1x;
 															$lastpointy=$p1y;
-															// echo "c.quadraticCurveTo(".numb($lastpointx).",".numb($lastpointy).",".numb($cx).",".numb($cy).");\n";
 															array_push($graphobj['pntarr'],makePnt4("Q",numb($lastpointx),numb($lastpointy),numb($cx),numb($cy)));
 													}
 											}
@@ -930,62 +874,14 @@ if(isset($_POST['svgname'])){
 				}
 			
 			  if($graphelement->getName()=="text"){
-			
-						echo "c.globalAlpha = $opacity;\n";
-
-						echo "c.beginPath();\n";
-						echo "c.save();\n";
-						echo "c.font = '".$fontstyle." ".$fontline."px ".$fontfamily."';\n";
-
-						if(isset($translate)&&isset($rotate)&&isset($scale)){
-								echo $translate;
-								echo $rotate;
-								echo $scale;
-						}
-						
-						if(isset($textx)&&isset($texty)){
-								echo "c.fillText('".$textline."',".$textx.",".$texty.");\n";						
-						}else{
-								echo "c.fillText('".$textline."',0,0);\n";												
-						}
-						
-
-			    	if($linestyle!="none"){
-								if(isset($textx)&&isset($texty)){
-			      				echo "c.strokeText('".$textline."',".$textx.",".$texty.");\n";
-					  		}else{
-			      				echo "c.strokeText('".$textline."',0,0);\n";					  		
-					  		}
-					  }				    
-
-						echo "c.restore();\n\n";
-
+						$graphobj['textline']=$textline;
 			  }elseif($graphelement->getName()=="rect"){
-						// This rectangle must be clipped!
-						if(isset($attrs['clip-path'])){
-									$clipid=substr($attrs['clip-path'],5);
-									$clipid=substr($clipid,0,strlen($clipid)-1);
-									$clipid=$clippaths[$clipid];
-									
-									echo "c.save();\n";
-									
-									echo $clipdefs[strval($clipid)];
-						}
-
-						$graphobj['kind']="Rect";
-						$graphobj['opacity']=$opacity;
-
-						$graphobj['pntarr']=array();
+						
 						array_push($graphobj['pntarr'],makePnt2("M",numb($linex1),numb($liney1)));
 						array_push($graphobj['pntarr'],makePnt2("L",numb($linex1+$linex2),numb($liney1)));
 						array_push($graphobj['pntarr'],makePnt2("L",numb($linex1+$linex2),numb($liney1+$liney2)));
 						array_push($graphobj['pntarr'],makePnt2("L",numb($linex1),numb($liney1+$liney2)));
 						array_push($graphobj['pntarr'],makePnt2("L",numb($linex1),numb($liney1)));
-
-						// This rectangle must be clipped!
-						if(isset($attrs['clip-path'])){
-									echo "c.restore();\n";
-						}
 			  }elseif($graphelement->getName()=="circle"||$graphelement->getName()=="ellipse"){
 
 						$xs=$cx-$rx;
@@ -998,46 +894,17 @@ if(isset($_POST['svgname'])){
 						$ysp=$cy-($ry*0.552);
 						$yep=$cy+($ry*0.552);
 
-						$graphobj['kind']="Circ";
-						$graphobj['opacity']=$opacity;
-
-						$graphobj['pntarr']=array();
-						array_push($graphobj['pntarr'],makePnt2("M",numb($xsp/$coordsscale),numb($ys/$coordsscale),numb($xs/$coordsscale),numb($ysp/$coordsscale),numb($xs/$coordsscale),numb($cy/$coordsscale)));
+						array_push($graphobj['pntarr'],makePnt2("M",numb($cx/$coordsscale),numb($ys/$coordsscale)));					
+						array_push($graphobj['pntarr'],makePnt6("B",numb($xsp/$coordsscale),numb($ys/$coordsscale),numb($xs/$coordsscale),numb($ysp/$coordsscale),numb($xs/$coordsscale),numb($cy/$coordsscale)));
 						array_push($graphobj['pntarr'],makePnt6("B",numb($xs/$coordsscale),numb($yep/$coordsscale),numb($xsp/$coordsscale),numb($ye/$coordsscale),numb($cx/$coordsscale),numb($ye/$coordsscale)));
 						array_push($graphobj['pntarr'],makePnt6("B",numb($xep/$coordsscale),numb($ye/$coordsscale),numb($xe/$coordsscale),numb($yep/$coordsscale),numb($xe/$coordsscale),numb($cy/$coordsscale)));
 						array_push($graphobj['pntarr'],makePnt6("B",numb($xe/$coordsscale),numb($ysp/$coordsscale),numb($xep/$coordsscale),numb($ys/$coordsscale),numb($cx/$coordsscale),numb($ys/$coordsscale)));
-
 				}elseif($graphelement->getName()=="line"){
-						$graphobj['kind']="Line";
-						$graphobj['opacity']=$opacity;
-						$graphobj['pntarr']=array();
 						array_push($graphobj['pntarr'],makePnt2("M", numb($linex1/$coordsscale),numb($liney1/$coordsscale) ));
 						array_push($graphobj['pntarr'],makePnt2("L", numb($linex2/$coordsscale),numb($liney2/$coordsscale)));
-				}elseif($graphelement->getName()=="g"){
-							// We only print groups that have an ID
-							if($coordsmode==0){
-									if(isset($attrs['id'])){
-											echo "//-------------------------------\n";
-											echo "// Group: ".$attrs['id']."\n";
-											echo "//-------------------------------\n";
-									}							
-							}else{
-									// if it is a group in non-coordinate mode we output a json array construct
-									$jsonstr.= ",[";									
-							}
+				}elseif($graphelement->getName()=="g"||$graphelement->getName()=="eg"){
+						$graphobj['id']=(string)$attrs['id'];
 				}elseif($graphelement->getName()=="eg"){
-							// We only print groups that have an ID
-							if($coordsmode==0){
-									if(isset($attrs['id'])){
-											echo "//-------------------------------\n";
-											echo "// GroupEnd: ".$attrs['id']."\n";
-											echo "//-------------------------------\n";
-											echo "\n\n\n";
-									}							
-							}else{
-									// if it is a group in non-coordinate mode we output a json array construct
-									$jsonstr.= "]";									
-							}
 				}elseif($graphelement->getName()=="defs"){
 									$defsmode=1;
 									$defsstring="";
@@ -1049,13 +916,147 @@ if(isset($_POST['svgname'])){
   			}
 
 				// Add object to drawing queue
-				array_push($graphobjs,$graphobj);
+				if($graphobj['kind']=="linearGradient"||$graphobj['kind']=="radialGradient"){
+						$lastgradient=array_push($graphobjs,$graphobj)-1;
+				}else if($graphobj['kind']!="stop"){
+						array_push($graphobjs,$graphobj);				
+				}
 		}
 
 }
 
-echo "/*";
-print_r($graphobjs);
-echo "*/";
+$lastopacity="1.0";
+$lastdash="";
+$tabs=0;
+$lastid="";
+
+$funclist = array();
+
+foreach ($graphobjs as $graphobj) {
+		
+		if($graphobj['kind']=="g"){
+				if(($tabs==0)&&(!empty($graphobj['id']))){
+						tabbedecho("function ".$graphobj['id']."(){\n",$tabs);
+						array_push($funclist,$graphobj['id']);
+						$lastid=$graphobj['id'];
+				}else{
+						tabbedecho("// --------======####".$graphobj['id']." START ####======--------\n",$tabs);		
+				}
+				$tabs++;
+		}else if($graphobj['kind']=="eg"){
+				$tabs--;
+				if(($tabs==0)&&(!empty($lastid))){
+						tabbedecho("}\n\n",$tabs);
+				}else{
+						tabbedecho("// --------======####".$graphobj['id']." END ####======--------\n",$tabs+1);		
+				}
+		}else{
+//				echo "/*\n";
+//				print_r($graphobj);
+//				echo "/*\n";
+				if(isset($graphobj['id'])){
+						tabbedecho("//--==## ".$graphobj['id']." ".$graphobj['kind']." ##==--\n",$tabs+1);
+				}		
+		}
+				
+		if(!isset($graphobj['opacity'])){
+				if($lastopacity!="none"){
+						tabbedecho("c.globalAlpha=1.0;\n",$tabs);
+						$lastopacity="none";
+				}
+		}
+		if(!isset($graphobj['dasharr'])){
+				if($lastdash!=""){
+						tabbedecho("c.setLineDash([]);\n",$tabs);
+						$lastdash="";
+				}
+		}
+	
+		$pnts=$graphobj['pntarr'];
+		$pntcount=count($pnts);
+
+		if($graphobj['kind']=="linearGradient"){
+				tabbedecho("var ".$graphobj['gradientid']."=c.createLinearGradient(".$graphobj['gradientx1'].",".$graphobj['gradienty1'].",".$graphobj['gradientx2'].",".$graphobj['gradienty2'].");\n",$tabs);
+				foreach($graphobj['stops'] as $key => $value){
+						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
+				}
+		}else if($graphobj['kind']=="radialGradient"){
+				tabbedecho("var ".$graphobj['gradientid']."=c.createRadialGradient(".$graphobj['gradientcx'].",".$graphobj['gradientcy'].",0,".$graphobj['gradientfx'].",".$graphobj['gradientfy'].",".$graphobj['gradientr'].");\n",$tabs);
+				foreach($graphobj['stops'] as $key => $value){
+						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
+				}
+		}else if($graphobj['kind']=="text"){
+				if(isset($graphobj['textx'])){
+						tabbedecho("c.fillText('".$graphobj['textline']."',".$graphobj['textx'].",".$graphobj['texty'].");\n",$tabs);						
+				}
+				if(isset($graphobj['translate'])){
+						tabbedecho("c.save();\n",$tabs);
+						//echo "c.font = '".$fontstyle." ".$fontline."px ".$fontfamily."';\n";
+						tabbedecho("c.translate(".$graphobj['translate'].");\n",$tabs);
+						tabbedecho("c.rotate(".$graphobj['rotate'].");\n",$tabs);
+						tabbedecho("c.scale(".$graphobj['scale'].");\n",$tabs);
+						tabbedecho("c.fillText('".$graphobj['textline']."',0,0);\n",$tabs);					
+						tabbedecho("c.restore();\n",$tabs);
+				}
+		}else if($graphobj['kind']=="g"||$graphobj['kind']=="eg"){
+
+		}else if($pntcount>0){
+				$fill="none";
+				$stroke="none";
+				foreach($graphobj as $key => $value){
+						if($key=="strokestyle"){
+								tabbedecho("c.strokeStyle='".$value."';\n",$tabs);
+								$stroke=$value;
+						}else if($key=="fillgradient"){
+								tabbedecho("c.fillStyle=".$value.";\n",$tabs);
+								$fill=$value;
+						}else if($key=="fillstyle"){
+								tabbedecho("c.fillStyle='".$value."';\n",$tabs);
+								$fill=$value;
+						}else if($key=="strokewidth"){
+								tabbedecho("c.lineWidth='".$value."';\n",$tabs);
+						}else if($key=="linecap"){
+								tabbedecho("c.lineCap='".$value."';\n",$tabs);
+						}else if($key=="linejoin"){
+								tabbedecho("c.lineJoin='".$value."';\n",$tabs);
+						}else if($key=="opacity"){
+								tabbedecho("c.globalAlpha=".$value.";\n",$tabs);
+								$lastopacity=$value;
+						}else if($key=="dasharr"){
+								tabbedecho("c.setLineDash([".$value."]);\n",$tabs);
+								$lastdash=$value;
+						}
+				}
+				if($fill=="none" && $stroke=="none") tabbedecho("c.fillStyle='#000';\n",$tabs);
+
+				tabbedecho("c.beginPath();\n",$tabs);
+				foreach($pnts as $pnt){
+						if($pnt[0]=="M"){
+								tabbedecho("c.moveTo(".$pnt[1].",".$pnt[2].");\n",$tabs);
+						}else if($pnt[0]=="L"){
+								tabbedecho("c.lineTo(".$pnt[1].",".$pnt[2].");\n",$tabs);								
+							}else if($pnt[0]=="Q"){
+								tabbedecho("c.quadraticCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].");\n",$tabs);								
+						}else if($pnt[0]=="B"){
+								tabbedecho("c.bezierCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].",".$pnt[5].",".$pnt[6].");\n",$tabs);								
+						}
+				}
+				if($fill!="none") tabbedecho("c.fill();\n",$tabs);
+				if($stroke!="none") tabbedecho("c.stroke();\n",$tabs);
+
+				if($fill=="none" && $stroke=="none") tabbedecho("c.fill();\n",$tabs);
+			
+		}else{
+				echo "//".$graphobj['kind']."\n";
+		}
+	
+}
+
+if((count($funclist)>0)&&(!isset($_GET['nofuncs']))){
+		echo "\n// Function calls\n";
+		foreach($funclist as $value){
+				echo $value."();\n";
+		}
+}
 
 ?>

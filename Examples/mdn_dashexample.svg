@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="200px" height="200px" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
+<line stroke-dasharray="5, 5" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="10" x2="190" y2="10"/>
+<line stroke-dasharray="5, 10" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="30" x2="190" y2="30"/>
+<line stroke-dasharray="10, 5" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="50" x2="190" y2="50"/>
+<line stroke-dasharray="5, 1" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="70" x2="190" y2="70"/>
+<line stroke-dasharray="1, 5" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="90" x2="190" y2="90"/>
+<line stroke-dasharray="0.9" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="110" x2="190" y2="110"/>
+<line stroke-dasharray="15, 10, 5" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="130" x2="190" y2="130"/>
+<line stroke-dasharray="15, 10, 5, 10" fill="none" stroke="#000000" stroke-miterlimit="10" x1="10" y1="150" x2="190" y2="150"/>
+<line stroke-dasharray="15, 10, 5, 10, 15" fill="none" stroke="#000000" x1="10" y1="170" x2="190" y2="170"/>
+<line stroke-dasharray="5, 5, 1, 5" fill="none" stroke="#000000" x1="10" y1="190" x2="190" y2="190"/>
+
+<line fill="none" stroke="#f88" x1="0" y1="0" x2="150" y2="220"/>
+<line fill="none" stroke="#f88" x1="0" y1="220" x2="150" y2="0"/>
+	
+</svg>
