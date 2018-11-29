@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="841.891px" height="595.279px" viewBox="0 0 841.891 595.279" enable-background="new 0 0 841.891 595.279"
+	 xml:space="preserve">
+<g id="Layer_2">
+</g>
+<g id="HexTiles">
+	<g id="FloorAV6">
+		<polygon fill="#897D5B" points="105.146,87.129 105.146,122.656 53.074,140.632 53.074,105.23 		"/>
+		<polygon fill="#92BF43" points="1,53.176 53.074,35.076 105.146,53.176 105.146,87.129 53.074,105.23 1,87.061 		"/>
+		<polygon fill="#63593A" points="53.074,105.23 53.074,140.632 1.001,122.632 1,87.061 		"/>
+		<polygon fill="none" stroke="#3C2415" stroke-width="0.5" stroke-miterlimit="10" points="1,18.099 53.074,-0.002 105.146,18.099 
+			105.146,52.052 53.074,70.154 1,51.984 		"/>
+		<polygon fill="#85A03C" points="53.073,-0.002 0.999,53.176 105.146,87.129 105.147,18.099 		"/>
+	</g>
+	<g id="FloorAV5" display="none">
+		<polygon display="inline" fill="#897D5B" points="104.147,51.89 104.147,122.495 52.075,140.47 52.075,69.992 		"/>
+		<polygon display="inline" fill="#92BF43" points="0.001,53.014 52.075,34.915 104.147,53.014 52.075,69.992 52.075,105.068 
+			0.001,86.899 		"/>
+		<polygon display="inline" fill="#63593A" points="52.075,69.992 52.075,140.47 0.002,122.47 0.001,86.899 		"/>
+		<polygon display="inline" fill="none" stroke="#3C2415" stroke-width="0.5" stroke-miterlimit="10" points="0.001,17.937 
+			52.075,-0.163 104.147,17.937 104.147,51.89 52.075,69.992 0.001,51.822 		"/>
+	</g>
+	<g id="FloorAV4" display="none">
+		<polygon display="inline" fill="#92BF43" points="235.747,92.468 287.822,74.368 339.894,92.468 339.894,126.421 287.822,144.521 
+			287.822,109.445 		"/>
+		<polygon display="inline" fill="#63593A" points="287.822,109.445 287.822,179.924 235.748,161.924 235.747,91.468 		"/>
+		<polygon display="inline" fill="none" stroke="#3C2415" stroke-width="0.5" stroke-miterlimit="10" points="235.747,57.39 
+			287.822,39.29 339.894,57.39 339.894,91.344 287.822,109.445 235.747,91.275 		"/>
+		<polygon display="inline" fill="#897D5B" points="339.894,126.421 339.894,161.948 287.822,179.924 287.822,109.445 		"/>
+	</g>
+	<g id="FloorAV3" display="none">
+		<polygon display="inline" fill="#897D5B" points="104.147,87.131 104.147,122.656 52.074,140.634 52.074,105.231 		"/>
+		<polygon display="inline" fill="#92BF43" points="0,53.178 52.074,35.077 104.147,53.178 104.147,87.131 52.074,105.231 		"/>
+		<polygon display="inline" fill="#63593A" points="52.074,105.231 52.074,140.634 0.001,122.634 0,51.985 		"/>
+		<polygon display="inline" fill="#6E8931" points="0,51.985 52.074,105.231 52.074,35.077 0,18.101 		"/>
+		<polygon display="inline" fill="none" stroke="#3C2415" stroke-width="0.5" stroke-miterlimit="10" points="0,18.101 52.074,0 
+			104.147,18.101 104.147,52.054 52.074,70.154 0,51.985 		"/>
+	</g>
+	<g id="FloorAV1">
+		<polygon fill="#897D5B" points="104.147,87.131 104.147,122.656 52.074,140.634 52.074,105.231 		"/>
+		<polygon fill="#92BF43" points="0,53.178 52.074,35.077 104.147,53.178 104.147,87.131 52.074,105.231 0,87.062 		"/>
+		<polygon fill="#63593A" points="52.074,105.231 52.074,140.634 0.001,122.634 0,87.062 		"/>
+		<polygon fill="#BFD856" points="0,18.101 0,87.062 104.147,53.178 52.074,0 		"/>
+		<polygon fill="none" stroke="#3C2415" stroke-width="0.5" stroke-miterlimit="10" points="0,18.101 52.074,0 104.147,18.101 
+			104.147,52.054 52.074,70.154 0,51.985 		"/>
+	</g>
+	<g id="FloorAV2" display="none">
+		<polygon display="inline" fill="#897D5B" points="104.147,87.002 104.147,122.529 52.074,140.505 52.073,105.103 		"/>
+		<polygon display="inline" fill="#92BF43" points="0,53.049 52.073,34.948 104.147,53.049 104.147,87.002 52.073,105.103 0,86.934 
+					"/>
+		<polygon display="inline" fill="#63593A" points="52.073,105.103 52.074,140.505 0.001,122.505 0,86.934 		"/>
+		<polygon display="inline" fill="#85A03C" points="52.073,-0.197 0,52.981 104.146,86.934 104.147,17.904 		"/>
+		<polygon display="inline" fill="none" stroke="#2E3192" stroke-width="0.3" stroke-miterlimit="10" points="0,17.972 
+			52.074,-0.128 104.148,17.972 104.148,51.925 52.074,70.026 0,51.857 		"/>
+	</g>
+	<g id="FloorA_1_" display="none">
+		<polygon display="inline" fill="#897D5B" points="104.146,86.968 104.146,122.495 52.074,140.471 52.074,105.069 		"/>
+		<polygon display="inline" fill="#92BF43" points="0,53.015 52.074,34.915 104.146,53.015 104.146,86.968 52.074,105.069 0,86.9 		
+			"/>
+		<polygon display="inline" fill="#63593A" points="52.074,105.069 52.074,140.471 0.001,122.471 0,86.9 		"/>
+		<polygon display="inline" fill="none" stroke="#3C2415" stroke-width="0.5" stroke-miterlimit="10" points="0,17.938 
+			52.074,-0.163 104.146,17.938 104.146,51.891 52.074,69.992 0,51.823 		"/>
+	</g>
+	<g id="Palette" display="none">
+		<rect x="357.409" y="15.815" display="inline" fill="#6E8931" width="30.669" height="30.669"/>
+		<rect x="234.737" y="15.815" display="inline" fill="#BFD856" width="30.669" height="30.669"/>
+		<rect x="265.406" y="15.815" display="inline" fill="#BFD856" width="30.669" height="30.669"/>
+		<rect x="296.076" y="15.815" display="inline" fill="#92BF43" width="30.669" height="30.669"/>
+		<rect x="326.74" y="15.815" display="inline" fill="#85A03C" width="30.669" height="30.669"/>
+	</g>
+</g>
+</svg>
