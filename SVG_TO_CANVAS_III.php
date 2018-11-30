@@ -1,5 +1,8 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.0.1
+//    Feature: Object hiding (2018-11-29)
+//--------------------------------------------------------------------------
 // Version 4.0
 //    Feature: Settings pane for decimals and json. (2017-12-29)
 //		Feature: Object creation before javascript / json export
@@ -141,6 +144,10 @@ if(isset($_POST['kind'])){
 }else{
 		$coordsmode=0;			// Output coordinates as moveto lineto
 }
+
+// List of functions and display properties
+$funclist = array();
+$showlist = array();
 
 // Rounding Decimal Count i.e. 1 is n.n 2 is n.nn
 $coordsscale=1.0;	// Rescale output coordinates e.g. if we want sizes to be normalized
@@ -328,6 +335,15 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 				// ID printing (disabled for clarity?)
 				if(isset($attrs['id'])){
 						$graphobj['id']=(string)$attrs['id'];
+				}
+
+				// We update array with ids of shown / hidden objects
+				if(isset($attrs['id'])&&isset($attrs['display'])){
+						if($attrs['display']=="none"){
+									$showlist[(string)$attrs['id']]="hide";
+						}else{
+									$showlist[(string)$attrs['id']]="show";
+						}
 				}
 
 				// For use element get 
@@ -930,8 +946,6 @@ $lastdash="";
 $tabs=0;
 $lastid="";
 
-$funclist = array();
-
 foreach ($graphobjs as $graphobj) {
 		
 		if($graphobj['kind']=="g"){
@@ -1055,8 +1069,11 @@ foreach ($graphobjs as $graphobj) {
 if((count($funclist)>0)&&(!isset($_GET['nofuncs']))){
 		echo "\n// Function calls\n";
 		foreach($funclist as $value){
-				echo $value."();\n";
+				if($showlist[$value]!="hide"){
+						echo $value."();\n";				
+				}
 		}
+
 }
 
 ?>
