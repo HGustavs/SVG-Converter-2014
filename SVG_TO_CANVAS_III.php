@@ -1069,8 +1069,12 @@ foreach ($graphobjs as $graphobj) {
 if((count($funclist)>0)&&(!isset($_GET['nofuncs']))){
 		echo "\n// Function calls\n";
 		foreach($funclist as $value){
-				if($showlist[$value]!="hide"){
-						echo $value."();\n";				
+				if(isset($showlist[$value])){
+						if($showlist[$value]!="hide"){
+								echo $value."();\n";				
+						}
+				}else{
+								echo $value."();\n";								
 				}
 		}
 
