@@ -34,7 +34,7 @@
 //		Bug: Dashed Lines do not work
 //		Bug: ID-s of elements can be printed as comments (to simplify reading of code) 
 //		Bug: Line Width as string ctx.lineWidth="10"; rather than ctx.lineWidth=10;
-//    Bug: No enter after c.stroke(); but enter after c.strokestyle. This makes it appear like strokestyle is in previous group -- Enter after stroke if there is no fill, never enter after strokestyle
+//    Bug: No enter after ctx.stroke(); but enter after ctx.strokestyle. This makes it appear like strokestyle is in previous group -- Enter after stroke if there is no fill, never enter after strokestyle
 //		Bug: Too many Opacity and Linewidth. Only add linewidth/Opacity if it changes
 //		Bug: End Caps do not work for bricks example
 //		Fix: Added better comment printing using single line comment
@@ -573,7 +573,7 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 			    }elseif ($key == "points"&&($graphelement->getName()=="polygon"||$graphelement->getName()=="polyline"||$graphelement->getName()=="line")) {
 			      	
 							if($defsmode){
-									$defsstring.="c.beginPath();\n";			      				      				      	
+									$defsstring.="ctx.beginPath();\n";			      				      				      	
 							}
 
 							// dostr loop for polygons. Bugfix: if old char is e, then we do not break string at -							
@@ -608,12 +608,12 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 							for($j=0;$j<$noparams;$j+=2){
 									if($j==0){
 										if($defsmode){
-												$defsstring.="c.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";							
+												$defsstring.="ctx.moveTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";							
 										}
 										array_push($graphobj['pntarr'],makePnt2("M",numb($params[$j]),numb($params[$j+1])));
 									}else{
 										if($defsmode){
-												$defsstring.="c.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
+												$defsstring.="ctx.lineTo(".numb($params[$j]).",".numb($params[$j+1]).");\n";														
 										}
 										array_push($graphobj['pntarr'],makePnt2("L", numb($params[$j]),numb($params[$j+1])));
 									}
@@ -622,13 +622,13 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 							// If a polygon closes path if not i.e. polyline keep it open
 							if($noparams>=2&&$graphelement->getName()=="polygon"){
 									if($defsmode){
-											$defsstring.="c.lineTo(".numb($params[0]).", ".numb($params[1]).");\n";														
+											$defsstring.="ctx.lineTo(".numb($params[0]).", ".numb($params[1]).");\n";														
 									}
 									array_push($graphobj['pntarr'],makePnt2("L",numb($params[0]),numb($params[1])));
 							}
 	
 							if($defsmode){
-									$defsstring.="c.clip();\n\n";		
+									$defsstring.="ctx.clip();\n\n";		
 							}
 			    }elseif ($key == "d") {
 			    	
@@ -975,13 +975,13 @@ foreach ($graphobjs as $graphobj) {
 				
 		if(!isset($graphobj['opacity'])){
 				if($lastopacity!="none"){
-						tabbedecho("c.globalAlpha=1.0;\n",$tabs);
+						tabbedecho("ctx.globalAlpha=1.0;\n",$tabs);
 						$lastopacity="none";
 				}
 		}
 		if(!isset($graphobj['dasharr'])){
 				if($lastdash!=""){
-						tabbedecho("c.setLineDash([]);\n",$tabs);
+						tabbedecho("ctx.setLineDash([]);\n",$tabs);
 						$lastdash="";
 				}
 		}
@@ -990,27 +990,27 @@ foreach ($graphobjs as $graphobj) {
 		$pntcount=count($pnts);
 
 		if($graphobj['kind']=="linearGradient"){
-				tabbedecho("var ".$graphobj['gradientid']."=c.createLinearGradient(".$graphobj['gradientx1'].",".$graphobj['gradienty1'].",".$graphobj['gradientx2'].",".$graphobj['gradienty2'].");\n",$tabs);
+				tabbedecho("var ".$graphobj['gradientid']."=ctx.createLinearGradient(".$graphobj['gradientx1'].",".$graphobj['gradienty1'].",".$graphobj['gradientx2'].",".$graphobj['gradienty2'].");\n",$tabs);
 				foreach($graphobj['stops'] as $key => $value){
 						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
 				}
 		}else if($graphobj['kind']=="radialGradient"){
-				tabbedecho("var ".$graphobj['gradientid']."=c.createRadialGradient(".$graphobj['gradientcx'].",".$graphobj['gradientcy'].",0,".$graphobj['gradientfx'].",".$graphobj['gradientfy'].",".$graphobj['gradientr'].");\n",$tabs);
+				tabbedecho("var ".$graphobj['gradientid']."=ctx.createRadialGradient(".$graphobj['gradientcx'].",".$graphobj['gradientcy'].",0,".$graphobj['gradientfx'].",".$graphobj['gradientfy'].",".$graphobj['gradientr'].");\n",$tabs);
 				foreach($graphobj['stops'] as $key => $value){
 						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
 				}
 		}else if($graphobj['kind']=="text"){
 				if(isset($graphobj['textx'])){
-						tabbedecho("c.fillText('".$graphobj['textline']."',".$graphobj['textx'].",".$graphobj['texty'].");\n",$tabs);						
+						tabbedecho("ctx.fillText('".$graphobj['textline']."',".$graphobj['textx'].",".$graphobj['texty'].");\n",$tabs);						
 				}
 				if(isset($graphobj['translate'])){
-						tabbedecho("c.save();\n",$tabs);
+						tabbedecho("ctx.save();\n",$tabs);
 						//echo "c.font = '".$fontstyle." ".$fontline."px ".$fontfamily."';\n";
-						tabbedecho("c.translate(".$graphobj['translate'].");\n",$tabs);
-						tabbedecho("c.rotate(".$graphobj['rotate'].");\n",$tabs);
-						tabbedecho("c.scale(".$graphobj['scale'].");\n",$tabs);
-						tabbedecho("c.fillText('".$graphobj['textline']."',0,0);\n",$tabs);					
-						tabbedecho("c.restore();\n",$tabs);
+						tabbedecho("ctx.translate(".$graphobj['translate'].");\n",$tabs);
+						tabbedecho("ctx.rotate(".$graphobj['rotate'].");\n",$tabs);
+						tabbedecho("ctx.scale(".$graphobj['scale'].");\n",$tabs);
+						tabbedecho("ctx.fillText('".$graphobj['textline']."',0,0);\n",$tabs);					
+						tabbedecho("ctx.restore();\n",$tabs);
 				}
 		}else if($graphobj['kind']=="g"||$graphobj['kind']=="eg"){
 
@@ -1019,46 +1019,46 @@ foreach ($graphobjs as $graphobj) {
 				$stroke="none";
 				foreach($graphobj as $key => $value){
 						if($key=="strokestyle"){
-								tabbedecho("c.strokeStyle='".$value."';\n",$tabs);
+								tabbedecho("ctx.strokeStyle='".$value."';\n",$tabs);
 								$stroke=$value;
 						}else if($key=="fillgradient"){
-								tabbedecho("c.fillStyle=".$value.";\n",$tabs);
+								tabbedecho("ctx.fillStyle=".$value.";\n",$tabs);
 								$fill=$value;
 						}else if($key=="fillstyle"){
-								tabbedecho("c.fillStyle='".$value."';\n",$tabs);
+								tabbedecho("ctx.fillStyle='".$value."';\n",$tabs);
 								$fill=$value;
 						}else if($key=="strokewidth"){
-								tabbedecho("c.lineWidth='".$value."';\n",$tabs);
+								tabbedecho("ctx.lineWidth='".$value."';\n",$tabs);
 						}else if($key=="linecap"){
-								tabbedecho("c.lineCap='".$value."';\n",$tabs);
+								tabbedecho("ctx.lineCap='".$value."';\n",$tabs);
 						}else if($key=="linejoin"){
-								tabbedecho("c.lineJoin='".$value."';\n",$tabs);
+								tabbedecho("ctx.lineJoin='".$value."';\n",$tabs);
 						}else if($key=="opacity"){
-								tabbedecho("c.globalAlpha=".$value.";\n",$tabs);
+								tabbedecho("ctx.globalAlpha=".$value.";\n",$tabs);
 								$lastopacity=$value;
 						}else if($key=="dasharr"){
-								tabbedecho("c.setLineDash([".$value."]);\n",$tabs);
+								tabbedecho("ctx.setLineDash([".$value."]);\n",$tabs);
 								$lastdash=$value;
 						}
 				}
-				if($fill=="none" && $stroke=="none") tabbedecho("c.fillStyle='#000';\n",$tabs);
+				if($fill=="none" && $stroke=="none") tabbedecho("ctx.fillStyle='#000';\n",$tabs);
 
-				tabbedecho("c.beginPath();\n",$tabs);
+				tabbedecho("ctx.beginPath();\n",$tabs);
 				foreach($pnts as $pnt){
 						if($pnt[0]=="M"){
-								tabbedecho("c.moveTo(".$pnt[1].",".$pnt[2].");\n",$tabs);
+								tabbedecho("ctx.moveTo(".$pnt[1].",".$pnt[2].");\n",$tabs);
 						}else if($pnt[0]=="L"){
-								tabbedecho("c.lineTo(".$pnt[1].",".$pnt[2].");\n",$tabs);								
+								tabbedecho("ctx.lineTo(".$pnt[1].",".$pnt[2].");\n",$tabs);								
 							}else if($pnt[0]=="Q"){
-								tabbedecho("c.quadraticCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].");\n",$tabs);								
+								tabbedecho("ctx.quadraticCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].");\n",$tabs);								
 						}else if($pnt[0]=="B"){
-								tabbedecho("c.bezierCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].",".$pnt[5].",".$pnt[6].");\n",$tabs);								
+								tabbedecho("ctx.bezierCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].",".$pnt[5].",".$pnt[6].");\n",$tabs);								
 						}
 				}
-				if($fill!="none") tabbedecho("c.fill();\n",$tabs);
-				if($stroke!="none") tabbedecho("c.stroke();\n",$tabs);
+				if($fill!="none") tabbedecho("ctx.fill();\n",$tabs);
+				if($stroke!="none") tabbedecho("ctx.stroke();\n",$tabs);
 
-				if($fill=="none" && $stroke=="none") tabbedecho("c.fill();\n",$tabs);
+				if($fill=="none" && $stroke=="none") tabbedecho("ctx.fill();\n",$tabs);
 			
 		}else{
 				echo "//".$graphobj['kind']."\n";
