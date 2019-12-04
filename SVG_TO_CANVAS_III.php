@@ -2,6 +2,7 @@
 //--------------------------------------------------------------------------
 // Version 4.0.2
 //    Feature: Affinity Designer Styling Support for Opacity
+//    Feature: Affinity Designer Styling Support for Linear Gradients
 //--------------------------------------------------------------------------
 // Version 4.0.1
 //    Feature: Object hiding (2018-11-29)
@@ -369,6 +370,8 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 						$graphobj['gradientx2']=numb((string)$attrs['x2']);
 						$graphobj['gradienty2']=numb((string)$attrs['y2']);
 					
+						if(isset($attrs['gradientTransform'])) $graphobj['gradientTransform']=(string)$attrs['gradientTransform'];
+					
 						$graphobj['gradientid']=(string)$attrs['id'];
 				}else if($graphelement->getName()=="radialGradient"){
 						// Create array to store stops
@@ -391,12 +394,17 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 				}else if($graphelement->getName()=="stop"){
 						$stopcolor=$attrs['style'];
 						
-						if(strpos($stopcolor,"opacity")>0){
+						if(strpos($stopcolor,"#")>0){
 								$stopR=hexdec(substr($stopcolor,12,2));
 								$stopG=hexdec(substr($stopcolor,14,2));
 								$stopB=hexdec(substr($stopcolor,16,2));
 								$stopA=substr($stopcolor,strrpos($stopcolor,":")+1);
 								$stopcolor="RGBA(".$stopR.",".$stopG.",".$stopB.",".$stopA.")";
+						}else if(strpos($stopcolor,"rgb(")>0){
+								$colstart=strpos($stopcolor,"rgb(");
+								$colend=strpos($stopcolor,");");
+								$stopA=substr($stopcolor,strrpos($stopcolor,":")+1);
+								$stopcolor="RGBA(".substr($stopcolor,$colstart+4,$colend-$colstart-4).",".$stopA.")";
 						}else{
 								if(strpos($stopcolor,";",11)!==false){
 										$stopcolorend=strpos($stopcolor,";",11);
@@ -525,7 +533,7 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 											if(strpos($fillstyle,"url(")===false){
 													$graphobj['fillstyle']=$fillstyle;				
 											}else{
-													$graphobj['fillstyle']=substr($fillstyle,5,strlen($fillstyle)-6);																	
+													$graphobj['fillgradient']=substr($fillstyle,5,strlen($fillstyle)-6);																	
 											}
 									}	
 			    		}
@@ -1009,6 +1017,28 @@ foreach ($graphobjs as $graphobj) {
 		$pntcount=count($pnts);
 
 		if($graphobj['kind']=="linearGradient"){
+
+				// We need to apply matrix exported from affinity designer
+				// The math for applying 2d transform:
+				// x' = a(0)*x + c(2)*y + e(4) 
+				// y' = b(1)*x + d(3)*y + f(5)
+				// https://stackoverflow.com/questions/14684846/flattening-svg-matrix-transforms-in-inkscape
+			
+				if(isset($graphobj['gradientTransform'])){
+						$matrix=explode(",",substr($graphobj['gradientTransform'],7,strlen($graphobj['gradientTransform'])-8));
+
+						$x1=(($graphobj['gradientx1']*$matrix[0])+($graphobj['gradienty1']*$matrix[2])+$matrix[4]);
+						$y1=(($graphobj['gradientx1']*$matrix[1])+($graphobj['gradienty1']*$matrix[3])+$matrix[5]);
+						$x2=(($graphobj['gradientx2']*$matrix[0])+($graphobj['gradienty2']*$matrix[2])+$matrix[4]);
+						$y2=(($graphobj['gradientx2']*$matrix[1])+($graphobj['gradienty2']*$matrix[3])+$matrix[5]);
+				
+						$graphobj['gradientx1']=$x1;
+						$graphobj['gradienty1']=$y1;
+						$graphobj['gradientx2']=$x2;
+						$graphobj['gradienty2']=$y2;
+					
+				}
+			
 				tabbedecho("var ".$graphobj['gradientid']."=ctx.createLinearGradient(".$graphobj['gradientx1'].",".$graphobj['gradienty1'].",".$graphobj['gradientx2'].",".$graphobj['gradienty2'].");\n",$tabs);
 				foreach($graphobj['stops'] as $key => $value){
 						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
