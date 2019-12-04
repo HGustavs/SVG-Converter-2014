@@ -1,5 +1,8 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.0.2
+//    Feature: Affinity Designer Styling Support for Opacity
+//--------------------------------------------------------------------------
 // Version 4.0.1
 //    Feature: Object hiding (2018-11-29)
 //--------------------------------------------------------------------------
@@ -537,7 +540,23 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 										}
 			    		}
 
-			    		$strokepos=strpos($val,"stroke-width:");
+			    		$strokepos=strpos($val,"fill-opacity:");
+			    		if($strokepos!==false){
+			    		  		$strokeposend=strpos($val,";",$strokepos);
+			    		  		if($strokeposend===false) $strokeposend=strlen($val);
+							  		$opacity=substr($val,$strokepos+13,$strokeposend-$strokepos-13);
+										$graphobj['opacity']=floatval($opacity);
+							}	
+						
+			    		$strokepos=strpos($val,"stroke-opacity:");
+			    		if($strokepos!==false){
+			    		  		$strokeposend=strpos($val,";",$strokepos);
+			    		  		if($strokeposend===false) $strokeposend=strlen($val);
+							  		$opacity=substr($val,$strokepos+15,$strokeposend-$strokepos-15);
+										$graphobj['opacity']=floatval($opacity);
+							}	
+
+							$strokepos=strpos($val,"stroke-width:");
 			    		if($strokepos!==false){
 			    		  		$strokeposend=strpos($val,";",$strokepos);
 			    		  		if($strokeposend===false) $strokeposend=strlen($val);
