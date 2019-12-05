@@ -3,6 +3,7 @@
 // Version 4.0.2
 //    Feature: Affinity Designer Styling Support for Opacity
 //    Feature: Affinity Designer Styling Support for Linear Gradients
+//    Fix:     Gradients with colors but no opacity broken.
 //--------------------------------------------------------------------------
 // Version 4.0.1
 //    Feature: Object hiding (2018-11-29)
@@ -398,8 +399,12 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 								$stopR=hexdec(substr($stopcolor,12,2));
 								$stopG=hexdec(substr($stopcolor,14,2));
 								$stopB=hexdec(substr($stopcolor,16,2));
-								$stopA=substr($stopcolor,strrpos($stopcolor,":")+1);
-								$stopcolor="RGBA(".$stopR.",".$stopG.",".$stopB.",".$stopA.")";
+								if(strpos($stopcolor,"opacity:")>0){
+										$stopA=substr($stopcolor,strrpos($stopcolor,":")+1);
+										$stopcolor="RGBA(".$stopR.",".$stopG.",".$stopB.",".$stopA.")";
+								}else{
+										$stopcolor="RGB(".$stopR.",".$stopG.",".$stopB.")";
+								}
 						}else if(strpos($stopcolor,"rgb(")>0){
 								$colstart=strpos($stopcolor,"rgb(");
 								$colend=strpos($stopcolor,");");
@@ -1025,7 +1030,12 @@ foreach ($graphobjs as $graphobj) {
 				// https://stackoverflow.com/questions/14684846/flattening-svg-matrix-transforms-in-inkscape
 			
 				if(isset($graphobj['gradientTransform'])){
-						$matrix=explode(",",substr($graphobj['gradientTransform'],7,strlen($graphobj['gradientTransform'])-8));
+						$matrixwork=substr($graphobj['gradientTransform'],7,strlen($graphobj['gradientTransform'])-8);
+						if(strpos(",",$matrixwork)){
+								$matrix=explode(",",$matrixwork);
+						}else{
+								$matrix=explode(" ",$matrixwork);
+						}
 
 						$x1=(($graphobj['gradientx1']*$matrix[0])+($graphobj['gradienty1']*$matrix[2])+$matrix[4]);
 						$y1=(($graphobj['gradientx1']*$matrix[1])+($graphobj['gradienty1']*$matrix[3])+$matrix[5]);
