@@ -1031,7 +1031,7 @@ foreach ($graphobjs as $graphobj) {
 			
 				if(isset($graphobj['gradientTransform'])){
 						$matrixwork=substr($graphobj['gradientTransform'],7,strlen($graphobj['gradientTransform'])-8);
-						if(strpos(",",$matrixwork)){
+						if(strpos($matrixwork,",")>0){
 								$matrix=explode(",",$matrixwork);
 						}else{
 								$matrix=explode(" ",$matrixwork);
