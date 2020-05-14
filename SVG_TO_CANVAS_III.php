@@ -1,5 +1,8 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.1
+//    Feature: Export of moveto lineto (using new architecture) to json format
+//--------------------------------------------------------------------------
 // Version 4.0.2
 //    Feature: Affinity Designer Styling Support for Opacity
 //    Feature: Affinity Designer Styling Support for Linear Gradients
@@ -979,10 +982,15 @@ $tabs=0;
 $lastid="";
 
 foreach ($graphobjs as $graphobj) {
+		global $coordsmode;
 		
 		if($graphobj['kind']=="g"){
 				if(($tabs==0)&&(!empty($graphobj['id']))){
-						tabbedecho("function ".$graphobj['id']."(){\n",$tabs);
+						if($coordsmode==0){
+								tabbedecho("function ".$graphobj['id']."(){\n",$tabs);
+						}else{
+								echo "// --------======####".$graphobj['id']." START ####======--------\n";
+						}
 						array_push($funclist,$graphobj['id']);
 						$lastid=$graphobj['id'];
 				}else{
@@ -992,7 +1000,9 @@ foreach ($graphobjs as $graphobj) {
 		}else if($graphobj['kind']=="eg"){
 				$tabs--;
 				if(($tabs==0)&&(!empty($lastid))){
-						tabbedecho("}\n\n",$tabs);
+						if($coordsmode==0){
+								tabbedecho("}\n\n",$tabs);
+						}
 				}else{
 						tabbedecho("// --------======####".$graphobj['id']." END ####======--------\n",$tabs+1);		
 				}
@@ -1007,7 +1017,7 @@ foreach ($graphobjs as $graphobj) {
 				
 		if(!isset($graphobj['opacity'])){
 				if($lastopacity!="none"){
-						tabbedecho("ctx.globalAlpha=1.0;\n",$tabs);
+						if($coordsmode==0) tabbedecho("ctx.globalAlpha=1.0;\n",$tabs);
 						$lastopacity="none";
 				}
 		}
@@ -1078,7 +1088,9 @@ foreach ($graphobjs as $graphobj) {
 				$stroke="none";
 				foreach($graphobj as $key => $value){
 						if($key=="strokestyle"){
-								tabbedecho("ctx.strokeStyle='".$value."';\n",$tabs);
+								if($coordsmode==0){
+										tabbedecho("ctx.strokeStyle='".$value."';\n",$tabs);
+								}
 								$stroke=$value;
 						}else if($key=="fillgradient"){
 								tabbedecho("ctx.fillStyle=".$value.";\n",$tabs);
@@ -1087,13 +1099,15 @@ foreach ($graphobjs as $graphobj) {
 								tabbedecho("ctx.fillStyle='".$value."';\n",$tabs);
 								$fill=$value;
 						}else if($key=="strokewidth"){
-								tabbedecho("ctx.lineWidth='".$value."';\n",$tabs);
+								if($coordsmode==0){
+										tabbedecho("ctx.lineWidth='".$value."';\n",$tabs);
+								}
 						}else if($key=="linecap"){
 								tabbedecho("ctx.lineCap='".$value."';\n",$tabs);
 						}else if($key=="linejoin"){
 								tabbedecho("ctx.lineJoin='".$value."';\n",$tabs);
 						}else if($key=="opacity"){
-								tabbedecho("ctx.globalAlpha=".$value.";\n",$tabs);
+								if($coordsmode==0) tabbedecho("ctx.globalAlpha=".$value.";\n",$tabs);
 								$lastopacity=$value;
 						}else if($key=="dasharr"){
 								tabbedecho("ctx.setLineDash([".$value."]);\n",$tabs);
@@ -1102,22 +1116,38 @@ foreach ($graphobjs as $graphobj) {
 				}
 				if($fill=="none" && $stroke=="none") tabbedecho("ctx.fillStyle='#000';\n",$tabs);
 
-				tabbedecho("ctx.beginPath();\n",$tabs);
+				if($coordsmode==0){
+						tabbedecho("ctx.beginPath();\n",$tabs);
+				}else{
+						echo "[";			
+				}
 				foreach($pnts as $pnt){
 						if($pnt[0]=="M"){
-								tabbedecho("ctx.moveTo(".$pnt[1].",".$pnt[2].");\n",$tabs);
+								if($coordsmode==0){
+										tabbedecho("ctx.moveTo(".$pnt[1].",".$pnt[2].");\en",$tabs);
+								}else{
+										echo $pnt[1].",".$pnt[2];					
+								}
 						}else if($pnt[0]=="L"){
-								tabbedecho("ctx.lineTo(".$pnt[1].",".$pnt[2].");\n",$tabs);								
-							}else if($pnt[0]=="Q"){
+								if($coordsmode==0){							
+										tabbedecho("ctx.lineTo(".$pnt[1].",".$pnt[2].");\n",$tabs);								
+								}else{
+											echo ",".$pnt[1].",".$pnt[2];								
+								}
+						}else if($pnt[0]=="Q"){
 								tabbedecho("ctx.quadraticCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].");\n",$tabs);								
 						}else if($pnt[0]=="B"){
 								tabbedecho("ctx.bezierCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].",".$pnt[5].",".$pnt[6].");\n",$tabs);								
 						}
 				}
-				if($fill!="none") tabbedecho("ctx.fill();\n",$tabs);
-				if($stroke!="none") tabbedecho("ctx.stroke();\n",$tabs);
-
-				if($fill=="none" && $stroke=="none") tabbedecho("ctx.fill();\n",$tabs);
+			
+				if($coordsmode==0){
+						if($fill!="none") tabbedecho("ctx.fill();\n",$tabs);
+						if($stroke!="none") tabbedecho("ctx.stroke();\n",$tabs);
+						if($fill=="none" && $stroke=="none") tabbedecho("ctx.fill();\n",$tabs);
+				}else{
+						echo "],\n";
+				}
 			
 		}else{
 				echo "//".$graphobj['kind']."\n";
@@ -1125,18 +1155,20 @@ foreach ($graphobjs as $graphobj) {
 	
 }
 
-if((count($funclist)>0)&&(!isset($_GET['nofuncs']))){
-		echo "\n// Function calls\n";
-		foreach($funclist as $value){
-				if(isset($showlist[$value])){
-						if($showlist[$value]!="hide"){
-								echo $value."();\n";				
+if($coordsmode==0){
+		if((count($funclist)>0)&&(!isset($_GET['nofuncs']))){
+				echo "\n// Function calls\n";
+				foreach($funclist as $value){
+						if(isset($showlist[$value])){
+								if($showlist[$value]!="hide"){
+										echo $value."();\n";				
+								}
+						}else{
+										echo $value."();\n";								
 						}
-				}else{
-								echo $value."();\n";								
 				}
-		}
 
+		}
 }
 
 ?>
