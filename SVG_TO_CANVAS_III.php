@@ -1093,10 +1093,14 @@ foreach ($graphobjs as $graphobj) {
 								}
 								$stroke=$value;
 						}else if($key=="fillgradient"){
-								tabbedecho("ctx.fillStyle=".$value.";\n",$tabs);
+								if($coordsmode==0){							
+										tabbedecho("ctx.fillStyle=".$value.";\n",$tabs);
+								}
 								$fill=$value;
 						}else if($key=="fillstyle"){
-								tabbedecho("ctx.fillStyle='".$value."';\n",$tabs);
+								if($coordsmode==0){
+										tabbedecho("ctx.fillStyle='".$value."';\n",$tabs);
+								}
 								$fill=$value;
 						}else if($key=="strokewidth"){
 								if($coordsmode==0){
@@ -1124,7 +1128,7 @@ foreach ($graphobjs as $graphobj) {
 				foreach($pnts as $pnt){
 						if($pnt[0]=="M"){
 								if($coordsmode==0){
-										tabbedecho("ctx.moveTo(".$pnt[1].",".$pnt[2].");\en",$tabs);
+										tabbedecho("ctx.moveTo(".$pnt[1].",".$pnt[2].");\n",$tabs);
 								}else{
 										echo $pnt[1].",".$pnt[2];					
 								}
