@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="841.889px" height="595.281px" viewBox="0 0 841.889 595.281" enable-background="new 0 0 841.889 595.281"
+	 xml:space="preserve">
+<g id="Bott">
+	<g enable-background="new    ">
+		<g>
+			<rect x="-59.652" y="-46.566" fill="#6F6F6F" width="129.242" height="26.687"/>
+		</g>
+		<g>
+			<polygon fill="#606060" points="134.241,9.396 134.241,36.082 69.652,-19.88 69.652,-46.566 			"/>
+		</g>
+		<g>
+			<polygon fill="#474747" points="-59.652,-46.566 -59.652,-19.88 -124.242,36.082 -124.242,9.396 			"/>
+		</g>
+		<g>
+			<polygon fill="#C2C2C2" points="-59.652,65.419 -59.652,92.106 -124.242,36.082 -124.242,9.396 			"/>
+		</g>
+		<g>
+			<polygon fill="#BFBFBF" points="69.652,-46.566 134.241,9.396 69.652,65.419 -59.652,65.419 -124.242,9.396 -59.652,-46.566 			
+				"/>
+		</g>
+		<g>
+			<rect x="-59.652" y="65.419" fill="#DFDFDF" width="129.242" height="26.687"/>
+		</g>
+		<g>
+			<polygon fill="#8F8F8F" points="134.241,9.396 134.241,36.082 69.652,92.106 69.652,65.419 			"/>
+		</g>
+		<g>
+			<rect x="-60.021" y="65.727" fill="#6F6F6F" width="129.981" height="26.687"/>
+		</g>
+		<g>
+			<path fill="#5F5F5F" d="M69.96-46.874l65.021,56.27L69.96,65.727H-60.021l-64.96-56.27l64.96-56.27H69.96V-46.874z
+				 M69.652,65.419l64.651-55.962L69.652-46.505H-59.59l-64.652,55.962l64.652,55.962H69.652"/>
+		</g>
+		<g>
+			<polygon fill="#474747" points="134.982,9.396 134.982,36.082 69.96,92.413 69.96,65.727 			"/>
+		</g>
+		<g>
+			<polygon fill="#606060" points="-60.021,65.727 -60.021,92.413 -124.981,36.082 -124.981,9.396 			"/>
+		</g>
+	</g>
+</g>
+<g id="Flag">
+	<polygon fill="#A2A2A2" points="121.577,7.301 121.577,11.552 63.273,60.92 63.273,56.667 	"/>
+	<rect x="-53.273" y="56.667" fill="#9D9D9D" width="116.546" height="4.253"/>
+	<polygon fill="#808080" points="-53.273,56.667 -53.273,60.92 -111.576,11.552 -111.576,7.301 	"/>
+	<polygon fill="#A9A9A9" points="-53.273,-42.128 63.273,-42.128 121.577,7.301 63.273,56.667 -53.273,56.667 -111.576,7.301 	"/>
+	<g>
+		<defs>
+			<polygon id="SVGID_1_" points="-53.273,-42.128 63.273,-42.128 121.577,7.301 63.273,56.667 -53.273,56.667 -111.576,7.301 			
+				"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  overflow="visible"/>
+		</clipPath>
+		<g clip-path="url(#SVGID_2_)">
+			<defs>
+				<polyline id="SVGID_3_" points="63.273,56.667 -53.273,56.667 -111.576,7.301 -53.273,-42.128 63.273,-42.128 121.577,7.301 
+					63.273,56.667 				"/>
+			</defs>
+			<clipPath id="SVGID_4_">
+				<use xlink:href="#SVGID_3_"  overflow="visible"/>
+			</clipPath>
+		</g>
+	</g>
+	<polygon fill="#155C99" enable-background="new    " points="-50.452,-39.935 -106.952,8.315 -51.952,53.315 63.273,53.315 
+		116.798,7.301 61.798,-39.935 	"/>
+	<polygon fill="#FBD01B" enable-background="new    " points="19.132,53.315 -16.202,53.315 -10.035,-39.935 14.298,-39.935 	"/>
+	<polygon fill="#FBD01B" enable-background="new    " points="99.64,-7.435 -88.51,-7.435 -105.702,7.301 116.798,7.301 	"/>
+</g>
+</svg>

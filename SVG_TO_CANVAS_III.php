@@ -1,5 +1,8 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.1.2
+//    Fix: More robust support for modern svg linear gradients (2021-10-04)
+//--------------------------------------------------------------------------
 // Version 4.1.1
 //    Fix: Newline javascrupt (2020-07-22)
 //--------------------------------------------------------------------------
@@ -400,18 +403,20 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 						$graphobj['gradientid']=(string)$attrs['id'];
 				}else if($graphelement->getName()=="stop"){
 						$stopcolor=$attrs['style'];
-						
-						if(strpos($stopcolor,"#")>0){
-								$stopR=hexdec(substr($stopcolor,12,2));
-								$stopG=hexdec(substr($stopcolor,14,2));
-								$stopB=hexdec(substr($stopcolor,16,2));
+            if(strlen($stopcolor)==0) $stopcolor=$attrs['stop-color'];
+
+						if(strpos($stopcolor,"#")>=0){
+                $hashpos=strpos($stopcolor,"#");
+								$stopR=hexdec(substr($stopcolor,$hashpos+1,2));
+								$stopG=hexdec(substr($stopcolor,$hashpos+3,2));
+								$stopB=hexdec(substr($stopcolor,$hashpos+5,2));
 								if(strpos($stopcolor,"opacity:")>0){
 										$stopA=substr($stopcolor,strrpos($stopcolor,":")+1);
 										$stopcolor="RGBA(".$stopR.",".$stopG.",".$stopB.",".$stopA.")";
 								}else{
 										$stopcolor="RGB(".$stopR.",".$stopG.",".$stopB.")";
 								}
-						}else if(strpos($stopcolor,"rgb(")>0){
+						}else if(strpos($stopcolor,"rgb(")>=0){
 								$colstart=strpos($stopcolor,"rgb(");
 								$colend=strpos($stopcolor,");");
 								$stopA=substr($stopcolor,strrpos($stopcolor,":")+1);

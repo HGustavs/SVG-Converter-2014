@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="841.9px" height="595.3px" viewBox="0 0 841.9 595.3" enable-background="new 0 0 841.9 595.3" xml:space="preserve">
+<g>
+	<line fill="#FFF200" stroke="#000000" stroke-miterlimit="10" x1="33.1" y1="-19.1" x2="-33" y2="19.1"/>
+	<line fill="#FFF200" stroke="#000000" stroke-miterlimit="10" x1="-45.3" y1="-7.1" x2="45.4" y2="7.1"/>
+	<line fill="#FFF200" stroke="#000000" stroke-miterlimit="10" x1="-12.3" y1="-26.2" x2="12.3" y2="26.2"/>
+</g>
+<g>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="-42.7" y1="24.8" x2="-10.7" y2="92.9"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="-69.7" y1="83.7" x2="16.3" y2="34"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="-85.7" y1="49.6" x2="32.3" y2="68.1"/>
+</g>
+<g>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="-16" y1="-34.1" x2="16" y2="34"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="-43" y1="24.8" x2="43" y2="-24.9"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="-59" y1="-9.3" x2="59" y2="9.2"/>
+</g>
+<g>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="59.3" y1="9.2" x2="91.3" y2="77.3"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="32.3" y1="68.1" x2="118.3" y2="18.4"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="16.3" y1="34" x2="134.3" y2="52.5"/>
+</g>
+<polygon id="OuterLower" fill="#BE1E2D" stroke="#000000" stroke-miterlimit="10" points="91.3,77.3 32.3,68.1 16.3,34 59.3,9.2 
+	118.3,18.4 134.3,52.5 "/>
+<polygon id="OuterRight" fill="#BE1E2D" stroke="#000000" stroke-miterlimit="10" points="-10.7,92.9 -69.7,83.7 -85.7,49.6 
+	-42.7,24.8 16.3,34 32.3,68.1 "/>
+<polygon id="Outer" fill="#BE1E2D" stroke="#000000" stroke-miterlimit="10" points="16,34 -43,24.8 -59,-9.3 -16,-34.1 43,-24.9 
+	59,9.2 "/>
+<polygon id="Inner" fill="#FFF200" stroke="#000000" stroke-miterlimit="10" points="-45.3,-7.1 -12.3,-26.2 33.1,-19.1 45.4,7.1 
+	12.3,26.2 -33,19.1 "/>
+<line id="Xadd" fill="none" stroke="#000000" stroke-miterlimit="10" x1="0" y1="0" x2="75.3" y2="43.3"/>
+<line id="Yadd" fill="none" stroke="#000000" stroke-miterlimit="10" x1="-26.7" y1="58.9" x2="0" y2="0"/>
+</svg>
