@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="841.9px" height="595.3px" viewBox="0 0 841.9 595.3" style="enable-background:new 0 0 841.9 595.3;" xml:space="preserve"
+	>
+<style type="text/css">
+<![CDATA[
+	.st0{fill:url(#SVGID_2_);stroke:#000000;stroke-width:3;stroke-miterlimit:10;}
+	.st1{fill:url(#SVGID_1_);stroke:#000000;stroke-width:3;stroke-miterlimit:10;}
+]]>
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="46.5264" y1="35.3911" x2="205.8481" y2="204.8828">
+	<stop  offset="0" style="stop-color:#FFF33B"/>
+	<stop  offset="5.948725e-02" style="stop-color:#FFE029"/>
+	<stop  offset="0.1303" style="stop-color:#FFD218"/>
+	<stop  offset="0.2032" style="stop-color:#FEC90F"/>
+	<stop  offset="0.2809" style="stop-color:#FDC70C"/>
+	<stop  offset="0.6685" style="stop-color:#F3903F"/>
+	<stop  offset="0.8876" style="stop-color:#ED683C"/>
+	<stop  offset="1" style="stop-color:#E93E3A"/>
+</linearGradient>
+<rect x="31.2" y="19.3" class="st1" width="191.5" height="203.4"/>
+<radialGradient id="SVGID_2_" cx="202.4058" cy="181.1523" r="121.6598" gradientUnits="userSpaceOnUse">
+	<stop  offset="0" style="stop-color:#FFFFFF"/>
+	<stop  offset="0.3914" style="stop-color:#FFF33B"/>
+	<stop  offset="0.4386" style="stop-color:#CEBD72"/>
+	<stop  offset="0.4877" style="stop-color:#A19584"/>
+	<stop  offset="0.5382" style="stop-color:#80788E"/>
+	<stop  offset="0.5891" style="stop-color:#656393"/>
+	<stop  offset="0.6406" style="stop-color:#505496"/>
+	<stop  offset="0.693" style="stop-color:#414997"/>
+	<stop  offset="0.7467" style="stop-color:#374298"/>
+	<stop  offset="0.804" style="stop-color:#34409A"/>
+	<stop  offset="1" style="stop-color:#131152"/>
+</radialGradient>
+<rect x="132.5" y="121" class="st0" width="191.5" height="203.4"/>
+</svg>

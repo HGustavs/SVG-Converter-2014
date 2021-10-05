@@ -1,5 +1,11 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.2
+//    Feature: Initial support for style elements (2021-10-05)
+//    Feature: Initial support for classes (2021-10-05)
+//                       fill style by class
+//                       stroke style by class
+//--------------------------------------------------------------------------
 // Version 4.1.2
 //    Fix: More robust support for modern svg linear gradients (2021-10-04)
 //--------------------------------------------------------------------------
@@ -172,6 +178,8 @@ $colorstops=array();
 $clipdefs=array();
 $clippaths=array();
 
+$styles=array();
+
 $fontstyle="none";
 $fontfamily="Arial";
 $fontline="24px";
@@ -226,6 +234,7 @@ function numb($numb)
 function recurseelement($element){
 		global $elementcounter;
 		global $graphnodes;
+    global $styles;
 
 		if($element->getName()=="clipPath"){
 					$attrs=$element->attributes();
@@ -250,7 +259,38 @@ function recurseelement($element){
 						$elementcounter++;
 				}else if($child->getName()=="foreignObject"){
 						// Ignore this element
-				}else{
+        }else if($child->getName()=="style"){
+            // handle style in defs element - read style text and create array element in style element for each class
+            $classes=explode("}",$child);
+            foreach($classes as $val){
+                // Class list is before { character and declaration is after
+                $declarationstart=strpos($val,"{");
+                $declarationtext=substr($val,$declarationstart+1);
+                $classtext=substr($val,0,$declarationstart);
+                $classarr=explode(",",$classtext);
+
+                foreach($classarr as $classname){
+                    $classname=substr(trim($classname),1);
+                    if($classname!=""){
+                        // Make key value proposition of each declaration... but first create array if it does not exist
+                        if(!isset($styles[$classname])){
+                            $styles[$classname]=array();
+                        }
+
+                        // Make each declaration a key value pair in the style class array
+                        $declarations=explode(";",$declarationtext);
+                        foreach($declarations as $declaration){
+                            $colonpos=strpos($declaration,":");
+                            $declarationval=trim(substr($declaration,$colonpos+1));
+                            $declarationkey=trim(substr($declaration,0,$colonpos));
+                            if($declarationkey!==""){
+                                $styles[$classname][$declarationkey]=$declarationval;
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
 						echo "//Unknown inner element: ".$child->getName()."\n";
 				}
 		}		
@@ -382,8 +422,9 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 					
 						if(isset($attrs['gradientTransform'])) $graphobj['gradientTransform']=(string)$attrs['gradientTransform'];
 					
-						$graphobj['gradientid']=(string)$attrs['id'];
-				}else if($graphelement->getName()=="radialGradient"){
+						$graphobj['gradientid']=str_replace("-","",(string)$attrs['id']);
+
+          }else if($graphelement->getName()=="radialGradient"){
 						// Create array to store stops
 						$graphobj['stops']=array();
 					
@@ -400,7 +441,7 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 								$graphobj['gradientfy']=numb((string)$attrs['cy']);						
 						}
 					
-						$graphobj['gradientid']=(string)$attrs['id'];
+						$graphobj['gradientid']=str_replace("-","",(string)$attrs['id']);
 				}else if($graphelement->getName()=="stop"){
 						$stopcolor=$attrs['style'];
             if(strlen($stopcolor)==0) $stopcolor=$attrs['stop-color'];
@@ -489,6 +530,10 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 							if($key=="x2") $linex2=$val;
 							if($key=="y1") $liney1=$val;
 							if($key=="y2") $liney2=$val;
+          }else if ($key == "class"){
+              $classstyle=$styles[strval($val)];
+              if(isset($classstyle['fill'])) $graphobj['fillstyle']=(string)$classstyle['fill'];
+              if(isset($classstyle['stroke'])) $graphobj['strokestyle']=(string)$classstyle['stroke'];              
 			    }else if ($key == "transform"&&$graphelement->getName()=="text"){
 			 				$j=0;
 							$dostr="";
@@ -1102,12 +1147,12 @@ foreach ($graphobjs as $graphobj) {
 								$stroke=$value;
 						}else if($key=="fillgradient"){
 								if($coordsmode==0){							
-										tabbedecho("ctx.fillStyle=".$value.";\n",$tabs);
+										tabbedecho("ctx.fillStyle=".str_replace("-","",$value).";\n",$tabs);
 								}
 								$fill=$value;
 						}else if($key=="fillstyle"){
 								if($coordsmode==0){
-										tabbedecho("ctx.fillStyle='".$value."';\n",$tabs);
+										tabbedecho("ctx.fillStyle='".str_replace("-","",$value)."';\n",$tabs);
 								}
 								$fill=$value;
 						}else if($key=="strokewidth"){
