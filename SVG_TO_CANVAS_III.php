@@ -5,7 +5,9 @@
 //    Feature: Initial support for classes (2021-10-05)
 //                       fill style by class
 //                       stroke style by class
+//    Fix: Hyphens in gradient names are removed
 //    Fix: Using url in styled canvas gradient
+//    Bug: link to stops from other gradient xlink:href="#linear-gradient-2" 
 //--------------------------------------------------------------------------
 // Version 4.1.2
 //    Fix: More robust support for modern svg linear gradients (2021-10-04)
@@ -1178,13 +1180,21 @@ foreach ($graphobjs as $graphobj) {
 								}
 								$stroke=$value;
 						}else if($key=="fillgradient"){
-								if($coordsmode==0){							
+								if($coordsmode==0){
+                    if(strpos($value,"url(")!==false){
+                        $value=substr($value,5,-1);
+                    }				
 										tabbedecho("ctx.fillStyle=".str_replace("-","",$value).";\n",$tabs);
 								}
 								$fill=$value;
 						}else if($key=="fillstyle"){
-								if($coordsmode==0){
-										tabbedecho("ctx.fillStyle='".$value."';\n",$tabs);
+                if($coordsmode==0){
+                    if(strpos($value,"url(")!==false){
+                        $value=substr($value,5,-1);
+                        tabbedecho("ctx.fillStyle=".str_replace("-","",$value).";\n",$tabs);
+                    }else{
+                        tabbedecho("ctx.fillStyle='".str_replace("-","",$value)."';\n",$tabs);
+                    }				
 								}
 								$fill=$value;
 						}else if($key=="strokewidth"){
