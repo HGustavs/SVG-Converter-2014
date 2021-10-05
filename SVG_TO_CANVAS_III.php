@@ -5,6 +5,7 @@
 //    Feature: Initial support for classes (2021-10-05)
 //                       fill style by class
 //                       stroke style by class
+//    Fix: Using url in styled canvas gradient
 //--------------------------------------------------------------------------
 // Version 4.1.2
 //    Fix: More robust support for modern svg linear gradients (2021-10-04)
@@ -335,7 +336,38 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 							// Add element to queue
 							$graphnodes[$elementcounter]=$element;
 							$elementcounter++;
-					}else{
+					}else if($element->getName()=="style"){
+            // handle style in defs element - read style text and create array element in style element for each class
+            $classes=explode("}",$element);
+            foreach($classes as $val){
+                // Class list is before { character and declaration is after
+                $declarationstart=strpos($val,"{");
+                $declarationtext=substr($val,$declarationstart+1);
+                $classtext=substr($val,0,$declarationstart);
+                $classarr=explode(",",$classtext);
+
+                foreach($classarr as $classname){
+                    $classname=substr(trim($classname),1);
+                    if($classname!=""){
+                        // Make key value proposition of each declaration... but first create array if it does not exist
+                        if(!isset($styles[$classname])){
+                            $styles[$classname]=array();
+                        }
+
+                        // Make each declaration a key value pair in the style class array
+                        $declarations=explode(";",$declarationtext);
+                        foreach($declarations as $declaration){
+                            $colonpos=strpos($declaration,":");
+                            $declarationval=trim(substr($declaration,$colonpos+1));
+                            $declarationkey=trim(substr($declaration,0,$colonpos));
+                            if($declarationkey!==""){
+                                $styles[$classname][$declarationkey]=$declarationval;
+                            }
+                        }
+                    }
+                }
+            }
+          }else{
 							echo "//Unknown outer element: ".$element->getName()."\n";
 					}
 			}
@@ -1152,7 +1184,7 @@ foreach ($graphobjs as $graphobj) {
 								$fill=$value;
 						}else if($key=="fillstyle"){
 								if($coordsmode==0){
-										tabbedecho("ctx.fillStyle='".str_replace("-","",$value)."';\n",$tabs);
+										tabbedecho("ctx.fillStyle='".$value."';\n",$tabs);
 								}
 								$fill=$value;
 						}else if($key=="strokewidth"){
