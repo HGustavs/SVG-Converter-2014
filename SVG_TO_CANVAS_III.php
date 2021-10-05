@@ -7,7 +7,8 @@
 //                       stroke style by class
 //    Fix: Hyphens in gradient names are removed
 //    Fix: Using url in styled canvas gradient
-//    Bug: link to stops from other gradient xlink:href="#linear-gradient-2" 
+//    Bug: link to stops from other gradient xlink:href="#linear-gradient-2"
+//    Bug: At end of group without id a } is written to stream even if no { was produced 
 //--------------------------------------------------------------------------
 // Version 4.1.2
 //    Fix: More robust support for modern svg linear gradients (2021-10-04)
@@ -1066,7 +1067,7 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 $lastopacity="1.0";
 $lastdash="";
 $tabs=0;
-$lastid="";
+$lastid=Array();
 
 foreach ($graphobjs as $graphobj) {
 		global $coordsmode;
@@ -1079,19 +1080,21 @@ foreach ($graphobjs as $graphobj) {
 								echo "// --------======####".$graphobj['id']." START ####======--------\n";
 						}
 						array_push($funclist,$graphobj['id']);
-						$lastid=$graphobj['id'];
+            array_push($lastid,$graphobj['id']);
 				}else{
 						tabbedecho("// --------======####".$graphobj['id']." START ####======--------\n",$tabs);		
-				}
+            array_push($lastid,"");
+          }
 				$tabs++;
 		}else if($graphobj['kind']=="eg"){
 				$tabs--;
-				if(($tabs==0)&&(!empty($lastid))){
+        $closeid=array_pop($lastid);
+				if(($tabs==0)&&($closeid!=="")){
 						if($coordsmode==0){
 								tabbedecho("}\n\n",$tabs);
 						}
 				}else{
-						tabbedecho("// --------======####".$graphobj['id']." END ####======--------\n",$tabs+1);		
+						tabbedecho("// --------======####".$closeid." END ####======--------\n",$tabs+1);		
 				}
 		}else{
 //				echo "/*\n";
