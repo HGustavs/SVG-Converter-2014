@@ -9,6 +9,7 @@
 //    Fix: Using url in styled canvas gradient
 //    Bug: link to stops from other gradient xlink:href="#linear-gradient-2"
 //    Bug: At end of group without id a } is written to stream even if no { was produced 
+//    Fix: Display:none for styled elements
 //--------------------------------------------------------------------------
 // Version 4.1.2
 //    Fix: More robust support for modern svg linear gradients (2021-10-04)
@@ -375,6 +376,8 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 					}
 			}
 
+//      print_r($styles);
+
 			$defsmode=0;
 			$defsstring="";
 			$defsid="";
@@ -569,6 +572,13 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
               $classstyle=$styles[strval($val)];
               if(isset($classstyle['fill'])) $graphobj['fillstyle']=(string)$classstyle['fill'];
               if(isset($classstyle['stroke'])) $graphobj['strokestyle']=(string)$classstyle['stroke'];              
+              if(isset($classstyle['display'])&&isset($attrs['id'])){
+                    if($classstyle['display']==="none"){
+                        $showlist[(string)$attrs['id']]="hide";
+                    }else{
+                        $showlist[(string)$attrs['id']]="show";
+                    }
+              }                 
 			    }else if ($key == "transform"&&$graphelement->getName()=="text"){
 			 				$j=0;
 							$dostr="";
