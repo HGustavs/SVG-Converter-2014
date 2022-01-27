@@ -12,9 +12,16 @@
 
 						// We only execute if the mode is set to canvas. JSON mode is executed in a separate manner
 						if(kind==0){
-								str='var acanvas=document.getElementById("previewCanvas");acanvas.width=700;var ctx=acanvas.getContext("2d");ctx.translate(200,200);ctx.save();'+htmltext+"ctx.restore();ctx.strokeStyle='#464';ctx.beginPath();ctx.moveTo(-20,-20);ctx.lineTo(20,20);ctx.moveTo(20,-20);ctx.lineTo(-20,20);ctx.stroke();";
-								console.log(str);
-								eval(str);						
+
+                var code=substr(htmltext,htmltext.indexOf("Function calls:"));
+
+                alert(code);
+
+                var prestr="var acanvas=document.getElementById('previewCanvas');acanvas.width=700;var ctx=acanvas.getContext('2d');ctx.translate(200,200);ctx.save();";
+                var poststr="ctx.restore();ctx.strokeStyle='#464';ctx.beginPath();ctx.moveTo(-20,-20);ctx.lineTo(20,20);ctx.moveTo(20,-20);ctx.lineTo(-20,20);ctx.stroke();";
+								eval(prestr);
+                eval(htmltext);
+                eval(poststr);						
 						}else{
 								// If it is a json object do nothing for now!
 						}

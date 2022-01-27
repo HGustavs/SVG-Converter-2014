@@ -1299,10 +1299,12 @@ foreach ($graphobjs as $graphobj) {
 }
 
 $Yoffs=($Ymax-$Ymin)+4;
+$Xoffs=($Xmax-$Xmin)+4;
+
 
 if($coordsmode==0){
 		if((count($funclist)>0)&&(!isset($_GET['nofuncs']))){
-				echo "\n// Function calls\n";
+				echo "\n// Function calls: ".$Xoffs." ".$Yoffs." \n";
 				foreach($funclist as $value){
 						if(isset($showlist[$value])){
 								if($showlist[$value]!="hide"){
@@ -1310,7 +1312,7 @@ if($coordsmode==0){
 								}
 						}else{
 										echo $value."();\n";								
-                    echo "ctx.translate(0,".$Yoffs.");";
+                    // echo "ctx.translate(0,".$Yoffs.");";
             }
 				}
 
