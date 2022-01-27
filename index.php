@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 		<script language="javascript" src="SVG_httpAjax.js"></script>
@@ -7,20 +8,59 @@
 				{
 						var kind=document.getElementById('kind').value;
 
-						var conto=document.getElementById('content');
-						conto.innerHTML=htmltext;
 
 						// We only execute if the mode is set to canvas. JSON mode is executed in a separate manner
 						if(kind==0){
 
-                var code=substr(htmltext,htmltext.indexOf("Function calls:"));
+                if(htmltext.indexOf("Function calls:")==-1){
+                    var code=htmltext;
+                    var funcs=[];
+                    var params=[];
+                    var wid=parseFloat(params[params.length-2]);
+                    var hei=parseFloat(params[params.length-3]);
+                    alert("NF!");
+                }else{
+                    var code=htmltext.substring(0,htmltext.indexOf("Function calls:")-3);
+                    var funcs=htmltext.substring(htmltext.indexOf("Function calls:")-3,htmltext.length);
+                    funcs=funcs.split("\n");
+                    var params=funcs[0].split(" ");
+                    var wid=0;
+                    var hei=0;
+                }
 
-                alert(code);
+                var conto=document.getElementById('content');
+						    conto.innerHTML=code;
 
                 var prestr="var acanvas=document.getElementById('previewCanvas');acanvas.width=700;var ctx=acanvas.getContext('2d');ctx.translate(200,200);ctx.save();";
                 var poststr="ctx.restore();ctx.strokeStyle='#464';ctx.beginPath();ctx.moveTo(-20,-20);ctx.lineTo(20,20);ctx.moveTo(20,-20);ctx.lineTo(-20,20);ctx.stroke();";
 								eval(prestr);
-                eval(htmltext);
+                eval(code);
+
+                ctx.save();
+
+/*
+                ctx.beginPath();
+                ctx.moveTo(0,0);
+                ctx.lineTo(wid,0);
+                ctx.lineTo(wid,hei);
+                ctx.lineTo(0,hei);
+                ctx.closePath();
+                ctx.stroke();
+*/
+
+                for(var i=1;i<funcs.length;i++){
+                      eval(funcs[i]);
+                }
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(wid,0);
+                for(var i=1;i<funcs.length;i++){
+                      eval(funcs[i]);
+                      ctx.translate(0,hei);
+                }
+                ctx.restore();
+                
                 eval(poststr);						
 						}else{
 								// If it is a json object do nothing for now!
