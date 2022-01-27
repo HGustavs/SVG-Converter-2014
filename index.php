@@ -81,7 +81,7 @@
 		</td>
 		<td id='preview' class="svgview" valign="top">
 			Preview:<br>
-			<canvas width="700" height="700" id="previewCanvas">
+			<canvas width="700" height="2100" id="previewCanvas">
 			</canvas>
 		</td>
 		<td id='preview' class="svgview" valign="top">
