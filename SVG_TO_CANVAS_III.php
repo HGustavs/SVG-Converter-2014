@@ -1304,7 +1304,7 @@ $Xoffs=($Xmax-$Xmin)+4;
 
 if($coordsmode==0){
 		if((count($funclist)>0)&&(!isset($_GET['nofuncs']))){
-				echo "\n// Function calls: ".$Xoffs." ".$Yoffs." \n";
+				echo "\n// Function calls: ".$Xoffs." ".$Yoffs." ".$Xmin." ".$Xmax." ".$Ymin." ".$Ymax." \n";
 				foreach($funclist as $value){
 						if(isset($showlist[$value])){
 								if($showlist[$value]!="hide"){
