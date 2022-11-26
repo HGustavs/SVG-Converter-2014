@@ -15,6 +15,20 @@
                 var wid,hei,xmin,xmax,ymin,ymax;
 
                 if(htmltext.indexOf("Function calls:")==-1){
+										code=htmltext.substring(0,htmltext.indexOf("Canvas extents:")-3);
+                    params=htmltext.substring(htmltext.indexOf("Canvas extents:")-3,htmltext.length).split(" ");
+
+                    ymin=parseFloat(params[params.length-2]);
+                    ymax=parseFloat(params[params.length-3]);
+
+                    xmax=parseFloat(params[params.length-4]);
+                    xmin=parseFloat(params[params.length-5]);
+
+                    wid=parseFloat(params[params.length-7]);
+                    hei=parseFloat(params[params.length-6]);
+
+										code="function draw(){\n"+code+"\n}";
+										funcs=["// Draw Function","draw();",""];
 
                 }else{
                     code=htmltext.substring(0,htmltext.indexOf("Function calls:")-3);
@@ -30,7 +44,8 @@
 
                     wid=parseFloat(params[params.length-7]);
                     hei=parseFloat(params[params.length-6]);
-                }
+										
+								}
 
                 var conto=document.getElementById('content');
 						    conto.innerHTML=code;

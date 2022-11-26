@@ -1,6 +1,9 @@
 ﻿<?php
 //--------------------------------------------------------------------------
 // Version 4.3
+// Fix: Work with layer-less layouts.
+//--------------------------------------------------------------------------
+// Version 4.3
 // Feature: Support for translating (and writing element names?) in order to support multiple objects and animation
 // Feature: Mark start of functions and separate functions, to execute separately to 
 // Feature: Collect minimum and maximum X/Y for all coordinates.
@@ -264,7 +267,7 @@ function numb($numb,$ortho)
         // Ignore all others for now!
     }
 
-    return  round($numb,$rndp);
+    return  round(floatval($numb),$rndp);
 }
 
 function recurseelement($element){
@@ -1316,6 +1319,8 @@ if($coordsmode==0){
             }
 				}
 
+		}else{
+			echo "\n// Canvas extents: ".$Xoffs." ".$Yoffs." ".$Xmin." ".$Xmax." ".$Ymin." ".$Ymax." \n";
 		}
 }
 
