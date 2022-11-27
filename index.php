@@ -106,6 +106,16 @@
 		
 		</script>
 		<style>
+
+        textarea {
+          white-space: pre;
+          overflow-wrap: normal;
+          overflow-x: scroll;
+          font-family: Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace;
+          font-size:12px;
+          width:400px;height:800px;
+        }
+
 				.svgview{
 						box-shadow: 1px 1px 2px #876 inset; 
 						border: 1px solid #ffeedd; 
@@ -185,7 +195,7 @@
 			</canvas>
 		</td>
 		<td id='preview' class="svgview" valign="top">
-				<textarea id='content' style='font-family:Calibri,Georgia,Serif;width:400px;height:800px;'>
+				<textarea id='content'>
 				</textarea>
 		</td>
 	</tr>

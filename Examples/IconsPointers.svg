@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 36 35.9" enable-background="new 0 0 36 35.9" xml:space="preserve">
+<g id="Floppy">
+	<g id="FloppyGrp">
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#244FA2" d="M35,6.6L29.3,1h-25l0,0C2.5,1.1,1.1,2.5,1.1,4.3v27.2
+			c0,1.8,1.5,3.3,3.3,3.3l0,0h27.3c0.9,0,1.7-0.4,2.3-0.9c0.6-0.6,1-1.4,1-2.4l0,0l0,0V6.6z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#A7A9AC" stroke="#000000" stroke-width="0.25" stroke-miterlimit="10" d="
+			M27.5,1c0,3,0,6,0,9c0,0.2,0,0.4,0,0.6c-0.2,1-0.9,1.7-1.9,1.7c-2.1,0-4.1,0-6.2,0c-2.8,0-5.7,0-8.5,0c-1.4,0-2.1-0.8-2.1-2.2
+			c0-2.9,0-5.7,0-8.6c0-0.2,0-0.4,0-0.5C14.9,1,21.2,1,27.5,1z M25.5,6.6C25.5,6.6,25.6,6.6,25.5,6.6c0-1.1,0-2.3,0-3.4
+			c0-0.3-0.1-0.4-0.4-0.4c-1.6,0-3.3,0-4.9,0c-0.3,0-0.4,0.1-0.4,0.4c0,2.2,0,4.5,0,6.7c0,0.3,0.1,0.4,0.4,0.4c1.6,0,3.2,0,4.8,0
+			c0.3,0,0.4-0.1,0.4-0.4C25.5,8.9,25.5,7.8,25.5,6.6z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#F0F2F3" d="M4.9,33c0-1.7,0-3.5,0-5.2c0-2.6,0-5.1,0-7.7
+			C4.9,18.7,5.6,18,7,18c7.3,0,14.7,0,22,0c1.4,0,2.1,0.7,2.1,2.1c0,4.2,0,8.4,0,12.5c0,0.1,0,0.3,0,0.4C22.4,33,13.7,33,4.9,33z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#C9CED2" d="M4.9,33c8.8,0,17.5,0,26.3,0c0,0.6,0,1.2,0,1.8
+			c-0.2,0-0.4,0-0.6,0c-8.4,0-16.8,0-25.2,0c-0.2,0-0.4,0-0.6,0C4.9,34.2,4.9,33.6,4.9,33z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#C9CED2" d="M29.8,29.4c0-0.4-0.3-0.6-0.6-0.6l0,0H6.8l0,0l0,0
+			c-0.4,0-0.6,0.3-0.6,0.6S6.5,30,6.8,30l0,0l0,0h22.4l0,0C29.5,30.1,29.8,29.8,29.8,29.4z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#C9CED2" d="M29.8,21.6c0-0.4-0.3-0.6-0.6-0.6l0,0H6.8l0,0l0,0
+			c-0.4,0-0.6,0.3-0.6,0.6s0.3,0.6,0.6,0.6l0,0l0,0h22.4l0,0C29.5,22.2,29.8,21.9,29.8,21.6z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#C9CED2" d="M29.8,25.5c0-0.4-0.3-0.6-0.6-0.6l0,0H6.8l0,0l0,0
+			c-0.4,0-0.6,0.3-0.6,0.6s0.3,0.6,0.6,0.6l0,0l0,0h22.4l0,0C29.5,26.1,29.8,25.9,29.8,25.5z"/>
+	</g>
+</g>
+<g id="Folder">
+	<g id="FolderGrp">
+		
+			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="16.036" y1="31.111" x2="15.3507" y2="4.1964" gradientTransform="matrix(1 0 0 -1 0 36)">
+			<stop  offset="0" style="stop-color:#DBAA5D"/>
+			<stop  offset="1" style="stop-color:#A17E44"/>
+		</linearGradient>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="url(#SVGID_1_)" d="M14.8,7.6h15.3c0.7,0,1.2,0.6,1.2,1.2v22.4
+			c0,0.7-0.6,1.2-1.2,1.2H1.2c-0.7,0-1.2-0.6-1.2-1.2V8.9c0-0.7,0.6-1.3,1.2-1.3h2.9V5.7c0-0.7,0.6-1.2,1.2-1.2h8.2
+			c0.7,0,1.2,0.6,1.2,1.2L14.8,7.6z"/>
+		
+			<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#F0F2F3" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" points="
+			16.5,28.6 32.9,15.8 25.3,1.7 5.3,12.5 11.8,28.6 		"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#C9CED2" d="M5.6,13.4h26l-0.3-0.6h-2.7l-3.8-7l0,0l0,0
+			c-0.1-0.2-0.4-0.3-0.6-0.2C24,5.7,23.9,6,24,6.2l0,0l0,0l3.5,6.5h-2.2l-3-5.6l0,0c-0.1-0.2-0.4-0.3-0.6-0.2
+			c-0.2,0.1-0.3,0.4-0.2,0.6l0,0l0,0l2.8,5.1h-2.2l-2.3-4.2l0,0c-0.1-0.2-0.4-0.3-0.6-0.2S18.9,8.6,19,8.8l0,0l0,0l2,3.7h-2.2
+			l-1.5-2.8l0,0c-0.1-0.2-0.4-0.3-0.6-0.2s-0.3,0.4-0.2,0.6l0,0l0,0l1.3,2.3H5.7L5.6,13.4z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#F7C06A" d="M4.5,15.1c0.2-0.7,1-1.2,1.6-1.2H35c0.7,0,1.1,0.5,0.9,1.2
+			l-4.1,16.1c-0.2,0.7-1,1.2-1.6,1.2h-29c-0.7,0-1.1-0.5-0.9-1.2L4.5,15.1z"/>
+		<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#AEB1B2" points="31.6,13.4 5.6,13.4 5.8,13.9 31.9,13.9 		"/>
+	</g>
+</g>
+<g id="Pointer">
+	<polygon fill="#00090F" points="25.1,20.6 10.9,6.2 10.9,26.7 15.3,23.1 18.8,29.8 23.6,27.2 20.3,21.1 	"/>
+	<polygon fill="#E2FCFB" points="15.5,21.3 12,24.2 12,9.3 22.3,19.7 18.3,20.2 21.8,26.8 19.2,28.2 	"/>
+</g>
+</svg>

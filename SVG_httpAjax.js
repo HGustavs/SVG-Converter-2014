@@ -57,7 +57,7 @@
 		  if (window.XMLHttpRequest) {
 		  	httpAjax = new XMLHttpRequest();
 		    if (httpAjax.overrideMimeType) {
-		    	httpAjax.overrideMimeType('text/xml');
+		    	httpAjax.overrideMimeType('text/javascript');
 		    }
 		  }else if(window.ActiveXObject){
 				try{
@@ -66,7 +66,7 @@
 							try{
 								httpAjax = new ActiveXObject("Microsoft.XMLHTTP");
 			        }catch(e){
-								alert("Couldn´t build an AJAX instance.");
+								alert("Couldnï¿½t build an AJAX instance.");
 			          return false;
 							}
 						}
@@ -77,18 +77,18 @@
 		    try{
 					httpAjax.onreadystatechange = getPage;
 		    }catch(e){
-					alert("onreadystatechange didn´t go well!");
+					alert("onreadystatechange didnï¿½t go well!");
 					return false;
 				}try{
 					httpAjax.open('POST', servicename, true);
 				  httpAjax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
 		    }catch(e){
-					alert("Couldn´t open url.");
+					alert("Couldnï¿½t open url.");
 		      return false;
 		    }try{
 						httpAjax.send(serviceparam);				
 		    }catch(e){
-					alert("Couldn´t send request.");
+					alert("Couldnï¿½t send request.");
 					return false;
 				}
 		   
