@@ -145,6 +145,20 @@
 	<tr>
 		<td class="svgview" id='preview' valign="top">
 			<?php
+
+					function cmp($a, $b)
+					{
+					    if ($a == $b) {
+					        return 0;
+					    }
+
+							if(strtolower($a)<strtolower($b)){
+									return -1;
+							}else{
+									return 1;
+							}
+					}
+
 					function endsWith($haystack,$needle,$case=true) {
 					    if($case){return (strcmp(substr($haystack, strlen($haystack) - strlen($needle)),$needle)===0);}
 					    return (strcasecmp(substr($haystack, strlen($haystack) - strlen($needle)),$needle)===0);
@@ -156,7 +170,9 @@
 									array_push($filelist,$file);
 			      	}
 			    }
-					sort($filelist);
+					
+					
+					usort($filelist,"cmp");
 					foreach($filelist as $file){
 			    		echo "<span onmouseover='this.style.backgroundColor=\"#000\";this.style.color=\"#fff\"' onmouseout='this.style.backgroundColor=\"#fff8f8\";this.style.color=\"#000\"' style='cursor:pointer;' onclick='getSVG(\"".$file."\",document.getElementById(\"decimals\").value,document.getElementById(\"kind\").value);'>".$file."</span><br>";						
 					}
