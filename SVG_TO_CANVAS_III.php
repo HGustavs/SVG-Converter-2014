@@ -1,14 +1,14 @@
 ﻿<?php
 //--------------------------------------------------------------------------
-// Version 4.3
-// Fix: Work with layer-less layouts.
+// Version 4.3.1
+// Fix: Work with layer-less layouts. (2022-11-25)
 //--------------------------------------------------------------------------
 // Version 4.3
 // Feature: Support for translating (and writing element names?) in order to support multiple objects and animation
 // Feature: Mark start of functions and separate functions, to execute separately to 
 // Feature: Collect minimum and maximum X/Y for all coordinates.
 //--------------------------------------------------------------------------
-// Version 4.2
+// Version 4.2.1
 // Bug: Rectangles placed at 0 has no X/Y coordinate initiate both
 //--------------------------------------------------------------------------
 // Version 4.2
