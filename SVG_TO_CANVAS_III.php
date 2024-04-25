@@ -1,5 +1,9 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.4
+// Feature: Basic curve export to arrays (2024-04-19)
+// Bug: Gradients are not exported with rest of data
+//--------------------------------------------------------------------------
 // Version 4.3.1
 // Fix: Work with layer-less layouts. (2022-11-25)
 //--------------------------------------------------------------------------
@@ -1113,20 +1117,32 @@ $lastdash="";
 $tabs=0;
 $lastid=Array();
 
+// Provide a default objid
+$objid="UNK";
+$objcount=0;
+if($coordsmode==1) echo "[\n";
 foreach ($graphobjs as $graphobj) {
 		global $coordsmode;
-		
+
 		if($graphobj['kind']=="g"){
 				if(($tabs==0)&&(!empty($graphobj['id']))){
 						if($coordsmode==0){
 								tabbedecho("function ".$graphobj['id']."(){\n",$tabs);
 						}else{
-								echo "// --------======####".$graphobj['id']." START ####======--------\n";
-						}
+            		if($coordsmode==0){
+								    echo "// --------======####".$graphobj['id']." START ####======--------\n";
+                }else{
+                    if(isset($graphobj['id'])) $objid=$graphobj['id'];
+                }
+            }
 						array_push($funclist,$graphobj['id']);
             array_push($lastid,$graphobj['id']);
 				}else{
-						tabbedecho("// --------======####".$graphobj['id']." START ####======--------\n",$tabs);		
+            if($coordsmode==0){
+						    tabbedecho("// --------======####".$graphobj['id']." START ####======--------\n",$tabs);		
+            }else{
+                if(isset($graphobj['id'])) $objid=$graphobj['id'];
+            }
             array_push($lastid,"");
           }
 				$tabs++;
@@ -1138,15 +1154,21 @@ foreach ($graphobjs as $graphobj) {
 								tabbedecho("}\n\n",$tabs);
 						}
 				}else{
-						tabbedecho("// --------======####".$closeid." END ####======--------\n",$tabs+1);		
+            if($coordsmode==0) tabbedecho("// --------======####".$closeid." END ####======--------\n",$tabs+1);		
 				}
 		}else{
 //				echo "/*\n";
 //				print_r($graphobj);
 //				echo "/*\n";
 				if(isset($graphobj['id'])){
-						tabbedecho("//--==## ".$graphobj['id']." ".$graphobj['kind']." ##==--\n",$tabs+1);
-				}		
+						if($coordsmode==0){
+                tabbedecho("//--==## ".$graphobj['id']." ".$graphobj['kind']." ##==--\n",$tabs+1);
+            }else{
+                $localobjid=$graphobj['id'];
+            }
+				}else{
+            $localobjid="";
+        }
 		}
 				
 		if(!isset($graphobj['opacity'])){
@@ -1193,15 +1215,23 @@ foreach ($graphobjs as $graphobj) {
 					
 				}
 			
-				tabbedecho("var ".$graphobj['gradientid']."=ctx.createLinearGradient(".$graphobj['gradientx1'].",".$graphobj['gradienty1'].",".$graphobj['gradientx2'].",".$graphobj['gradienty2'].");\n",$tabs);
-				foreach($graphobj['stops'] as $key => $value){
-						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
-				}
+        if($coordsmode==0){
+    				tabbedecho("var ".$graphobj['gradientid']."=ctx.createLinearGradient(".$graphobj['gradientx1'].",".$graphobj['gradienty1'].",".$graphobj['gradientx2'].",".$graphobj['gradienty2'].");\n",$tabs);
+    				foreach($graphobj['stops'] as $key => $value){
+    						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
+    				}        
+        }else{
+            // Make code for handling gradients and stops
+        }
 		}else if($graphobj['kind']=="radialGradient"){
-				tabbedecho("var ".$graphobj['gradientid']."=ctx.createRadialGradient(".$graphobj['gradientcx'].",".$graphobj['gradientcy'].",0,".$graphobj['gradientfx'].",".$graphobj['gradientfy'].",".$graphobj['gradientr'].");\n",$tabs);
-				foreach($graphobj['stops'] as $key => $value){
-						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
-				}
+        if($coordsmode==0){
+      				tabbedecho("var ".$graphobj['gradientid']."=ctx.createRadialGradient(".$graphobj['gradientcx'].",".$graphobj['gradientcy'].",0,".$graphobj['gradientfx'].",".$graphobj['gradientfy'].",".$graphobj['gradientr'].");\n",$tabs);
+      				foreach($graphobj['stops'] as $key => $value){
+      						tabbedecho($graphobj['gradientid'].".addColorStop(".$value[0].",'".$value[1]."');\n",$tabs);
+      				}
+        }else{
+            // Make code for handling gradients and stops
+        }
 		}else if($graphobj['kind']=="text"){
 				if(isset($graphobj['textx'])){
 						tabbedecho("ctx.fillText('".$graphobj['textline']."',".$graphobj['textx'].",".$graphobj['texty'].");\n",$tabs);						
@@ -1249,42 +1279,71 @@ foreach ($graphobjs as $graphobj) {
 										tabbedecho("ctx.lineWidth='".$value."';\n",$tabs);
 								}
 						}else if($key=="linecap"){
-								tabbedecho("ctx.lineCap='".$value."';\n",$tabs);
+								if($coordsmode==0){
+								    tabbedecho("ctx.lineCap='".$value."';\n",$tabs);
+                }
 						}else if($key=="linejoin"){
-								tabbedecho("ctx.lineJoin='".$value."';\n",$tabs);
+								if($coordsmode==0){								
+                    tabbedecho("ctx.lineJoin='".$value."';\n",$tabs);
+                }
 						}else if($key=="opacity"){
 								if($coordsmode==0) tabbedecho("ctx.globalAlpha=".$value.";\n",$tabs);
 								$lastopacity=$value;
 						}else if($key=="dasharr"){
-								tabbedecho("ctx.setLineDash([".$value."]);\n",$tabs);
-								$lastdash=$value;
+								if($coordsmode==0){
+                    tabbedecho("ctx.setLineDash([".$value."]);\n",$tabs);
+                }
+                $lastdash=$value;
 						}
 				}
-				if($fill=="none" && $stroke=="none") tabbedecho("ctx.fillStyle='#000';\n",$tabs);
+
+        // Handling if no fill or stroke is given
+				if($fill=="none" && $stroke=="none" && $coordsmode==0) tabbedecho("ctx.fillStyle='#000';\n",$tabs);
 
 				if($coordsmode==0){
 						tabbedecho("ctx.beginPath();\n",$tabs);
 				}else{
-						echo "[";			
+            if($objcount++>0) echo ",";
+						echo "[";
+            // Object ID
+            if($localobjid!=""){
+                echo '"'.$objid." ".$localobjid.'",';		
+            }else{
+                echo '"'.$objid.'",';		            
+            }
+            // Write fill and stroke style to array
+            echo '"'.$fill.'",';
+            echo '"'.$stroke.'",';
 				}
+        $pointcnt=0;
 				foreach($pnts as $pnt){
 						if($pnt[0]=="M"){
 								if($coordsmode==0){
 										tabbedecho("ctx.moveTo(".$pnt[1].",".$pnt[2].");\n",$tabs);
 								}else{
-										echo $pnt[1].",".$pnt[2];					
+                    if($pointcnt!=0) echo ",";
+										echo '"M",'.$pnt[1].",".$pnt[2];					
 								}
 						}else if($pnt[0]=="L"){
 								if($coordsmode==0){							
 										tabbedecho("ctx.lineTo(".$pnt[1].",".$pnt[2].");\n",$tabs);								
 								}else{
-											echo ",".$pnt[1].",".$pnt[2];								
+											echo ',"L",'.$pnt[1].",".$pnt[2];								
 								}
 						}else if($pnt[0]=="Q"){
-								tabbedecho("ctx.quadraticCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].");\n",$tabs);								
+								if($coordsmode==0){	
+								    tabbedecho("ctx.quadraticCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].");\n",$tabs);
+                }else{
+											echo ',"Q",'.$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4];								
+								}
 						}else if($pnt[0]=="B"){
-								tabbedecho("ctx.bezierCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].",".$pnt[5].",".$pnt[6].");\n",$tabs);								
-						}
+								if($coordsmode==0){	            
+								    tabbedecho("ctx.bezierCurveTo(".$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].",".$pnt[5].",".$pnt[6].");\n",$tabs);
+                }else{
+											echo ',"B",'.$pnt[1].",".$pnt[2].",".$pnt[3].",".$pnt[4].",".$pnt[5].",".$pnt[6];								
+								}
+ 						}
+            $pointcnt++;
 				}
 			
 				if($coordsmode==0){
@@ -1297,9 +1356,10 @@ foreach ($graphobjs as $graphobj) {
 			
 		}else{
 				echo "//".$graphobj['kind']."\n";
-		}
-	
+		}	
 }
+
+if($coordsmode==1) echo "]";
 
 $Yoffs=($Ymax-$Ymin)+4;
 $Xoffs=($Xmax-$Xmin)+4;

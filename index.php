@@ -101,6 +101,8 @@
                 eval(poststr);						
 						}else{
 								// If it is a json object do nothing for now!
+                var conto=document.getElementById('content');
+                conto.value=htmltext;
 						}
 			}
 		
