@@ -1,5 +1,8 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.4.1 
+// Feature: Start of ignoring of repeated styles and begin path statements
+//--------------------------------------------------------------------------
 // Version 4.4
 // Feature: Basic curve export to arrays (2024-04-19)
 // Bug: Gradients are not exported with rest of data
@@ -1120,6 +1123,12 @@ $lastid=Array();
 // Provide a default objid
 $objid="UNK";
 $objcount=0;
+
+// lastFill lastStroke startedPath -- if we have same mode as previous
+$lastFill="None";
+$lastStroke="None";
+$startedPath=false;
+
 if($coordsmode==1) echo "[\n";
 foreach ($graphobjs as $graphobj) {
 		global $coordsmode;
@@ -1301,6 +1310,7 @@ foreach ($graphobjs as $graphobj) {
 				if($fill=="none" && $stroke=="none" && $coordsmode==0) tabbedecho("ctx.fillStyle='#000';\n",$tabs);
 
 				if($coordsmode==0){
+            // echo "// Modes ".$fill." ".$lastFill." ".$stroke." ".$lastStroke." ".$startedPath."\n";
 						tabbedecho("ctx.beginPath();\n",$tabs);
 				}else{
             if($objcount++>0) echo ",";
@@ -1353,6 +1363,9 @@ foreach ($graphobjs as $graphobj) {
 				}else{
 						echo "],\n";
 				}
+
+        $lastFill=$fill;
+        $lastStroke=$stroke;
 			
 		}else{
 				echo "//".$graphobj['kind']."\n";
