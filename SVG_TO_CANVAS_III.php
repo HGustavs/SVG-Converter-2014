@@ -561,6 +561,12 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 
 				// For each attribute of svg 								
 				// We process attributes after gradients but before the drawing elements.
+			  
+        // Extra clear for rectangle in origo in either dimension
+        if ($graphelement->getName()=="rect"){
+            $linex1=0;
+            $liney1=0;
+        }
 
 			  foreach ($graphelement->attributes() as $key => $val) {
 
