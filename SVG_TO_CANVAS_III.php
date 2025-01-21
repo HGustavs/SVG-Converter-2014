@@ -1,5 +1,8 @@
 ﻿<?php
 //--------------------------------------------------------------------------
+// Version 4.4.3
+// Fix: SVG Gradients some time use very long IDs  (2025-01-21)
+//--------------------------------------------------------------------------
 // Version 4.4.2
 // Fix: Handling for rectangles in Origo (2024-12-11)
 //--------------------------------------------------------------------------
@@ -220,6 +223,10 @@ $caps="none";
 $join="none";
 $opacity="1.0";
 $gradientname="foo";
+
+// Gradient map for storing gradient ID values
+$gradientcnt=1;
+$gradientmap=array();   
 
 $isinkscape=false;
 $graphobjs=array();
@@ -503,6 +510,13 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 						$graphobj['gradienty2']=numb((string)$attrs['y2'],2);
 					
 						if(isset($attrs['gradientTransform'])) $graphobj['gradientTransform']=(string)$attrs['gradientTransform'];
+
+            // If length of gradient ID is over 10 we substitute for GNO01 id
+            if(strlen((string)$attrs['id'])>10){
+                $grad="GNO".str_pad($gradientcnt++, 3, "0", STR_PAD_LEFT);
+                $gradientmap[(string)$attrs['id']]=$grad;
+                $attrs['id']=$grad;
+            }
 					
 						$graphobj['gradientid']=str_replace("-","",(string)$attrs['id']);
 
@@ -522,7 +536,14 @@ if(isset($_POST['svgname'])||isset($_GET['svgname'])){
 								$graphobj['gradientfx']=numb((string)$attrs['cx'],2);
 								$graphobj['gradientfy']=numb((string)$attrs['cy'],2);						
 						}
-					
+
+            // If length of gradient ID is over 10 we substitute for GNO01 id
+            if(strlen((string)$attrs['id'])>10){
+                $grad="GNO".str_pad($gradientcnt++, 3, "0", STR_PAD_LEFT);
+                $gradientmap[(string)$attrs['id']]=$grad;
+                $attrs['id']=$grad;
+            }
+
 						$graphobj['gradientid']=str_replace("-","",(string)$attrs['id']);
 				}else if($graphelement->getName()=="stop"){
 						$stopcolor=$attrs['style'];
@@ -1279,7 +1300,11 @@ foreach ($graphobjs as $graphobj) {
                     if(strpos($value,"url(")!==false){
                         $value=substr($value,5,-1);
                     }				
-										tabbedecho("ctx.fillStyle=".str_replace("-","",$value).";\n",$tabs);
+                    if(isset($gradientmap[$value])){
+    										tabbedecho("ctx.fillStyle=".$gradientmap[$value].";\n",$tabs);                    
+                    }else{
+    										tabbedecho("ctx.fillStyle=".str_replace("-","",$value).";\n",$tabs);                                        
+                    }
 								}
 								$fill=$value;
 						}else if($key=="fillstyle"){
